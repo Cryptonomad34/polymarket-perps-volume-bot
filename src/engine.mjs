@@ -13,6 +13,8 @@ import { autoCancelHeadroomLow, evaluate, netPnl } from "./risk.mjs";
 import { computeSummary, formatSummary } from "./report.mjs";
 import { emptyDaily, utcDay } from "./state.mjs";
 import { SIDES, bookIsUsable, decideQuotes, fastPullSides } from "./strategy.mjs";
+import { fairValue } from "./fairvalue.mjs";
+import { decideLadder, unsafeOrders } from "./ladder.mjs";
 
 const LOOP_MS = 200;
 const RECONCILE_MS = 10_000;
@@ -32,12 +34,16 @@ export function snapshotIsFresh(requestedAt, positionChangedAt) {
 
 export function createEngine({ cfg, mode, insts, api, md, exec, store, state, reporter, log, creds = null, reference = null }) {
   const iids = [...insts.keys()];
+  // "join": one quote per side at the best price (strategy.mjs).
+  // "fair": a resting ladder around fair value (ladder.mjs).
+  const fairMode = cfg.strategy?.mode === "fair";
   const orders = new Map(); // coid -> order record
   const per = new Map(
     iids.map((iid) => [
       iid,
       {
-        quotes: { buy: null, sell: null }, // coid
+        quotes: { buy: null, sell: null }, // coid (join mode)
+        ladder: { buy: [], sell: [] }, // coids (fair mode)
         flattenCoid: null,
         fstate: IDLE,
         bestSince: { buy: 0, sell: 0 },
@@ -213,6 +219,12 @@ export function createEngine({ cfg, mode, insts, api, md, exec, store, state, re
       realized_pnl: realized,
       trade_id: f.tradeId,
       coid: f.coid ?? "",
+      level: o?.level,
+      order_age_ms: o?.placedAt ? now - o.placedAt : null,
+      fair_at_place: o?.fairAtPlace,
+      // How far on our side of fair value we traded; positive = bought below
+      // (or sold above) the fair value the order was priced from.
+      edge_vs_fair_bps: o?.fairAtPlace > 0 ? ((f.buy ? o.fairAtPlace - f.price : f.price - o.fairAtPlace) / o.fairAtPlace) * 1e4 : null,
     });
     log.info(`fill ${sym(f.iid)} ${f.buy ? "BUY" : "SELL"} ${f.qty} @ ${f.price} (${f.taker ? "taker" : "maker"})`, {
       intent: o?.intent,
@@ -238,7 +250,10 @@ export function createEngine({ cfg, mode, insts, api, md, exec, store, state, re
     o.status = "done";
     o.doneReason = reason;
     const s = per.get(o.iid);
-    for (const side of SIDES) if (s.quotes[side] === coid) s.quotes[side] = null;
+    for (const side of SIDES) {
+      if (s.quotes[side] === coid) s.quotes[side] = null;
+      s.ladder[side] = s.ladder[side].filter((c) => c !== coid);
+    }
     if (s.flattenCoid === coid) s.flattenCoid = null;
     markDirty();
   }
@@ -296,14 +311,17 @@ export function createEngine({ cfg, mode, insts, api, md, exec, store, state, re
       reduceOnly: spec.reduceOnly ?? false,
       intent: spec.intent,
       decisionMid: spec.decisionMid ?? bookMid(b),
+      level: spec.level, // fair mode: ladder level
+      fairAtPlace: spec.fair, // fair mode: the fair value this order was priced from
       filled: 0,
       status: "pending",
       placedAt: Date.now(),
     };
     orders.set(coid, o);
     const s = per.get(iid);
-    if (spec.intent === "quote-bid") s.quotes.buy = coid;
-    if (spec.intent === "quote-ask") s.quotes.sell = coid;
+    const quoteSide = spec.intent === "quote-bid" ? "buy" : spec.intent === "quote-ask" ? "sell" : null;
+    if (quoteSide && fairMode) s.ladder[quoteSide].push(coid);
+    else if (quoteSide) s.quotes[quoteSide] = coid;
     if (spec.intent === "flatten-post") s.flattenCoid = coid;
     markDirty();
     flushState(); // persist the nonce before the request leaves
@@ -372,6 +390,18 @@ export function createEngine({ cfg, mode, insts, api, md, exec, store, state, re
     return view;
   }
 
+  function ladderView(iid) {
+    const s = per.get(iid);
+    const view = {};
+    for (const side of SIDES) {
+      view[side] = s.ladder[side]
+        .map((c) => orders.get(c))
+        .filter((o) => o && o.status !== "done")
+        .map((o) => ({ coid: o.coid, price: o.price, qty: o.qty, remaining: o.qty - (o.filled ?? 0), status: o.status, level: o.level }));
+    }
+    return view;
+  }
+
   function flowTotals(iid, now) {
     const s = per.get(iid);
     const cutoff = now - cfg.quote.adverse.flowWindowMs;
@@ -421,32 +451,45 @@ export function createEngine({ cfg, mode, insts, api, md, exec, store, state, re
     // the same thing regardless of how busy the book is.
     reference?.observe(iid, m, now);
 
-    const q = decideQuotes({
-      inst,
-      book: b,
-      position: posView,
-      ref: reference ? reference.view(iid, m, now) : null,
-      quotes: quoteView(iid),
-      bestSince: s.bestSince,
-      lastReplaceAt: s.lastReplaceAt,
-      canOpen,
-      flattening,
-      blocked,
-      now,
-      cfg,
-      flow: flowTotals(iid, now),
-      adverseUntil: s.adverseUntil,
-      bookIncludesOwn: mode === "live",
-    });
+    const ref = reference ? reference.view(iid, m, now) : null;
+    const q = fairMode
+      ? decideLadder({
+          inst,
+          book: b,
+          position: posView,
+          orders: ladderView(iid),
+          fairView: fairValue({ ref, book: b, position: posView, cfg }),
+          canOpen,
+          flattening,
+          blocked,
+          cfg,
+        })
+      : decideQuotes({
+          inst,
+          book: b,
+          position: posView,
+          ref,
+          quotes: quoteView(iid),
+          bestSince: s.bestSince,
+          lastReplaceAt: s.lastReplaceAt,
+          canOpen,
+          flattening,
+          blocked,
+          now,
+          cfg,
+          flow: flowTotals(iid, now),
+          adverseUntil: s.adverseUntil,
+          bookIncludesOwn: mode === "live",
+        });
     for (const side of SIDES) if (q.adverse?.[side]) s.adverseUntil[side] = now + cfg.quote.adverse.holdMs;
     for (const a of q.actions) {
       if (a.type === "cancel") await cancel(a.coid, a.reason);
     }
-    const quotesClear = !flattening || SIDES.every((side) => !quoteView(iid)[side]);
+    const quotesClear = !flattening || SIDES.every((side) => !quoteView(iid)[side] && !ladderView(iid)[side].length);
     for (const a of q.actions) {
       if (a.type !== "place") continue;
       if (a.replaces) s.lastReplaceAt[a.side] = now;
-      await place(iid, { side: a.side, price: a.price, qty: a.qty, intent: a.intent, reason: a.reason });
+      await place(iid, { side: a.side, price: a.price, qty: a.qty, intent: a.intent, reason: a.reason, level: a.level, fair: a.fair });
     }
 
     if (!flattening) {
@@ -703,10 +746,14 @@ export function createEngine({ cfg, mode, insts, api, md, exec, store, state, re
   // Binance tick itself and cancels at once, outside the loop. cancel() marks
   // the order "cancelling" before its request leaves, so the loop leaves it
   // alone and re-quotes that side once the warning clears.
+  //
+  // In fair mode the same idea applies to the ladder: any resting order that
+  // fair value has come within cancelEdgeBps of is pulled on the tick.
   function fastPull(iid) {
     if (!running || state.stop) return;
     const b = book(iid);
     if (!bookIsUsable(b)) return;
+    if (fairMode) return fastPullLadder(iid, b);
     const quotes = quoteView(iid);
     const ref = reference.view(iid, bookMid(b));
     for (const side of fastPullSides({ ref, position: position(iid), quotes, cfg })) {
@@ -716,6 +763,21 @@ export function createEngine({ cfg, mode, insts, api, md, exec, store, state, re
       if (o.fastPullTried) continue;
       o.fastPullTried = true;
       cancel(o.coid, `reference fast pull: edge ${ref.edgeBps.toFixed(2)} bps`).catch((e) => log.warn("fast pull cancel failed", { error: e.message }));
+    }
+  }
+
+  function fastPullLadder(iid, b) {
+    const p = position(iid);
+    const m = bookMid(b);
+    const fv = fairValue({ ref: reference.view(iid, m), book: b, position: { size: p.size, notional: p.size * m }, cfg });
+    if (!fv.ok) return; // no fair value: the loop moves the ladder to reduce-only
+    for (const u of unsafeOrders({ fair: fv.fair, orders: ladderView(iid), cfg })) {
+      const o = orders.get(u.coid);
+      if (o.fastPullTried) continue; // one attempt per order; the loop retries
+      o.fastPullTried = true;
+      cancel(o.coid, `fast pull: fair ${fv.fair.toFixed(insts.get(iid).priceDecimals)} within ${cfg.fair.cancelEdgeBps} bps`).catch((e) =>
+        log.warn("fast pull cancel failed", { error: e.message }),
+      );
     }
   }
 

@@ -98,6 +98,8 @@ npm run dashboard            # or: node dashboard.mjs   -> http://localhost:5174
 - It stops quoting the side that would push the position beyond `inventory.maxNotionalUsd`.
 - Once the day's cost budget is spent, it quotes only the side that reduces the position.
 
+**Fair mode** (`strategy.mode: "fair"`, `src/fairvalue.mjs` + `src/ladder.mjs`) replaces the above with a resting ladder priced from a fair value (median of Binance, Bybit and OKX plus Polymarket's book imbalance). Safe orders are never re-priced, so they keep their queue position; an order is pulled only when fair value comes within `fair.cancelEdgeBps` of it, checked on every reference tick. Inventory shifts fair value instead of switching a side off. See `OPERATIONS.md`, "Fair mode".
+
 **Flattening** (`src/flatten.mjs`) is the main cost lever. It starts when the position exceeds the cap, is older than `maxPositionAgeSec`, or is within `liqDistancePct` of liquidation:
 1. **Passive exit:** a reduce-only post-only order at the best exit price for `passiveSec`, re-pegged when the best price moves. This exits at maker fee.
 2. **One extension:** if the mid has moved in our favour by at least one tick and the position isn't losing, it keeps the passive exit for `extendSec`, once.
@@ -118,6 +120,15 @@ The config is checked at startup. Unknown keys, missing keys, wrong types and ou
 | `quote.debounceMs` | 300 | the new best price must hold this long before re-joining |
 | `quote.minReplaceMs` | 250 | minimum time between replaces on one side |
 | `quote.maxPlacesPerMinute` | 300 | the bot's own order-placement budget (cancels cost 0 on the exchange) |
+| `strategy.mode` | `"join"` | `"join"`: join the best bid/ask. `"fair"`: resting ladder around fair value (needs `reference.mode: "gate"` and the `fair` section). Optional; older configs load as join |
+| `fair.edgeBps` / `.levelStepBps` | 1 / 1 | level *i* rests at fair ± (edgeBps + *i* × levelStepBps) |
+| `fair.levels` | 2 | resting orders per side |
+| `fair.cancelEdgeBps` | 0.3 | pull an order once fair value is this close (must be < edgeBps) |
+| `fair.maxDistanceBps` | 6 | pull an order this far from fair value |
+| `fair.imbalanceWeight` | 0.5 | share of Polymarket's microprice-vs-mid gap added to fair value |
+| `fair.skewBps` | 1.5 | fair value shift at a full `inventory.maxNotionalUsd` position |
+| `fair.maxDeviationBps` | 15 | no fair value if it is further than this from Polymarket's mid |
+| `reference.venues` | `["binance"]` | reference venues (`binance`, `bybit`, `okx`); the signal is the median of the fresh ones |
 | `inventory.maxNotionalUsd` | 80 | per-market position cap |
 | `flatten.maxPositionAgeSec` | 60 | position age that triggers flattening |
 | `flatten.passiveSec` | 15 | length of the passive-exit window |

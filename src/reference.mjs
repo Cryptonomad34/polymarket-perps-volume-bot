@@ -27,6 +27,18 @@
 // edge < 0 warns the bid. Symmetric by construction, which matters because the
 // measured markout is symmetric too.
 //
+// Several venues can feed it (config.reference.venues: binance, bybit, okx).
+// Each keeps its own basis EMA against Polymarket, because each has its own
+// permanent offset. The combined signal is the MEDIAN across venues that are
+// fresh and warm, so one lagging or broken venue cannot move it:
+//
+//     fair_v   = venueMid_v * (1 + ema_v / 1e4)   Polymarket-equivalent price
+//     refFair  = median(fair_v)                    used by the "fair" strategy
+//     edgeBps  = median(ema_v - basis_v)           used by the gate
+//
+// With only Binance configured (the default) this is exactly the original
+// single-venue signal.
+//
 // Three modes, set by config.reference.mode:
 //   off      not started; the bot behaves exactly as it did before
 //   observe  connected and recording, but no decision changes. This is how we
@@ -41,17 +53,59 @@ import { EventEmitter } from "node:events";
 import WebSocket from "ws";
 
 export const BINANCE_WS = "wss://fstream.binance.com/stream";
+export const BYBIT_WS = "wss://stream.bybit.com/v5/public/linear";
+export const OKX_WS = "wss://ws.okx.com:8443/ws/v5/public";
 
-// Polymarket instrument -> Binance USD-M futures symbol. An instrument with no
-// entry here simply gets no reference signal; it is never an error, and that
-// instrument then quotes exactly as it would with the reference off.
-export const BINANCE_SYMBOL = {
-  "BTC-USD": "btcusdt",
-  "ETH-USD": "ethusdt",
-  "BNB-USD": "bnbusdt",
+// A price update from any venue, normalised. A side a message does not carry
+// is NaN (kept from the previous update); an explicit unusable price is 0 or
+// negative and rejects the whole update.
+const num = (x) => (x === undefined || x === null || x === "" ? NaN : Number(x));
+
+// Polymarket instrument -> venue symbol, plus how to connect and parse. An
+// instrument with no entry for a venue simply gets nothing from that venue;
+// with no venue at all it gets no signal and quotes as if the reference were
+// off. It is never an error.
+export const VENUES = {
+  // USD-M futures bookTicker: every message is the full top of book.
+  binance: {
+    symbols: { "BTC-USD": "BTCUSDT", "ETH-USD": "ETHUSDT", "BNB-USD": "BNBUSDT" },
+    url: (syms) => `${BINANCE_WS}?streams=${syms.map((s) => `${s.toLowerCase()}@bookTicker`).join("/")}`,
+    subscribe: null,
+    ping: null,
+    parse(m) {
+      const d = m?.data;
+      if (!d?.s) return null;
+      return [{ sym: String(d.s).toUpperCase(), bid: num(d.b), ask: num(d.a), exchTs: num(d.T ?? d.E) || 0 }];
+    },
+  },
+  // v5 linear perpetuals, level-1 order book. A delta may carry one side
+  // only, and a level with size 0 is a removal: both count as "not carried".
+  bybit: {
+    symbols: { "BTC-USD": "BTCUSDT", "ETH-USD": "ETHUSDT", "BNB-USD": "BNBUSDT" },
+    url: () => BYBIT_WS,
+    subscribe: (syms) => ({ op: "subscribe", args: syms.map((s) => `orderbook.1.${s}`) }),
+    ping: { everyMs: 20_000, msg: JSON.stringify({ op: "ping" }) },
+    parse(m) {
+      if (typeof m?.topic !== "string" || !m.topic.startsWith("orderbook.1.") || !m.data) return null;
+      const side = (lv) => (lv && num(lv[1]) > 0 ? num(lv[0]) : NaN);
+      return [{ sym: String(m.data.s ?? m.topic.slice("orderbook.1.".length)).toUpperCase(), bid: side(m.data.b?.[0]), ask: side(m.data.a?.[0]), exchTs: num(m.ts) || 0 }];
+    },
+  },
+  // Public bbo-tbt channel on the USDT-margined swap: every push is the full
+  // top of book. Keepalive is the plain-text "ping" (answered with "pong").
+  okx: {
+    symbols: { "BTC-USD": "BTC-USDT-SWAP", "ETH-USD": "ETH-USDT-SWAP", "BNB-USD": "BNB-USDT-SWAP" },
+    url: () => OKX_WS,
+    subscribe: (syms) => ({ op: "subscribe", args: syms.map((instId) => ({ channel: "bbo-tbt", instId })) }),
+    ping: { everyMs: 25_000, msg: "ping" },
+    parse(m) {
+      if (m?.arg?.channel !== "bbo-tbt" || !Array.isArray(m.data)) return null;
+      return m.data.map((d) => ({ sym: String(m.arg.instId).toUpperCase(), bid: num(d.bids?.[0]?.[0]), ask: num(d.asks?.[0]?.[0]), exchTs: num(d.ts) || 0 }));
+    },
+  },
 };
 
-export const REF_COLUMNS = ["ts", "iid", "symbol", "binBid", "binAsk", "pmMid", "basisBps", "emaBps", "edgeBps"];
+export const REF_COLUMNS = ["ts", "iid", "symbol", "binBid", "binAsk", "pmMid", "basisBps", "emaBps", "edgeBps", "refFair", "venues"];
 
 /**
  * Pure: how far Polymarket has lagged its usual relationship to the reference.
@@ -86,167 +140,215 @@ export function emaStep(prev, value, dtMs, halfLifeSec) {
   return prev + alpha * (value - prev);
 }
 
-export function createReference({ cfg, markets, log, reporter = null, WebSocketImpl = WebSocket, url = BINANCE_WS, clock = Date.now }) {
+export function median(xs) {
+  if (!xs.length) return NaN;
+  const a = [...xs].sort((x, y) => x - y);
+  const m = a.length >> 1;
+  return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
+}
+
+const venueMid = (v) => (v.bid > 0 && v.ask > v.bid ? (v.bid + v.ask) / 2 : NaN);
+
+export function createReference({ cfg, markets, log, reporter = null, WebSocketImpl = WebSocket, clock = Date.now }) {
   const ev = new EventEmitter();
   const refCfg = cfg.reference;
   const enabled = refCfg.mode !== "off";
+  const venueNames = (refCfg.venues ?? ["binance"]).filter((n) => VENUES[n]);
 
-  // iid -> live state
+  // iid -> { symbol, venues: Map(name -> live state), lastLogAt }
   const per = new Map();
+  // venue name -> Map(venue symbol -> iid)
+  const bySym = new Map(venueNames.map((n) => [n, new Map()]));
   for (const { iid, symbol } of markets) {
-    const binance = BINANCE_SYMBOL[symbol];
-    if (!binance) continue;
-    per.set(iid, {
-      symbol,
-      binance,
-      bid: NaN,
-      ask: NaN,
-      updatedAt: 0,
-      exchTs: 0,
-      emaBps: NaN,
-      lastEmaAt: 0,
-      firstSampleAt: 0,
-      lastLogAt: 0,
-    });
+    const venues = new Map();
+    for (const name of venueNames) {
+      const vsym = VENUES[name].symbols[symbol];
+      if (!vsym) continue;
+      venues.set(name, { sym: vsym, bid: NaN, ask: NaN, updatedAt: 0, exchTs: 0, emaBps: NaN, lastEmaAt: 0, firstSampleAt: 0 });
+      bySym.get(name).set(vsym, iid);
+    }
+    if (venues.size) per.set(iid, { symbol, venues, lastLogAt: 0 });
   }
-  const byBinance = new Map([...per.entries()].map(([iid, s]) => [s.binance, iid]));
 
-  let ws = null;
+  // venue name -> connection state
+  const conns = new Map();
   let closing = false;
-  let connected = false;
-  let reconnectDelay = 1000;
   let messages = 0;
 
-  function onMessage(raw) {
+  function onMessage(name, raw) {
     let m;
     try {
       m = JSON.parse(raw);
     } catch {
-      return;
+      return; // e.g. OKX's plain-text "pong"
     }
-    const d = m?.data;
-    if (!d?.s) return;
-    const iid = byBinance.get(d.s.toLowerCase());
-    if (iid === undefined) return;
-    const bid = Number(d.b);
-    const ask = Number(d.a);
-    if (!(bid > 0) || !(ask > bid)) return;
-    const s = per.get(iid);
-    s.bid = bid;
-    s.ask = ask;
-    s.updatedAt = clock();
-    s.exchTs = Number(d.T ?? d.E ?? 0) || 0;
-    messages++;
-    // Lets the engine react to this tick directly instead of on its next
-    // loop; Binance leads Polymarket by ~100 ms, less than one loop period.
-    ev.emit("tick", iid);
+    const updates = VENUES[name].parse(m);
+    if (!updates) return;
+    for (const u of updates) {
+      const iid = bySym.get(name).get(u.sym);
+      if (iid === undefined) continue;
+      const v = per.get(iid).venues.get(name);
+      // A carried price must be usable; a missing side keeps its last value.
+      if ((!Number.isNaN(u.bid) && !(u.bid > 0)) || (!Number.isNaN(u.ask) && !(u.ask > 0))) continue;
+      const bid = Number.isNaN(u.bid) ? v.bid : u.bid;
+      const ask = Number.isNaN(u.ask) ? v.ask : u.ask;
+      if (!(bid > 0) || !(ask > bid)) continue;
+      v.bid = bid;
+      v.ask = ask;
+      v.updatedAt = clock();
+      v.exchTs = u.exchTs;
+      messages++;
+      // Lets the engine react to this tick directly instead of on its next
+      // loop; the reference leads Polymarket by ~100 ms, less than one loop.
+      ev.emit("tick", iid);
+    }
   }
 
-  function connect() {
-    const streams = [...per.values()].map((s) => `${s.binance}@bookTicker`).join("/");
-    ws = new WebSocketImpl(`${url}?streams=${streams}`);
+  function connect(name) {
+    const venue = VENUES[name];
+    const syms = [...bySym.get(name).keys()];
+    const c = conns.get(name) ?? { connected: false, reconnectDelay: 1000, ws: null, pingTimer: null };
+    conns.set(name, c);
+    const ws = new WebSocketImpl(venue.url(syms));
+    c.ws = ws;
     ws.on("open", () => {
-      reconnectDelay = 1000;
-      connected = true;
-      log.info("reference: connected", { venue: "binance-futures", streams, mode: refCfg.mode });
-      ev.emit("connected");
+      c.reconnectDelay = 1000;
+      c.connected = true;
+      if (venue.subscribe) ws.send?.(JSON.stringify(venue.subscribe(syms)));
+      if (venue.ping) {
+        clearInterval(c.pingTimer);
+        c.pingTimer = setInterval(() => {
+          try {
+            ws.send?.(venue.ping.msg);
+          } catch {
+            // the close handler reconnects
+          }
+        }, venue.ping.everyMs);
+        c.pingTimer.unref?.();
+      }
+      log.info("reference: connected", { venue: name, symbols: syms, mode: refCfg.mode });
+      ev.emit("connected", name);
     });
-    ws.on("message", onMessage);
-    ws.on("error", (e) => log.warn("reference: websocket error", { error: e.message }));
+    ws.on("message", (raw) => onMessage(name, raw));
+    ws.on("error", (e) => log.warn("reference: websocket error", { venue: name, error: e.message }));
     ws.on("close", (code) => {
-      const was = connected;
-      connected = false;
+      const was = c.connected;
+      c.connected = false;
+      clearInterval(c.pingTimer);
       if (closing) return;
-      if (was) log.warn("reference: disconnected", { code });
-      const delay = reconnectDelay;
-      reconnectDelay = Math.min(reconnectDelay * 2, 15_000);
-      setTimeout(() => !closing && connect(), delay);
+      if (was) log.warn("reference: disconnected", { venue: name, code });
+      const delay = c.reconnectDelay;
+      c.reconnectDelay = Math.min(c.reconnectDelay * 2, 15_000);
+      setTimeout(() => !closing && connect(name), delay);
     });
   }
 
-  function binMid(iid) {
-    const s = per.get(iid);
-    return s && s.bid > 0 && s.ask > s.bid ? (s.bid + s.ask) / 2 : NaN;
-  }
+  const isFresh = (v, now) => v.updatedAt > 0 && now - v.updatedAt <= refCfg.staleMs;
+  const isWarm = (v, now) => v.firstSampleAt > 0 && now - v.firstSampleAt >= refCfg.warmupSec * 1000;
 
   return Object.assign(ev, {
     enabled,
     mode: refCfg.mode,
+    venues: venueNames,
 
     start() {
       if (!enabled) return;
       closing = false;
-      connect();
+      for (const name of venueNames) if (bySym.get(name).size) connect(name);
     },
 
     stop() {
       closing = true;
-      if (ws) ws.close();
+      for (const c of conns.values()) {
+        clearInterval(c.pingTimer);
+        c.ws?.close();
+      }
     },
 
-    isConnected: () => connected,
+    isConnected: () => [...conns.values()].some((c) => c.connected),
     messageCount: () => messages,
 
     /**
-     * Feed in Polymarket's current mid and advance the basis EMA. Called once
-     * per instrument per engine loop, so the EMA is sampled on a regular clock
-     * rather than on book churn.
+     * Feed in Polymarket's current mid and advance each venue's basis EMA.
+     * Called once per instrument per engine loop, so the EMAs are sampled on
+     * a regular clock rather than on book churn.
      */
     observe(iid, pmMid, now = clock()) {
       if (!enabled) return;
       const s = per.get(iid);
-      if (!s) return;
-      const bm = binMid(iid);
-      if (!(pmMid > 0) || !(bm > 0)) return;
-      if (now - s.updatedAt > refCfg.staleMs) return; // do not fold a stale reference into the EMA
-      const basis = ((pmMid - bm) / bm) * 1e4;
-      s.emaBps = emaStep(s.emaBps, basis, s.lastEmaAt ? now - s.lastEmaAt : 0, refCfg.basisHalfLifeSec);
-      s.lastEmaAt = now;
-      s.firstSampleAt ||= now;
+      if (!s || !(pmMid > 0)) return;
+      for (const v of s.venues.values()) {
+        const vm = venueMid(v);
+        if (!(vm > 0) || !isFresh(v, now)) continue; // never fold a stale reference into the EMA
+        const basis = ((pmMid - vm) / vm) * 1e4;
+        v.emaBps = emaStep(v.emaBps, basis, v.lastEmaAt ? now - v.lastEmaAt : 0, refCfg.basisHalfLifeSec);
+        v.lastEmaAt = now;
+        v.firstSampleAt ||= now;
+      }
 
-      // Record what the bot saw, so markout can be bucketed by edge later.
-      // One row a second is plenty and keeps the file small.
+      // Record what the bot saw, so markout can be bucketed by edge later
+      // and use pmMid as its mid series. One row a second is plenty.
       if (reporter && now - s.lastLogAt >= 1000) {
         s.lastLogAt = now;
-        const edge = edgeBps(pmMid, bm, s.emaBps);
+        const view = this.view(iid, pmMid, now);
+        const bin = s.venues.get("binance");
         reporter.reference?.({
           ts: new Date(now).toISOString(),
           iid,
           symbol: s.symbol,
-          binBid: s.bid,
-          binAsk: s.ask,
+          binBid: bin?.bid,
+          binAsk: bin?.ask,
           pmMid,
-          basisBps: basis.toFixed(4),
-          emaBps: Number.isFinite(s.emaBps) ? s.emaBps.toFixed(4) : "",
-          edgeBps: Number.isFinite(edge) ? edge.toFixed(4) : "",
+          basisBps: Number.isFinite(view.basisBps) ? view.basisBps.toFixed(4) : "",
+          emaBps: Number.isFinite(view.emaBps) ? view.emaBps.toFixed(4) : "",
+          edgeBps: Number.isFinite(view.edgeBps) ? view.edgeBps.toFixed(4) : "",
+          refFair: Number.isFinite(view.refFair) ? view.refFair : "",
+          venues: view.venues ?? 0,
         });
       }
     },
 
     /**
-     * The signal for one instrument. `ok` is false whenever the feed cannot be
-     * trusted - off, disconnected, stale, or still warming up - and callers
-     * must then behave exactly as if there were no reference at all.
+     * The signal for one instrument. `ok` is false whenever it cannot be
+     * trusted - off, every venue stale, still warming up - and callers must
+     * then behave exactly as if there were no reference at all.
      */
     view(iid, pmMid, now = clock()) {
       const s = per.get(iid);
       if (!enabled || !s) return { ok: false, reason: "off", edgeBps: NaN };
-      const staleMs = s.updatedAt ? now - s.updatedAt : Infinity;
-      if (staleMs > refCfg.staleMs) return { ok: false, reason: "stale", edgeBps: NaN, staleMs };
-      if (!s.firstSampleAt || now - s.firstSampleAt < refCfg.warmupSec * 1000) {
-        return { ok: false, reason: "warming", edgeBps: NaN, staleMs };
+      const all = [...s.venues.entries()];
+      const fresh = all.filter(([, v]) => isFresh(v, now) && venueMid(v) > 0);
+      const staleMs = Math.min(...all.map(([, v]) => (v.updatedAt ? now - v.updatedAt : Infinity)));
+      if (!fresh.length) return { ok: false, reason: "stale", edgeBps: NaN, staleMs };
+      const used = fresh.filter(([, v]) => isWarm(v, now) && Number.isFinite(v.emaBps));
+      if (!used.length) return { ok: false, reason: "warming", edgeBps: NaN, staleMs };
+      if (!(pmMid > 0)) return { ok: false, reason: "no price", edgeBps: NaN, staleMs };
+
+      const bases = [];
+      const emas = [];
+      const edges = [];
+      const fairs = [];
+      for (const [, v] of used) {
+        const vm = venueMid(v);
+        const basis = ((pmMid - vm) / vm) * 1e4;
+        bases.push(basis);
+        emas.push(v.emaBps);
+        edges.push(v.emaBps - basis);
+        fairs.push(vm * (1 + v.emaBps / 1e4));
       }
-      const edge = edgeBps(pmMid, binMid(iid), s.emaBps);
-      if (!Number.isFinite(edge)) return { ok: false, reason: "no price", edgeBps: NaN, staleMs };
+      const bin = s.venues.get("binance");
       return {
         ok: true,
         // Only "gate" mode is allowed to change a decision; "observe" reports
-        // the same number but tells the strategy not to act on it.
+        // the same numbers but tells the strategy not to act on them.
         acting: refCfg.mode === "gate",
-        edgeBps: edge,
-        basisBps: ((pmMid - binMid(iid)) / binMid(iid)) * 1e4,
-        emaBps: s.emaBps,
-        binMid: binMid(iid),
+        edgeBps: median(edges),
+        refFair: median(fairs),
+        venues: used.length,
+        venueNames: used.map(([n]) => n),
+        basisBps: median(bases),
+        emaBps: median(emas),
+        binMid: bin && isFresh(bin, now) ? venueMid(bin) : NaN,
         staleMs,
       };
     },
@@ -256,10 +358,12 @@ export function createReference({ cfg, markets, log, reporter = null, WebSocketI
       let worstStale = 0;
       let warm = true;
       for (const s of per.values()) {
-        worstStale = Math.max(worstStale, s.updatedAt ? now - s.updatedAt : Infinity);
-        if (!s.firstSampleAt || now - s.firstSampleAt < refCfg.warmupSec * 1000) warm = false;
+        const vs = [...s.venues.values()];
+        worstStale = Math.max(worstStale, Math.min(...vs.map((v) => (v.updatedAt ? now - v.updatedAt : Infinity))));
+        if (!vs.some((v) => isWarm(v, now))) warm = false;
       }
-      return { enabled: true, mode: refCfg.mode, connected, warm, staleMs: worstStale, messages };
+      const venues = Object.fromEntries(venueNames.map((n) => [n, Boolean(conns.get(n)?.connected)]));
+      return { enabled: true, mode: refCfg.mode, connected: Object.values(venues).some(Boolean), venues, warm, staleMs: worstStale, messages };
     },
   });
 }

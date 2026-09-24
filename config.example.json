@@ -23,12 +23,28 @@
       "holdMs": 1000
     }
   },
+  "strategy": {
+    "mode": "join"
+  },
+  "fair": {
+    "edgeBps": 1.0,
+    "levels": 2,
+    "levelStepBps": 1.0,
+    "cancelEdgeBps": 0.3,
+    "maxDistanceBps": 6,
+    "imbalanceWeight": 0.5,
+    "skewBps": 1.5,
+    "maxDeviationBps": 15
+  },
   "reference": {
     "mode": "off",
     "basisHalfLifeSec": 300,
     "warmupSec": 120,
     "staleMs": 2000,
-    "gateBps": 0.6
+    "gateBps": 0.6,
+    "venues": [
+      "binance"
+    ]
   },
   "inventory": {
     "maxNotionalUsd": 80,

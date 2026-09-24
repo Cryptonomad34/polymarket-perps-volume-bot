@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
-import { createReference, edgeBps, emaStep, warnedSide } from "../src/reference.mjs";
+import { BYBIT_WS, OKX_WS, createReference, edgeBps, emaStep, median, warnedSide } from "../src/reference.mjs";
 import { decideQuotes, fastPullSides, refWarns } from "../src/strategy.mjs";
 import { BTC, ETH, testConfig } from "./fixtures.mjs";
 
@@ -16,7 +16,12 @@ class FakeWs extends EventEmitter {
   constructor(url) {
     super();
     this.url = url;
+    this.sent = [];
     FakeWs.last = this;
+    FakeWs.all.push(this);
+  }
+  send(msg) {
+    this.sent.push(msg);
   }
   close() {
     this.emit("close", 1000);
@@ -26,6 +31,8 @@ class FakeWs extends EventEmitter {
     this.emit("message", JSON.stringify({ stream: `${symbol.toLowerCase()}@bookTicker`, data: { s: symbol, b: String(bid), a: String(ask), T } }));
   }
 }
+
+FakeWs.all = [];
 
 const refCfg = (over = {}) => testConfig({ reference: { mode: "gate", basisHalfLifeSec: 300, warmupSec: 120, staleMs: 2000, gateBps: 1.5, ...over } });
 
@@ -324,4 +331,118 @@ test("reference emits a tick per Binance update, so the engine can react before 
   ws.push("ETHUSDT", 3_000, 3_000.01);
   ws.push("BTCUSDT", 0, 100_000.2); // unusable: no tick
   assert.deepEqual(seen, [BTC.iid, ETH.iid]);
+});
+
+// ------------------------------------------------------------ several venues
+
+// Start a three-venue reference and return one fake socket per venue.
+function threeVenues(over = {}, startAt = 1_000_000) {
+  FakeWs.all = [];
+  const now = { t: startAt };
+  const cfg = refCfg({ venues: ["binance", "bybit", "okx"], warmupSec: 10, ...over });
+  const ref = createReference({ cfg, markets: MARKETS, log, WebSocketImpl: FakeWs, clock: () => now.t });
+  ref.start();
+  const ws = {
+    binance: FakeWs.all.find((w) => w.url.includes("fstream.binance.com")),
+    bybit: FakeWs.all.find((w) => w.url === BYBIT_WS),
+    okx: FakeWs.all.find((w) => w.url === OKX_WS),
+  };
+  for (const w of Object.values(ws)) w.emit("open");
+  const push = {
+    binance: (sym, b, a) => ws.binance.emit("message", JSON.stringify({ data: { s: sym, b: String(b), a: String(a), T: now.t } })),
+    bybit: (sym, b, a) => ws.bybit.emit("message", JSON.stringify({ topic: `orderbook.1.${sym}`, type: "snapshot", ts: now.t, data: { s: sym, b: b == null ? [] : [[String(b), "1.5"]], a: a == null ? [] : [[String(a), "2"]] } })),
+    okx: (inst, b, a) => ws.okx.emit("message", JSON.stringify({ arg: { channel: "bbo-tbt", instId: inst }, data: [{ bids: [[String(b), "10", "0", "3"]], asks: [[String(a), "7", "0", "2"]], ts: String(now.t) }] })),
+  };
+  return { ref, ws, push, now };
+}
+
+test("median: odd, even and empty", () => {
+  assert.equal(median([3, 1, 2]), 2);
+  assert.equal(median([4, 1, 3, 2]), 2.5);
+  assert.ok(Number.isNaN(median([])));
+});
+
+test("bybit and okx connect, subscribe to the top of book and keep their own basis", () => {
+  const { ref, ws, push, now } = threeVenues();
+  assert.match(ws.bybit.sent[0], /orderbook\.1\.BTCUSDT/);
+  assert.match(ws.okx.sent[0], /"channel":"bbo-tbt","instId":"BTC-USDT-SWAP"/);
+  // Each venue sits at its own permanent offset to Polymarket.
+  const pm = 100_000;
+  for (let i = 0; i < 100; i++, now.t += 200) {
+    push.binance("BTCUSDT", 99_970, 99_970.2); // PM +3 bps over Binance
+    push.bybit("BTCUSDT", 99_990, 99_990.2); // +1 bps
+    push.okx("BTC-USDT-SWAP", 100_010, 100_010.2); // -1 bps
+    ref.observe(BTC.iid, pm, now.t);
+  }
+  const v = ref.view(BTC.iid, pm, now.t);
+  assert.equal(v.ok, true);
+  assert.equal(v.venues, 3);
+  assert.deepEqual(v.venueNames.sort(), ["binance", "bybit", "okx"]);
+  // Every venue maps back to the same Polymarket-equivalent price.
+  assert.ok(Math.abs(v.refFair - pm) < 0.5, `refFair ${v.refFair}`);
+  assert.ok(Math.abs(v.edgeBps) < 0.05, `settled edge ${v.edgeBps}`);
+});
+
+test("the median ignores one venue that lags or breaks", () => {
+  const { ref, push, now } = threeVenues();
+  const pm = 100_000;
+  for (let i = 0; i < 100; i++, now.t += 200) {
+    push.binance("BTCUSDT", 99_999.9, 100_000.1);
+    push.bybit("BTCUSDT", 99_999.9, 100_000.1);
+    push.okx("BTC-USDT-SWAP", 99_999.9, 100_000.1);
+    ref.observe(BTC.iid, pm, now.t);
+  }
+  // Binance and Bybit jump 5 bps; OKX is stuck. Two of three agree.
+  push.binance("BTCUSDT", 100_049.9, 100_050.1);
+  push.bybit("BTCUSDT", 100_049.9, 100_050.1);
+  const v = ref.view(BTC.iid, pm, now.t);
+  assert.ok(Math.abs(v.refFair - 100_050) < 1, `median should follow the two that moved: ${v.refFair}`);
+  assert.ok(v.edgeBps > 4, "Polymarket now lags: the ask is warned");
+});
+
+test("a stale venue drops out; the others still give a signal", () => {
+  const { ref, push, now } = threeVenues({ staleMs: 2000 });
+  for (let i = 0; i < 100; i++, now.t += 200) {
+    push.binance("BTCUSDT", 99_999.9, 100_000.1);
+    push.bybit("BTCUSDT", 99_999.9, 100_000.1);
+    push.okx("BTC-USDT-SWAP", 99_999.9, 100_000.1);
+    ref.observe(BTC.iid, 100_000, now.t);
+  }
+  // OKX goes quiet for 5 s; the other two keep ticking.
+  for (let i = 0; i < 25; i++, now.t += 200) {
+    push.binance("BTCUSDT", 99_999.9, 100_000.1);
+    push.bybit("BTCUSDT", 99_999.9, 100_000.1);
+    ref.observe(BTC.iid, 100_000, now.t);
+  }
+  const v = ref.view(BTC.iid, 100_000, now.t);
+  assert.equal(v.ok, true);
+  assert.equal(v.venues, 2);
+  assert.ok(!v.venueNames.includes("okx"));
+});
+
+test("a one-sided bybit update keeps the other side; an explicit bad price is rejected", () => {
+  const { ref, push } = threeVenues();
+  const ticks = [];
+  ref.on("tick", (iid) => ticks.push(iid));
+  push.bybit("BTCUSDT", 100_000, 100_000.5);
+  push.bybit("BTCUSDT", 100_000.2, null); // bid only: ask carried over
+  assert.deepEqual(ticks, [BTC.iid, BTC.iid]);
+  push.binance("BTCUSDT", 0, 100_000.5); // Binance always sends both: 0 is bad
+  assert.equal(ticks.length, 2);
+});
+
+test("a tick from any venue reaches the engine", () => {
+  const { ref, push } = threeVenues();
+  const ticks = [];
+  ref.on("tick", (iid) => ticks.push(iid));
+  push.okx("ETH-USDT-SWAP", 3000, 3000.1);
+  push.bybit("ETHUSDT", 3000, 3000.1);
+  assert.deepEqual(ticks, [ETH.iid, ETH.iid]);
+});
+
+test("okx's plain-text pong and subscribe acks are ignored", () => {
+  const { ws } = threeVenues();
+  ws.okx.emit("message", "pong");
+  ws.okx.emit("message", JSON.stringify({ event: "subscribe", arg: { channel: "bbo-tbt" } }));
+  ws.bybit.emit("message", JSON.stringify({ success: true, ret_msg: "pong", op: "ping" }));
 });

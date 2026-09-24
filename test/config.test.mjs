@@ -49,3 +49,47 @@ test("reports every problem at once", () => {
   });
   assert.equal(errs.length, 2);
 });
+
+// ------------------------------------------------------------ fair mode
+
+const FAIR = { edgeBps: 1, levels: 2, levelStepBps: 1, cancelEdgeBps: 0.3, maxDistanceBps: 6, imbalanceWeight: 0.5, skewBps: 1.5, maxDeviationBps: 15 };
+
+test("configs written before fair mode existed still load, as join mode", () => {
+  const c = rawConfig();
+  delete c.strategy;
+  delete c.fair;
+  delete c.reference.venues;
+  const v = validateConfig(c);
+  assert.equal(v.strategy, undefined);
+});
+
+test("fair mode needs its settings and a reference in gate mode", () => {
+  const c = rawConfig();
+  c.strategy = { mode: "fair" };
+  delete c.fair;
+  c.reference.mode = "observe";
+  assert.throws(() => validateConfig(c), (e) => /config\.fair is missing/.test(e.message) && /reference\.mode must be "gate"/.test(e.message));
+  c.fair = FAIR;
+  c.reference.mode = "gate";
+  assert.equal(validateConfig(c).strategy.mode, "fair");
+});
+
+test("fair settings: cancel distance below the edge, deepest level inside maxDistance", () => {
+  const c = rawConfig();
+  c.fair = { ...FAIR, cancelEdgeBps: 1 };
+  assert.throws(() => validateConfig(c), /cancelEdgeBps \(1\) must be < edgeBps/);
+  c.fair = { ...FAIR, levels: 5, levelStepBps: 2, maxDistanceBps: 6 };
+  assert.throws(() => validateConfig(c), /maxDistanceBps \(6\) must exceed the deepest level/);
+  c.fair = { ...FAIR, bogus: 1 };
+  assert.throws(() => validateConfig(c), /config\.fair\.bogus is not a known setting/);
+});
+
+test("reference venues: known names only, no duplicates", () => {
+  const c = rawConfig();
+  c.reference.venues = ["binance", "bybit", "okx"];
+  assert.deepEqual([...validateConfig(c).reference.venues], ["binance", "bybit", "okx"]);
+  c.reference.venues = ["binance", "kraken"];
+  assert.throws(() => validateConfig(c), /contains "kraken"/);
+  c.reference.venues = ["okx", "okx"];
+  assert.throws(() => validateConfig(c), /contains duplicates/);
+});

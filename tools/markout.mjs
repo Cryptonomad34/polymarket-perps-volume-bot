@@ -15,7 +15,10 @@
 // selection: where did the price go right after we got filled?
 //
 // MID RECONSTRUCTION
-// There is no recorded mid series, but there doesn't need to be: our own quote
+// When logs/reference.csv exists (any reference mode but "off", and always in
+// strategy.mode "fair") its pmMid column is Polymarket's mid once a second,
+// and that is used. Otherwise the mid is rebuilt from our own placements.
+// That fallback only works in "join" mode: our own quote
 // placements sit ON the best bid/ask, so quotes.csv is a sampled BBO. The one
 // correction needed is that a quote placed while an adverse signal is firing is
 // deliberately `backoffTicks` behind the best, so that offset is added back.
@@ -46,6 +49,7 @@ function parseArgs(argv) {
     since: null,
     until: null,
     split: null,
+    by: null,
     calibrate: null,
     backoffTicks: null, // read from config.json when not given
   };
@@ -58,6 +62,7 @@ function parseArgs(argv) {
       case "--since": a.since = val(); break;
       case "--until": a.until = val(); break;
       case "--split": a.split = val(); break;
+      case "--by": a.by = val(); break;
       case "--calibrate": a.calibrate = Number(val()); break;
       case "--backoff-ticks": a.backoffTicks = Number(val()); break;
       case "--help": case "-h": a.help = true; break;
@@ -75,6 +80,8 @@ markout.mjs — what happened to the price right after we got filled
   --since TS           ISO timestamp, inclusive (prefix match is fine)
   --until TS           ISO timestamp, exclusive
   --split TS           report the window before and after TS separately
+  --by level|age       also break markout down by ladder level or order age
+                       (how long the order rested before it filled)
   --calibrate MS       also print the rolling mid-range distribution over MS
   --backoff-ticks N    override quote.adverse.backoffTicks from config.json
 `;
@@ -147,6 +154,25 @@ function buildBook(quotes, backoffTicks) {
     console.log(`  Add them to PRICE_DECIMALS in tools/markout.mjs (see /v1/info/instruments).`);
   }
   return bysymbol;
+}
+
+// Polymarket's mid once a second, as the bot saw it (reference.csv). Replaces
+// the placement-based series for every symbol it covers, because in "fair"
+// mode our orders rest away from the best price and are not a sampled BBO.
+function mergeReferenceMids(book, refRows) {
+  const mids = new Map();
+  for (const r of refRows) {
+    const t = Date.parse(r.ts);
+    const m = num(r.pmMid);
+    if (!(m > 0) || !Number.isFinite(t) || !r.symbol) continue;
+    if (!mids.has(r.symbol)) mids.set(r.symbol, []);
+    mids.get(r.symbol).push([t, m]);
+  }
+  for (const [symbol, series] of mids) {
+    series.sort((x, y) => x[0] - y[0]);
+    book.set(symbol, { bid: series, ask: series, source: "reference.csv" });
+  }
+  return mids.size;
 }
 
 function bysym(map, symbol) {
@@ -228,7 +254,47 @@ function markouts(fills, book) {
   return out;
 }
 
-function printWindow(label, fills, book) {
+// Markout grouped by a key: is the ladder's deep level less toxic than its
+// first, and do orders that rested longer (front of the queue) fill better?
+function printMarkoutBy(fills, book, by) {
+  const keyOf =
+    by === "level"
+      ? (f) => (f.level === "" || f.level == null ? "join mode" : `level ${f.level}`)
+      : (f) => {
+          const ms = num(f.order_age_ms);
+          if (ms == null) return "unknown";
+          if (ms < 1_000) return "a <1s";
+          if (ms < 5_000) return "b 1-5s";
+          if (ms < 30_000) return "c 5-30s";
+          if (ms < 120_000) return "d 30-120s";
+          return "e 120s+";
+        };
+  const groups = new Map();
+  for (const f of fills) {
+    if (f.liquidity !== "maker" || !f.intent?.startsWith("quote")) continue;
+    const k = keyOf(f);
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(f);
+  }
+  console.log(`\n  MARKOUT BY ${by.toUpperCase()} (vs fill price; + means the price went our way)`);
+  if (!groups.size) { console.log("    no maker quote fills"); return; }
+  for (const k of [...groups.keys()].sort()) {
+    const g = groups.get(k);
+    const cols = HORIZONS_SEC.map((H) => {
+      const xs = [];
+      for (const f of g) {
+        const m = midAt(book, f.symbol, Date.parse(f.ts) + H * 1000);
+        if (m != null) xs.push((1e4 * (f.side === "buy" ? 1 : -1) * (m - f.price)) / f.price);
+      }
+      return `+${H}s ${xs.length ? bps(mean(xs)) : "n/a"}`;
+    });
+    const edges = g.map((f) => num(f.edge_vs_fair_bps)).filter((x) => x != null);
+    const edge = edges.length ? `  vs fair ${bps(mean(edges))}` : "";
+    console.log(`    ${k.padEnd(12)} ${String(g.length).padStart(5)} fills  ${cols.join("  ")}${edge}`);
+  }
+}
+
+function printWindow(label, fills, book, by = null) {
   if (!fills.length) { console.log(`\n=== ${label} ===\n  no fills in window`); return; }
   const first = Date.parse(fills[0].ts), last = Date.parse(fills.at(-1).ts);
   const mins = Math.max(1 / 60, (last - first) / 60_000);
@@ -258,6 +324,7 @@ function printWindow(label, fills, book) {
       );
     }
   }
+  if (by) printMarkoutBy(fills, book, by);
   return c;
 }
 
@@ -347,6 +414,10 @@ function main() {
   }
 
   const inWindow = (ts) => (!a.since || ts >= a.since) && (!a.until || ts < a.until);
+  // Mids are needed up to the longest horizon after the last fill.
+  const pad = (ts, ms) => new Date(Date.parse(ts) + ms).toISOString();
+  const inWindowWide = (ts) => (!a.since || ts >= a.since) && (!a.until || ts < pad(a.until, (Math.max(...HORIZONS_SEC) + 5) * 1000));
+  if (a.by && a.by !== "level" && a.by !== "age") throw new Error(`--by must be "level" or "age" (got "${a.by}")`);
 
   const fills = readCsv(path.join(a.logs, "fills.csv"))
     .filter((f) => f.mode === a.mode && inWindow(f.ts))
@@ -359,16 +430,18 @@ function main() {
 
   const quotes = readCsv(path.join(a.logs, "quotes.csv")).filter((q) => q.mode === a.mode);
   const book = buildBook(quotes, backoffTicks);
+  const refSymbols = mergeReferenceMids(book, readCsv(path.join(a.logs, "reference.csv")).filter((r) => inWindowWide(r.ts)));
 
   console.log(`logs ${a.logs}  mode ${a.mode}  backoffTicks ${backoffTicks}`);
   console.log(`${fills.length} fills, ${quotes.length} quote rows, book samples: ` +
-    [...book].map(([s, v]) => `${s} ${v.bid.length}/${v.ask.length}`).join("  "));
+    [...book].map(([s, v]) => `${s} ${v.bid.length}/${v.ask.length}`).join("  ") +
+    (refSymbols ? "  (mid from reference.csv)" : "  (mid rebuilt from our placements: only valid in join mode)"));
 
   if (a.split) {
-    printWindow("BEFORE " + a.split, fills.filter((f) => f.ts < a.split), book);
-    printWindow("AFTER  " + a.split, fills.filter((f) => f.ts >= a.split), book);
+    printWindow("BEFORE " + a.split, fills.filter((f) => f.ts < a.split), book, a.by);
+    printWindow("AFTER  " + a.split, fills.filter((f) => f.ts >= a.split), book, a.by);
   } else {
-    printWindow("WINDOW", fills, book);
+    printWindow("WINDOW", fills, book, a.by);
   }
   if (fills.length) {
     printPricePath(fills);

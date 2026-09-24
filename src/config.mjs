@@ -6,6 +6,10 @@ import fs from "node:fs";
 const num = (min, max, { int = false } = {}) => ({ type: "number", min, max, int });
 const bool = () => ({ type: "boolean" });
 const oneOf = (...values) => ({ type: "enum", values });
+// A whole section that may be left out of config.json (older configs keep
+// loading); when present, every field in it is checked as usual.
+const optionalSection = (fields) => ({ type: "section", fields, optional: true });
+const REFERENCE_VENUES = ["binance", "bybit", "okx"];
 
 // Every field is required; config.example.json documents each one.
 export const SCHEMA = {
@@ -38,7 +42,26 @@ export const SCHEMA = {
     warmupSec: num(10, 3_600),
     staleMs: num(200, 60_000, { int: true }),
     gateBps: num(0.1, 50),
+    // Which external venues feed the reference. Default ["binance"]. With
+    // several, the signal is the median across the fresh ones.
+    venues: { type: "venues", optional: true },
   },
+  // "join" (default): join the best bid/ask (src/strategy.mjs).
+  // "fair": quote a resting ladder around a fair value (src/ladder.mjs).
+  strategy: optionalSection({
+    mode: oneOf("join", "fair"),
+  }),
+  // Settings for strategy.mode "fair". All distances are bps of fair value.
+  fair: optionalSection({
+    edgeBps: num(0.1, 50), // level 0 sits this far from fair value
+    levels: num(1, 5, { int: true }), // resting orders per side
+    levelStepBps: num(0.1, 50), // extra distance for each deeper level
+    cancelEdgeBps: num(0, 50), // pull an order once fair value is this close to it
+    maxDistanceBps: num(1, 200), // pull an order this far from fair value (it has no chance)
+    imbalanceWeight: num(0, 1), // share of the microprice-vs-mid gap added to fair value
+    skewBps: num(0, 50), // fair value shift at a full inventory.maxNotionalUsd position
+    maxDeviationBps: num(1, 200), // distrust a fair value this far from Polymarket's mid
+  }),
   inventory: {
     maxNotionalUsd: num(10, 80),
     // Above this, the side that would grow the position stops quoting and the
@@ -122,6 +145,14 @@ function check(schema, value, where, errors) {
     return;
   }
   switch (schema.type) {
+    case "section":
+      check(schema.fields, value, where, errors);
+      break;
+    case "venues":
+      if (!Array.isArray(value) || value.length === 0) errors.push(`${where} must be a non-empty list`);
+      else for (const v of value) if (!REFERENCE_VENUES.includes(v)) errors.push(`${where} contains "${v}"; only ${REFERENCE_VENUES.join(", ")} are supported`);
+      if (Array.isArray(value) && new Set(value).size !== value.length) errors.push(`${where} contains duplicates`);
+      break;
     case "number":
       if (typeof value !== "number" || !Number.isFinite(value)) errors.push(`${where} must be a number (got ${JSON.stringify(value)})`);
       else if (schema.int && !Number.isInteger(value)) errors.push(`${where} must be a whole number (got ${value})`);
@@ -157,6 +188,14 @@ function crossChecks(c, errors) {
     errors.push(`config.quote.notionalUsd (${c.quote.notionalUsd}) must be ≤ inventory.maxNotionalUsd (${c.inventory.maxNotionalUsd})`);
   if (c.reference?.mode !== "off" && c.reference?.warmupSec * 1000 < c.reference?.staleMs)
     errors.push(`config.reference.warmupSec (${c.reference.warmupSec}s) must exceed staleMs (${c.reference.staleMs}ms) or the feed is judged warm before it is judged live`);
+  if (c.strategy?.mode === "fair") {
+    if (!c.fair) errors.push(`config.fair is missing; strategy.mode "fair" needs it (see config.example.json)`);
+    if (c.reference?.mode !== "gate") errors.push(`strategy.mode "fair" prices every order from the reference, so config.reference.mode must be "gate" (got "${c.reference?.mode}")`);
+  }
+  if (c.fair && c.fair.cancelEdgeBps >= c.fair.edgeBps)
+    errors.push(`config.fair.cancelEdgeBps (${c.fair.cancelEdgeBps}) must be < edgeBps (${c.fair.edgeBps}), or a freshly placed order is already "unsafe" and gets pulled at once`);
+  if (c.fair && c.fair.maxDistanceBps <= c.fair.edgeBps + (c.fair.levels - 1) * c.fair.levelStepBps)
+    errors.push(`config.fair.maxDistanceBps (${c.fair.maxDistanceBps}) must exceed the deepest level (edgeBps + (levels-1) x levelStepBps = ${c.fair.edgeBps + (c.fair.levels - 1) * c.fair.levelStepBps}), or deep orders are pulled as soon as they are placed`);
   if (c.inventory?.skewAtUsd > c.inventory?.maxNotionalUsd)
     errors.push(`config.inventory.skewAtUsd (${c.inventory.skewAtUsd}) must be ≤ maxNotionalUsd (${c.inventory.maxNotionalUsd}) or the skew never engages before the cap`);
 }

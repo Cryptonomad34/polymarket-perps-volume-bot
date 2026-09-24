@@ -15,6 +15,7 @@ import { costUsed, netPnl } from "./risk.mjs";
 export const FILL_COLUMNS = [
   "ts", "mode", "symbol", "iid", "side", "price", "qty", "notional", "liquidity", "fee", "intent",
   "decision_mid", "slippage_usd", "slippage_bps", "position_after", "realized_pnl", "trade_id", "coid",
+  "level", "order_age_ms", "fair_at_place", "edge_vs_fair_bps",
 ];
 export const QUOTE_COLUMNS = ["ts", "mode", "symbol", "iid", "action", "side", "price", "qty", "intent", "reason", "coid"];
 export const SUMMARY_COLUMNS = [
@@ -33,8 +34,33 @@ function csvCell(v) {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
+// A file written with a different set of columns is moved aside before the
+// first new row. Appending rows of a new width under the old header would be
+// silently dropped by every reader (they skip rows that don't match it).
+export function rollIfHeaderChanged(file, columns) {
+  if (!fs.existsSync(file)) return null;
+  const fd = fs.openSync(file, "r");
+  let head;
+  try {
+    const buf = Buffer.alloc(4096);
+    const n = fs.readSync(fd, buf, 0, buf.length, 0);
+    head = buf.subarray(0, n).toString("utf8").split("\n")[0].replace(/\r$/, "");
+  } finally {
+    fs.closeSync(fd);
+  }
+  if (head === columns.join(",")) return null;
+  const moved = file.replace(/\.csv$/, "") + `.pre-${new Date().toISOString().replace(/[:.]/g, "-")}.csv`;
+  fs.renameSync(file, moved);
+  return moved;
+}
+
 function appender(file, columns) {
+  let checked = false;
   return (row) => {
+    if (!checked) {
+      checked = true;
+      rollIfHeaderChanged(file, columns);
+    }
     const exists = fs.existsSync(file);
     const line = columns.map((c) => csvCell(row[c])).join(",") + "\n";
     fs.appendFileSync(file, exists ? line : columns.join(",") + "\n" + line);
