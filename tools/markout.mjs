@@ -156,9 +156,11 @@ function buildBook(quotes, backoffTicks) {
   return bysymbol;
 }
 
-// Polymarket's mid once a second, as the bot saw it (reference.csv). Replaces
-// the placement-based series for every symbol it covers, because in "fair"
+// Polymarket's mid once a second, as the bot saw it (reference.csv). Where it
+// has a sample it wins over the placement-based series, because in "fair"
 // mode our orders rest away from the best price and are not a sampled BBO.
+// Outside its coverage (older fills, reference off) the placement-based
+// series still prices the markout.
 function mergeReferenceMids(book, refRows) {
   const mids = new Map();
   for (const r of refRows) {
@@ -170,7 +172,7 @@ function mergeReferenceMids(book, refRows) {
   }
   for (const [symbol, series] of mids) {
     series.sort((x, y) => x[0] - y[0]);
-    book.set(symbol, { bid: series, ask: series, source: "reference.csv" });
+    bysym(book, symbol).ref = series;
   }
   return mids.size;
 }
@@ -194,6 +196,8 @@ function sampleAt(series, t) {
 function midAt(book, symbol, t) {
   const s = book.get(symbol);
   if (!s) return null;
+  const ref = s.ref ? sampleAt(s.ref, t) : null;
+  if (ref != null) return ref;
   const bid = sampleAt(s.bid, t);
   const ask = sampleAt(s.ask, t);
   return bid != null && ask != null ? (bid + ask) / 2 : null;
@@ -434,8 +438,8 @@ function main() {
 
   console.log(`logs ${a.logs}  mode ${a.mode}  backoffTicks ${backoffTicks}`);
   console.log(`${fills.length} fills, ${quotes.length} quote rows, book samples: ` +
-    [...book].map(([s, v]) => `${s} ${v.bid.length}/${v.ask.length}`).join("  ") +
-    (refSymbols ? "  (mid from reference.csv)" : "  (mid rebuilt from our placements: only valid in join mode)"));
+    [...book].map(([s, v]) => `${s} ${v.bid.length}/${v.ask.length}${v.ref ? ` +${v.ref.length} ref` : ""}`).join("  ") +
+    (refSymbols ? "  (mid from reference.csv where it has one, else from our placements)" : "  (mid rebuilt from our placements: only valid in join mode)"));
 
   if (a.split) {
     printWindow("BEFORE " + a.split, fills.filter((f) => f.ts < a.split), book, a.by);
