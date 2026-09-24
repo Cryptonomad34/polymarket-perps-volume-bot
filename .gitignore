@@ -1,0 +1,9 @@
+node_modules/
+logs/
+control/STOP
+control/.lock
+config.json
+*.env
+
+# local-only ops notes (server details)
+OPERATIONS.md

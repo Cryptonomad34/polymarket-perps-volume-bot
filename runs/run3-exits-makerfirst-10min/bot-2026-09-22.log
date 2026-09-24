@@ -1,0 +1,117 @@
+{"ts":"2026-09-22T07:50:54.510Z","level":"info","msg":"volume-bot starting in DRY mode","markets":["BTC-USD","ETH-USD"],"pid":7508}
+{"ts":"2026-09-22T07:50:55.009Z","level":"info","msg":"clock synced with exchange","offsetMs":-397}
+{"ts":"2026-09-22T07:50:55.233Z","level":"info","msg":"fee schedule has no \"crypto\" category; using \"equity\" rates for BTC-USD"}
+{"ts":"2026-09-22T07:50:55.234Z","level":"info","msg":"fee schedule has no \"crypto\" category; using \"equity\" rates for ETH-USD"}
+{"ts":"2026-09-22T07:50:55.234Z","level":"info","msg":"dry run uses fee override from config.sim","makerBps":-0.5,"takerBps":2}
+{"ts":"2026-09-22T07:50:55.235Z","level":"info","msg":"state: no previous state, starting fresh","file":"logs/state-dry.json"}
+{"ts":"2026-09-22T07:50:56.524Z","level":"info","msg":"ws: connected and resynced","iids":[6,7]}
+{"ts":"2026-09-22T07:50:56.768Z","level":"info","msg":"engine running (TRADING)","mode":"dry","markets":["BTC-USD","ETH-USD"]}
+{"ts":"2026-09-22T07:51:05.820Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85257 (maker)","intent":"quote-ask","fee":-0.001236,"slipBps":-0.18,"position":-0.00029}
+{"ts":"2026-09-22T07:51:07.655Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.4 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.55,"position":0.0091}
+{"ts":"2026-09-22T07:51:08.644Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85278 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:51:11.115Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2723.9 (maker)","intent":"quote-bid","fee":-0.001239,"slipBps":-0.55,"position":0.0182}
+{"ts":"2026-09-22T07:51:16.338Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85273 (maker)","intent":"quote-bid","fee":-0.001236,"slipBps":-0.06,"position":0.00029}
+{"ts":"2026-09-22T07:51:29.415Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2723.6 (maker)","intent":"quote-bid","fee":-0.001239,"slipBps":-0.55,"position":0.0273}
+{"ts":"2026-09-22T07:51:41.794Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85264 (maker)","intent":"quote-bid","fee":-0.001236,"slipBps":-0.18,"position":0.00058}
+{"ts":"2026-09-22T07:51:43.313Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2723.4 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":-0.55,"position":0.0182}
+{"ts":"2026-09-22T07:51:45.088Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2723.6 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":-0.55,"position":0.0091}
+{"ts":"2026-09-22T07:51:51.451Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85259 (maker)","intent":"quote-bid","fee":-0.001236,"slipBps":-0.18,"position":0.00087}
+{"ts":"2026-09-22T07:51:51.707Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2723.5 (maker)","intent":"quote-bid","fee":-0.001239,"slipBps":-0.55,"position":0.0182}
+{"ts":"2026-09-22T07:51:59.189Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2723.1 (maker)","intent":"quote-bid","fee":-0.001239,"slipBps":-0.55,"position":0.0273}
+{"ts":"2026-09-22T07:52:06.704Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2723.2 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":-0.55,"position":0.0182}
+{"ts":"2026-09-22T07:52:06.843Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85254 (maker)","intent":"quote-ask","fee":-0.001236,"slipBps":-0.18,"position":0.00058}
+{"ts":"2026-09-22T07:52:08.051Z","level":"info","msg":"flatten start ETH-USD: position age","size":0.0182,"phase":"passive","decisionMid":2724.25}
+{"ts":"2026-09-22T07:52:09.242Z","level":"info","msg":"fill ETH-USD SELL 0.0182 @ 2724.3 (maker)","intent":"flatten-post","fee":-0.002479,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:52:09.266Z","level":"info","msg":"flatten ETH-USD -> idle","reason":"flat","size":0}
+{"ts":"2026-09-22T07:52:09.367Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85264 (maker)","intent":"quote-ask","fee":-0.001236,"slipBps":-0.18,"position":0.00029}
+{"ts":"2026-09-22T07:52:11.134Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85270 (maker)","intent":"quote-bid","fee":-0.001236,"slipBps":-0.18,"position":0.00058}
+{"ts":"2026-09-22T07:52:16.372Z","level":"info","msg":"flatten start BTC-USD: position age","size":0.00058,"phase":"passive","decisionMid":85263.5}
+{"ts":"2026-09-22T07:52:22.685Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.2 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.55,"position":0.0091}
+{"ts":"2026-09-22T07:52:24.766Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2723.9 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":-0.55,"position":0}
+{"ts":"2026-09-22T07:52:24.854Z","level":"info","msg":"fill BTC-USD SELL 0.00058 @ 85258 (maker)","intent":"flatten-post","fee":-0.002472,"slipBps":0.65,"position":0}
+{"ts":"2026-09-22T07:52:24.930Z","level":"info","msg":"flatten BTC-USD -> idle","reason":"flat","size":0}
+{"ts":"2026-09-22T07:52:32.213Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.2 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":0.0091}
+{"ts":"2026-09-22T07:53:04.304Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2724.3 (maker)","intent":"quote-ask","fee":-0.00124,"slipBps":-0.55,"position":0}
+{"ts":"2026-09-22T07:53:04.332Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85267 (maker)","intent":"quote-ask","fee":-0.001236,"slipBps":-0.18,"position":-0.00029}
+{"ts":"2026-09-22T07:53:04.676Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85284 (maker)","intent":"quote-ask","fee":-0.001237,"slipBps":-1,"position":-0.00058}
+{"ts":"2026-09-22T07:53:04.917Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2725.1 (maker)","intent":"quote-ask","fee":-0.00124,"slipBps":-0.73,"position":-0.0091}
+{"ts":"2026-09-22T07:53:04.935Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85292 (maker)","intent":"quote-ask","fee":-0.001237,"slipBps":-0.18,"position":-0.00087}
+{"ts":"2026-09-22T07:53:07.388Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2725.3 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:53:07.502Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85295 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":-0.00058}
+{"ts":"2026-09-22T07:53:11.091Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85293 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":-0.00029}
+{"ts":"2026-09-22T07:53:12.315Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.7 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":0.0091}
+{"ts":"2026-09-22T07:53:12.389Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85290 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:53:15.499Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85288 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0.00029}
+{"ts":"2026-09-22T07:53:15.854Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85285 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0.00058}
+{"ts":"2026-09-22T07:53:16.878Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85283 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0.00087}
+{"ts":"2026-09-22T07:53:36.865Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2723.6 (maker)","intent":"quote-bid","fee":-0.001239,"slipBps":-0.55,"position":0.0182}
+{"ts":"2026-09-22T07:53:39.059Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2723.6 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":-0.55,"position":0.0091}
+{"ts":"2026-09-22T07:53:44.281Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2723.7 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:53:44.407Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85273 (maker)","intent":"quote-ask","fee":-0.001236,"slipBps":-0.06,"position":0.00058}
+{"ts":"2026-09-22T07:53:44.792Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2724.3 (maker)","intent":"quote-ask","fee":-0.00124,"slipBps":-0.55,"position":-0.0091}
+{"ts":"2026-09-22T07:53:44.883Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85278 (maker)","intent":"quote-ask","fee":-0.001237,"slipBps":-0.06,"position":0.00029}
+{"ts":"2026-09-22T07:53:46.575Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2724.7 (maker)","intent":"quote-ask","fee":-0.00124,"slipBps":-0.55,"position":-0.0182}
+{"ts":"2026-09-22T07:53:46.592Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85288 (maker)","intent":"quote-ask","fee":-0.001237,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:53:55.470Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2725 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":-0.0091}
+{"ts":"2026-09-22T07:53:56.510Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.5 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:53:57.609Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85295 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.06,"position":0.00029}
+{"ts":"2026-09-22T07:54:04.776Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.3 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":0.0091}
+{"ts":"2026-09-22T07:54:05.216Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85292 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0.00058}
+{"ts":"2026-09-22T07:54:06.191Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2724.3 (maker)","intent":"quote-ask","fee":-0.00124,"slipBps":-0.55,"position":0}
+{"ts":"2026-09-22T07:54:07.261Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2725.6 (maker)","intent":"quote-ask","fee":-0.00124,"slipBps":-0.73,"position":-0.0091}
+{"ts":"2026-09-22T07:54:09.776Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85313 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0.00087}
+{"ts":"2026-09-22T07:54:11.446Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2725.6 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:54:57.755Z","level":"info","msg":"flatten start BTC-USD: position age","size":0.00087,"phase":"passive","decisionMid":85298.5}
+{"ts":"2026-09-22T07:55:00.420Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2725.5 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":0.0091}
+{"ts":"2026-09-22T07:55:01.170Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2725.2 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.55,"position":0.0182}
+{"ts":"2026-09-22T07:55:01.414Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.7 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.55,"position":0.0273}
+{"ts":"2026-09-22T07:55:06.079Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2724.1 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":0.92,"position":0.0182}
+{"ts":"2026-09-22T07:55:06.953Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2724.4 (maker)","intent":"quote-ask","fee":-0.00124,"slipBps":-0.55,"position":0.0091}
+{"ts":"2026-09-22T07:55:18.523Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.4 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.55,"position":0.0182}
+{"ts":"2026-09-22T07:55:42.761Z","level":"info","msg":"flatten BTC-USD -> taker","reason":"taker exit (passive window elapsed)","size":0.00087}
+{"ts":"2026-09-22T07:55:43.773Z","level":"info","msg":"flatten IOC BTC-USD sell 0.00087 limit 85247","reason":"taker exit (passive window elapsed)"}
+{"ts":"2026-09-22T07:55:43.870Z","level":"info","msg":"fill BTC-USD SELL 0.00087 @ 85289 (taker)","intent":"flatten-ioc","fee":0.01484,"slipBps":0.06,"position":0}
+{"ts":"2026-09-22T07:55:43.976Z","level":"info","msg":"flatten BTC-USD -> idle","reason":"flat","size":0}
+{"ts":"2026-09-22T07:55:49.136Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85288 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0.00029}
+{"ts":"2026-09-22T07:55:56.779Z","level":"info","msg":"summary (periodic)\n[dry] 2026-09-22  volume $1560.10 (59 fills; maker $1485.90 / taker $74.20)\n  cost per $1: 0.000015  (= $15.02 per $1M)   net cost $0.0234   net P&L $-0.0234\n  maker fees $-0.0743  taker fees $0.0148  funding $0.0000  slippage $-0.0414  inventory drift $-0.1243\n  budget $-0.1008/$5.00  margin $7.43  max DD $0.0535  flattens 3 (avg slip 0.17 bps)  min liq dist 9.0%\n  $1M tier: ~2.2 days at this pace, ~$15.02 total cost"}
+{"ts":"2026-09-22T07:55:56.780Z","level":"info","msg":"position BTC-USD 0.00029 @ 85288; liq 77612.08 (9% away)"}
+{"ts":"2026-09-22T07:55:56.780Z","level":"info","msg":"position ETH-USD 0.0182 @ 2724.77; liq 2479.54 (8.98% away)"}
+{"ts":"2026-09-22T07:56:00.578Z","level":"info","msg":"flatten start ETH-USD: position age","size":0.0182,"phase":"passive","decisionMid":2724.1499999999996}
+{"ts":"2026-09-22T07:56:12.607Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85283 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0.00058}
+{"ts":"2026-09-22T07:56:19.990Z","level":"info","msg":"fill ETH-USD SELL 0.0182 @ 2723.4 (maker)","intent":"flatten-post","fee":-0.002478,"slipBps":2.75,"position":0}
+{"ts":"2026-09-22T07:56:20.094Z","level":"info","msg":"flatten ETH-USD -> idle","reason":"flat","size":0}
+{"ts":"2026-09-22T07:56:22.461Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2723.7 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":-0.55,"position":-0.0091}
+{"ts":"2026-09-22T07:56:32.949Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2724 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":-0.55,"position":-0.0182}
+{"ts":"2026-09-22T07:56:34.855Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85290 (maker)","intent":"quote-ask","fee":-0.001237,"slipBps":-0.18,"position":0.00029}
+{"ts":"2026-09-22T07:56:35.274Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85301 (maker)","intent":"quote-ask","fee":-0.001237,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:56:47.689Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2725.1 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":-0.0091}
+{"ts":"2026-09-22T07:56:55.521Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85308 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.06,"position":0.00029}
+{"ts":"2026-09-22T07:56:55.884Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85302 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.41,"position":0.00058}
+{"ts":"2026-09-22T07:57:02.499Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2725 (maker)","intent":"quote-ask","fee":-0.00124,"slipBps":-0.55,"position":-0.0182}
+{"ts":"2026-09-22T07:57:08.974Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2725 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":-0.0091}
+{"ts":"2026-09-22T07:57:11.649Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2725.2 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.18,"position":0}
+{"ts":"2026-09-22T07:57:20.609Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2725.1 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.55,"position":0.0091}
+{"ts":"2026-09-22T07:57:20.632Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85298 (maker)","intent":"quote-bid","fee":-0.001237,"slipBps":-0.18,"position":0.00087}
+{"ts":"2026-09-22T07:57:23.031Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.2 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-1.65,"position":0.0182}
+{"ts":"2026-09-22T07:57:26.858Z","level":"info","msg":"fill ETH-USD SELL 0.0091 @ 2724.1 (maker)","intent":"quote-ask","fee":-0.001239,"slipBps":-0.18,"position":0.0091}
+{"ts":"2026-09-22T07:57:27.802Z","level":"info","msg":"fill BTC-USD SELL 0.00029 @ 85261 (maker)","intent":"quote-ask","fee":-0.001236,"slipBps":-0.18,"position":0.00058}
+{"ts":"2026-09-22T07:57:29.926Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.4 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.55,"position":0.0182}
+{"ts":"2026-09-22T07:57:44.813Z","level":"info","msg":"fill ETH-USD BUY 0.0091 @ 2724.2 (maker)","intent":"quote-bid","fee":-0.00124,"slipBps":-0.55,"position":0.0273}
+{"ts":"2026-09-22T07:57:46.008Z","level":"info","msg":"fill BTC-USD BUY 0.00029 @ 85260 (maker)","intent":"quote-bid","fee":-0.001236,"slipBps":-0.18,"position":0.00087}
+{"ts":"2026-09-22T07:57:55.601Z","level":"info","msg":"flatten start BTC-USD: position age","size":0.00087,"phase":"passive","decisionMid":85249.5}
+{"ts":"2026-09-22T07:58:20.729Z","level":"info","msg":"flatten start ETH-USD: position age","size":0.0273,"phase":"passive","decisionMid":2725}
+{"ts":"2026-09-22T07:58:40.618Z","level":"info","msg":"flatten BTC-USD -> taker","reason":"taker exit (passive window elapsed)","size":0.00087}
+{"ts":"2026-09-22T07:58:41.626Z","level":"info","msg":"flatten IOC BTC-USD sell 0.00087 limit 85160","reason":"taker exit (passive window elapsed)"}
+{"ts":"2026-09-22T07:58:41.721Z","level":"info","msg":"fill BTC-USD SELL 0.00087 @ 85202 (taker)","intent":"flatten-ioc","fee":0.014825,"slipBps":7.51,"position":0}
+{"ts":"2026-09-22T07:58:41.828Z","level":"info","msg":"flatten BTC-USD -> idle","reason":"flat","size":0}
+{"ts":"2026-09-22T07:59:05.758Z","level":"info","msg":"flatten ETH-USD -> extended","reason":"extended passive exit","size":0.0273}
+{"ts":"2026-09-22T07:59:25.847Z","level":"info","msg":"flatten ETH-USD -> taker","reason":"taker exit (extension elapsed)","size":0.0273}
+{"ts":"2026-09-22T07:59:26.871Z","level":"info","msg":"flatten IOC ETH-USD sell 0.0273 limit 2722.7","reason":"taker exit (extension elapsed)"}
+{"ts":"2026-09-22T07:59:26.966Z","level":"info","msg":"fill ETH-USD SELL 0.0273 @ 2724 (taker)","intent":"flatten-ioc","fee":0.014873,"slipBps":11.01,"position":0}
+{"ts":"2026-09-22T07:59:27.074Z","level":"info","msg":"flatten ETH-USD -> idle","reason":"flat","size":0}
+{"ts":"2026-09-22T08:00:56.783Z","level":"info","msg":"summary (periodic)\n[dry] 2026-09-22  volume $2228.75 (81 fills; maker $2006.06 / taker $222.69)\n  cost per $1: 0.000072  (= $72.37 per $1M)   net cost $0.1613   net P&L $-0.1613\n  maker fees $-0.1003  taker fees $0.0445  funding $0.0000  slippage $0.0920  inventory drift $-0.1251\n  budget $0.0362/$5.00  margin $0.00  max DD $0.1912  flattens 6 (avg slip 3.63 bps)  min liq dist n/a%\n  $1M tier: ~3.1 days at this pace, ~$72.37 total cost"}
+{"ts":"2026-09-22T08:01:06.118Z","level":"warn","msg":"shutting down: control/STOP file"}
+{"ts":"2026-09-22T08:01:06.118Z","level":"warn","msg":"cancelling 2 order(s) on BTC-USD: shutdown: control/STOP file"}
+{"ts":"2026-09-22T08:01:06.119Z","level":"warn","msg":"cancelling 2 order(s) on ETH-USD: shutdown: control/STOP file"}
+{"ts":"2026-09-22T08:01:06.215Z","level":"info","msg":"summary (exit: control/STOP file)\n[dry] 2026-09-22  volume $2228.75 (81 fills; maker $2006.06 / taker $222.69)\n  cost per $1: 0.000072  (= $72.37 per $1M)   net cost $0.1613   net P&L $-0.1613\n  maker fees $-0.1003  taker fees $0.0445  funding $0.0000  slippage $0.0920  inventory drift $-0.1251\n  budget $0.0362/$5.00  margin $0.00  max DD $0.1912  flattens 6 (avg slip 3.63 bps)  min liq dist n/a%\n  $1M tier: ~3.1 days at this pace, ~$72.37 total cost"}
+{"ts":"2026-09-22T08:01:06.217Z","level":"info","msg":"exited","reason":"control/STOP file"}

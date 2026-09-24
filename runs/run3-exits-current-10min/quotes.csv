@@ -1,0 +1,722 @@
+ts,mode,symbol,iid,action,side,price,qty,intent,reason,coid
+2026-09-22T07:50:55.495Z,dry,BTC-USD,6,place,buy,85255,0.00029,quote-bid,join best,e2fc304130c3f8e9174c43473fa0a433
+2026-09-22T07:50:55.586Z,dry,BTC-USD,6,place,sell,85257,0.00029,quote-ask,back off: book leaning up,be9d8e75e13a857d2dd8e19d1c352c9f
+2026-09-22T07:50:55.681Z,dry,ETH-USD,7,place,buy,2723.9,0.0091,quote-bid,back off: aggressive selling,681bc373fc8b0fbb4a43112b241a84d0
+2026-09-22T07:50:55.775Z,dry,ETH-USD,7,place,sell,2724.1,0.0091,quote-ask,join best,71847136e2f82e8d6148bb51ca9d6bb6
+2026-09-22T07:50:59.166Z,dry,ETH-USD,7,cancel,sell,2724.1,0.0091,quote-ask,target moved 2724.1 -> 2724.2,71847136e2f82e8d6148bb51ca9d6bb6
+2026-09-22T07:50:59.261Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,back off: book leaning up,5d6553a0691cc67f45dbe07fa64f7b03
+2026-09-22T07:51:00.797Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.1,5d6553a0691cc67f45dbe07fa64f7b03
+2026-09-22T07:51:00.891Z,dry,ETH-USD,7,place,sell,2724.1,0.0091,quote-ask,rejoin best,f5e03c3de9c0dbc486129d3a133bce9e
+2026-09-22T07:51:01.202Z,dry,BTC-USD,6,cancel,buy,85255,0.00029,quote-bid,target moved 85255 -> 85254,e2fc304130c3f8e9174c43473fa0a433
+2026-09-22T07:51:01.299Z,dry,BTC-USD,6,place,buy,85254,0.00029,quote-bid,back off: aggressive selling,e4f66b83c24aa154b149fcd0f15328b5
+2026-09-22T07:51:01.606Z,dry,ETH-USD,7,cancel,buy,2723.9,0.0091,quote-bid,target moved 2723.9 -> 2724,681bc373fc8b0fbb4a43112b241a84d0
+2026-09-22T07:51:01.707Z,dry,ETH-USD,7,place,buy,2724,0.0091,quote-bid,rejoin best,da6c7bfaa52e74fbbdb6a890340fcaba
+2026-09-22T07:51:02.216Z,dry,ETH-USD,7,cancel,sell,2724.1,0.0091,quote-ask,target moved 2724.1 -> 2724.2,f5e03c3de9c0dbc486129d3a133bce9e
+2026-09-22T07:51:02.307Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,back off: book leaning up,5b90b2d7bad3cc0c25ea0d3bd1401896
+2026-09-22T07:51:03.445Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.1,5b90b2d7bad3cc0c25ea0d3bd1401896
+2026-09-22T07:51:03.540Z,dry,ETH-USD,7,place,sell,2724.1,0.0091,quote-ask,rejoin best,7eb8054349516016b2631eb1c7d4a66d
+2026-09-22T07:51:05.881Z,dry,BTC-USD,6,place,sell,85281,0.00029,quote-ask,back off: holding inventory,a51ece166f77fa674185b556c532c761
+2026-09-22T07:51:05.973Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: holding inventory,420a3af1e7a81445835dc5e33cc45f3b
+2026-09-22T07:51:06.283Z,dry,BTC-USD,6,cancel,buy,85254,0.00029,quote-bid,target moved 85254 -> 85278,e4f66b83c24aa154b149fcd0f15328b5
+2026-09-22T07:51:06.378Z,dry,BTC-USD,6,place,buy,85278,0.00029,quote-bid,back off: holding back-off,cca8d2a36a10c5d8220f6dd610ba5b27
+2026-09-22T07:51:06.471Z,dry,ETH-USD,7,cancel,buy,2724,0.0091,quote-bid,target moved 2724 -> 2724.4,da6c7bfaa52e74fbbdb6a890340fcaba
+2026-09-22T07:51:06.565Z,dry,ETH-USD,7,place,buy,2724.4,0.0091,quote-bid,back off: book leaning down,69690238715136891cade672a8833813
+2026-09-22T07:51:07.092Z,dry,BTC-USD,6,cancel,buy,85278,0.00029,quote-bid,target moved 85278 -> 85279,cca8d2a36a10c5d8220f6dd610ba5b27
+2026-09-22T07:51:07.190Z,dry,BTC-USD,6,place,buy,85279,0.00029,quote-bid,rejoin best,1843433a202fba5cea254658dbc9ece2
+2026-09-22T07:51:07.701Z,dry,ETH-USD,7,place,buy,2723.9,0.0091,quote-bid,back off: holding back-off,83f8948716b0a92252ded26c5d4a1533
+2026-09-22T07:51:07.901Z,dry,BTC-USD,6,cancel,buy,85279,0.00029,quote-bid,target moved 85279 -> 85278,1843433a202fba5cea254658dbc9ece2
+2026-09-22T07:51:08.000Z,dry,BTC-USD,6,place,buy,85278,0.00029,quote-bid,back off: book leaning down,2a82e9753a89a8f1d4c262862963bb40
+2026-09-22T07:51:08.102Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0091,quote-ask,target moved 2724.7 -> 2724.2,420a3af1e7a81445835dc5e33cc45f3b
+2026-09-22T07:51:08.200Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,back off: book leaning up,62db1319f9652766d8959e020ce6677e
+2026-09-22T07:51:08.506Z,dry,ETH-USD,7,cancel,buy,2723.9,0.0091,quote-bid,target moved 2723.9 -> 2724,83f8948716b0a92252ded26c5d4a1533
+2026-09-22T07:51:08.600Z,dry,ETH-USD,7,place,buy,2724,0.0091,quote-bid,rejoin best,a7ca05734e4ecd4eeab1dab2cd52c900
+2026-09-22T07:51:08.709Z,dry,BTC-USD,6,place,buy,85272,0.00029,quote-bid,back off: holding back-off,97966028b4e366908745824712b5617b
+2026-09-22T07:51:09.106Z,dry,BTC-USD,6,cancel,sell,85281,0.00029,quote-ask,target moved 85281 -> 85275,a51ece166f77fa674185b556c532c761
+2026-09-22T07:51:09.203Z,dry,BTC-USD,6,place,sell,85275,0.00029,quote-ask,back off: holding back-off,81a8289cb3360a9c6bec9ff00f99250c
+2026-09-22T07:51:09.513Z,dry,BTC-USD,6,cancel,buy,85272,0.00029,quote-bid,target moved 85272 -> 85273,97966028b4e366908745824712b5617b
+2026-09-22T07:51:09.607Z,dry,BTC-USD,6,place,buy,85273,0.00029,quote-bid,rejoin best,febb1c4aef92f2c555a1c50181150e7d
+2026-09-22T07:51:10.316Z,dry,BTC-USD,6,cancel,sell,85275,0.00029,quote-ask,target moved 85275 -> 85274,81a8289cb3360a9c6bec9ff00f99250c
+2026-09-22T07:51:10.405Z,dry,BTC-USD,6,place,sell,85274,0.00029,quote-ask,rejoin best,fbe3c642d093561576c59f956722feb9
+2026-09-22T07:51:10.722Z,dry,BTC-USD,6,cancel,sell,85274,0.00029,quote-ask,target moved 85274 -> 85275,fbe3c642d093561576c59f956722feb9
+2026-09-22T07:51:10.815Z,dry,BTC-USD,6,place,sell,85275,0.00029,quote-ask,back off: book leaning up,54dd03f62de4b690ec5da00703725c58
+2026-09-22T07:51:11.125Z,dry,ETH-USD,7,place,buy,2723.6,0.0091,quote-bid,back off: holding inventory,9207e77539df56bcd724eeeba1556139
+2026-09-22T07:51:11.529Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2723.9,62db1319f9652766d8959e020ce6677e
+2026-09-22T07:51:11.623Z,dry,ETH-USD,7,place,sell,2723.9,0.0091,quote-ask,back off: book leaning up,303aabfffea4665f6e7b1a039de1e52f
+2026-09-22T07:51:12.140Z,dry,ETH-USD,7,cancel,buy,2723.6,0.0091,quote-bid,target moved 2723.6 -> 2723.7,9207e77539df56bcd724eeeba1556139
+2026-09-22T07:51:12.232Z,dry,ETH-USD,7,cancel,sell,2723.9,0.0091,quote-ask,target moved 2723.9 -> 2724,303aabfffea4665f6e7b1a039de1e52f
+2026-09-22T07:51:12.327Z,dry,ETH-USD,7,place,buy,2723.7,0.0091,quote-bid,back off: holding inventory,7267cf4f126a35712a3af33c533a55b2
+2026-09-22T07:51:12.422Z,dry,ETH-USD,7,place,sell,2724,0.0091,quote-ask,back off: book leaning up,4a59215d8f2b26080519e3dde05e384f
+2026-09-22T07:51:16.206Z,dry,BTC-USD,6,cancel,sell,85275,0.00029,quote-ask,target moved 85275 -> 85274,54dd03f62de4b690ec5da00703725c58
+2026-09-22T07:51:16.291Z,dry,BTC-USD,6,place,sell,85274,0.00029,quote-ask,rejoin best,46ce6892b46ba8428c781f33a470a547
+2026-09-22T07:51:16.373Z,dry,ETH-USD,7,cancel,buy,2723.7,0.0091,quote-bid,target moved 2723.7 -> 2723.4,7267cf4f126a35712a3af33c533a55b2
+2026-09-22T07:51:16.462Z,dry,ETH-USD,7,place,buy,2723.4,0.0091,quote-bid,back off: holding inventory,5c9aa05f09def48158487915cca146e9
+2026-09-22T07:51:16.617Z,dry,BTC-USD,6,place,buy,85264,0.00029,quote-bid,back off: holding inventory,7265a66b6fa75c0a322d2987d4308bcb
+2026-09-22T07:51:16.708Z,dry,ETH-USD,7,cancel,buy,2723.4,0.0091,quote-bid,target moved 2723.4 -> 2723.7,5c9aa05f09def48158487915cca146e9
+2026-09-22T07:51:16.806Z,dry,ETH-USD,7,place,buy,2723.7,0.0091,quote-bid,back off: holding inventory,b8b572072d50f2f51c39df6b6583b658
+2026-09-22T07:51:17.024Z,dry,BTC-USD,6,cancel,sell,85274,0.00029,quote-ask,target moved 85274 -> 85267,46ce6892b46ba8428c781f33a470a547
+2026-09-22T07:51:17.120Z,dry,BTC-USD,6,place,sell,85267,0.00029,quote-ask,back off: book leaning up,f0f184086014c22ccdb2006752279759
+2026-09-22T07:51:17.228Z,dry,ETH-USD,7,cancel,sell,2724,0.0091,quote-ask,target moved 2724 -> 2723.9,4a59215d8f2b26080519e3dde05e384f
+2026-09-22T07:51:17.324Z,dry,ETH-USD,7,place,sell,2723.9,0.0091,quote-ask,rejoin best,daf8a6656f3e601c4d821645731494ea
+2026-09-22T07:51:19.266Z,dry,ETH-USD,7,cancel,sell,2723.9,0.0091,quote-ask,target moved 2723.9 -> 2724,daf8a6656f3e601c4d821645731494ea
+2026-09-22T07:51:19.363Z,dry,ETH-USD,7,place,sell,2724,0.0091,quote-ask,back off: book leaning up,251255ac50b54964ee0f3cdfcc668311
+2026-09-22T07:51:20.283Z,dry,ETH-USD,7,cancel,sell,2724,0.0091,quote-ask,target moved 2724 -> 2723.9,251255ac50b54964ee0f3cdfcc668311
+2026-09-22T07:51:20.378Z,dry,ETH-USD,7,place,sell,2723.9,0.0091,quote-ask,rejoin best,b65186d6d7d93d8c1beaea166a50d3ce
+2026-09-22T07:51:26.766Z,dry,ETH-USD,7,cancel,buy,2723.7,0.0091,quote-bid,target moved 2723.7 -> 2723.6,b8b572072d50f2f51c39df6b6583b658
+2026-09-22T07:51:26.860Z,dry,ETH-USD,7,cancel,sell,2723.9,0.0091,quote-ask,target moved 2723.9 -> 2723.8,b65186d6d7d93d8c1beaea166a50d3ce
+2026-09-22T07:51:26.956Z,dry,ETH-USD,7,place,buy,2723.6,0.0091,quote-bid,back off: book leaning down,a90e43c9da20787d8726e1ace1da5e0c
+2026-09-22T07:51:27.048Z,dry,ETH-USD,7,place,sell,2723.8,0.0091,quote-ask,rejoin best,82c6156a54361b76619b20a96fa0ae70
+2026-09-22T07:51:29.406Z,dry,ETH-USD,7,place,buy,2723.3,0.0091,quote-bid,back off: holding inventory,5cd6950b0142c1b7096289288c5f4588
+2026-09-22T07:51:29.820Z,dry,ETH-USD,7,cancel,sell,2723.8,0.0091,quote-ask,target moved 2723.8 -> 2723.6,82c6156a54361b76619b20a96fa0ae70
+2026-09-22T07:51:29.914Z,dry,ETH-USD,7,place,sell,2723.6,0.0091,quote-ask,back off: book leaning up,068f37019471a78002a122edd2161abd
+2026-09-22T07:51:36.101Z,dry,ETH-USD,7,cancel,buy,2723.3,0.0091,quote-bid,target moved 2723.3 -> 2723.4,5cd6950b0142c1b7096289288c5f4588
+2026-09-22T07:51:36.194Z,dry,ETH-USD,7,cancel,sell,2723.6,0.0091,quote-ask,target moved 2723.6 -> 2723.7,068f37019471a78002a122edd2161abd
+2026-09-22T07:51:36.289Z,dry,ETH-USD,7,place,buy,2723.4,0.0091,quote-bid,back off: holding inventory,8c06baaaae4132418370a50ffd76898f
+2026-09-22T07:51:36.381Z,dry,ETH-USD,7,place,sell,2723.7,0.0091,quote-ask,back off: book leaning up,74870f5c9cd242d7ee68bdcff70c878e
+2026-09-22T07:51:37.312Z,dry,ETH-USD,7,cancel,buy,2723.4,0.0091,quote-bid,target moved 2723.4 -> 2723.5,8c06baaaae4132418370a50ffd76898f
+2026-09-22T07:51:37.407Z,dry,ETH-USD,7,cancel,sell,2723.7,0.0091,quote-ask,target moved 2723.7 -> 2723.8,74870f5c9cd242d7ee68bdcff70c878e
+2026-09-22T07:51:37.502Z,dry,ETH-USD,7,place,buy,2723.5,0.0091,quote-bid,back off: holding inventory,73c526c27a774b655013bb684dea4096
+2026-09-22T07:51:37.595Z,dry,ETH-USD,7,place,sell,2723.8,0.0091,quote-ask,back off: book leaning up,abaa2a81e9cfb64f5c72ef59d92e3654
+2026-09-22T07:51:39.133Z,dry,ETH-USD,7,cancel,sell,2723.8,0.0091,quote-ask,target moved 2723.8 -> 2723.7,abaa2a81e9cfb64f5c72ef59d92e3654
+2026-09-22T07:51:39.228Z,dry,ETH-USD,7,place,sell,2723.7,0.0091,quote-ask,rejoin best,d674b321848d7e369ab641e34c57cee2
+2026-09-22T07:51:39.946Z,dry,ETH-USD,7,cancel,sell,2723.7,0.0091,quote-ask,target moved 2723.7 -> 2723.8,d674b321848d7e369ab641e34c57cee2
+2026-09-22T07:51:40.041Z,dry,ETH-USD,7,place,sell,2723.8,0.0091,quote-ask,back off: book leaning up,d523e4d1b3f80a893492cf2f1c403752
+2026-09-22T07:51:41.364Z,dry,ETH-USD,7,cancel,sell,2723.8,0.0091,quote-ask,target moved 2723.8 -> 2723.7,d523e4d1b3f80a893492cf2f1c403752
+2026-09-22T07:51:41.465Z,dry,ETH-USD,7,place,sell,2723.7,0.0091,quote-ask,rejoin best,a4e2ddf3be86ed580807bc6eeae0d1c4
+2026-09-22T07:51:41.973Z,dry,BTC-USD,6,place,buy,85254,0.00029,quote-bid,back off: holding inventory,7fb2f1751e42a4d55628122ea00f0356
+2026-09-22T07:51:42.372Z,dry,BTC-USD,6,cancel,sell,85267,0.00029,quote-ask,target moved 85267 -> 85257,f0f184086014c22ccdb2006752279759
+2026-09-22T07:51:42.458Z,dry,BTC-USD,6,place,sell,85257,0.00029,quote-ask,back off: holding back-off,6cae2879181f308307df1634eb4d2e70
+2026-09-22T07:51:42.574Z,dry,ETH-USD,7,cancel,sell,2723.7,0.0091,quote-ask,target moved 2723.7 -> 2723.4,a4e2ddf3be86ed580807bc6eeae0d1c4
+2026-09-22T07:51:42.659Z,dry,ETH-USD,7,place,sell,2723.4,0.0091,quote-ask,back off: book leaning up,acc417734c401fe06f700777d6a7a8a7
+2026-09-22T07:51:42.781Z,dry,BTC-USD,6,cancel,sell,85257,0.00029,quote-ask,target moved 85257 -> 85256,6cae2879181f308307df1634eb4d2e70
+2026-09-22T07:51:42.878Z,dry,BTC-USD,6,place,sell,85256,0.00029,quote-ask,rejoin best,1fc771590f548f5ad9031ebdfe86cfd0
+2026-09-22T07:51:43.386Z,dry,ETH-USD,7,place,buy,2723.3,0.0091,quote-bid,back off: holding inventory,2dd03a2cb9e41f4fb8f2e70b3c86e914
+2026-09-22T07:51:43.486Z,dry,ETH-USD,7,place,sell,2723.6,0.0091,quote-ask,back off: book leaning up,7cdecaf5a9a1ef466c5624420f2c2bb9
+2026-09-22T07:51:45.206Z,dry,ETH-USD,7,place,sell,2723.8,0.0091,quote-ask,back off: book leaning up,27fe5dff61cbff6cb0aa1378873ca34f
+2026-09-22T07:51:45.406Z,dry,BTC-USD,6,place,sell,85263,0.00029,quote-ask,back off: holding back-off,b84b8635c3ec8819527e6f720c94f3e4
+2026-09-22T07:51:45.606Z,dry,ETH-USD,7,cancel,buy,2723.3,0.0091,quote-bid,target moved 2723.3 -> 2723.5,2dd03a2cb9e41f4fb8f2e70b3c86e914
+2026-09-22T07:51:45.700Z,dry,ETH-USD,7,place,buy,2723.5,0.0091,quote-bid,back off: holding inventory,349becaa7763dd463ada98d6fe0036c6
+2026-09-22T07:51:45.808Z,dry,BTC-USD,6,cancel,buy,85254,0.00029,quote-bid,target moved 85254 -> 85260,7fb2f1751e42a4d55628122ea00f0356
+2026-09-22T07:51:45.901Z,dry,BTC-USD,6,place,buy,85260,0.00029,quote-bid,back off: holding inventory,72d8b94c453171afbd5631d3c2bbaf6a
+2026-09-22T07:51:50.699Z,dry,ETH-USD,7,cancel,sell,2723.8,0.0091,quote-ask,target moved 2723.8 -> 2723.7,27fe5dff61cbff6cb0aa1378873ca34f
+2026-09-22T07:51:50.794Z,dry,ETH-USD,7,place,sell,2723.7,0.0091,quote-ask,rejoin best,c903c8f4935f23f3b41687d0cbdfaf7d
+2026-09-22T07:51:50.913Z,dry,BTC-USD,6,cancel,buy,85260,0.00029,quote-bid,target moved 85260 -> 85259,72d8b94c453171afbd5631d3c2bbaf6a
+2026-09-22T07:51:51.004Z,dry,BTC-USD,6,cancel,sell,85263,0.00029,quote-ask,target moved 85263 -> 85261,b84b8635c3ec8819527e6f720c94f3e4
+2026-09-22T07:51:51.099Z,dry,BTC-USD,6,place,buy,85259,0.00029,quote-bid,back off: book leaning down,5a342af4092b84e4042b69dab1391b72
+2026-09-22T07:51:51.195Z,dry,BTC-USD,6,place,sell,85261,0.00029,quote-ask,rejoin best,91c5ccb1b7a7fcd4ed9a37cc8aa094e8
+2026-09-22T07:51:51.520Z,dry,BTC-USD,6,place,buy,85254,0.00029,quote-bid,back off: book leaning down,4bfe841bb35f3c19737540a809f21423
+2026-09-22T07:51:51.612Z,dry,ETH-USD,7,cancel,buy,2723.5,0.0091,quote-bid,target moved 2723.5 -> 2723.4,349becaa7763dd463ada98d6fe0036c6
+2026-09-22T07:51:51.699Z,dry,ETH-USD,7,cancel,sell,2723.7,0.0091,quote-ask,target moved 2723.7 -> 2723.6,c903c8f4935f23f3b41687d0cbdfaf7d
+2026-09-22T07:51:51.784Z,dry,ETH-USD,7,place,buy,2723.4,0.0091,quote-bid,back off: holding inventory,2f2755722a33cbd79606bebbb34d2323
+2026-09-22T07:51:51.875Z,dry,ETH-USD,7,reject,buy,2723.4,0.0091,quote-bid,post only order would cross,2f2755722a33cbd79606bebbb34d2323
+2026-09-22T07:51:51.881Z,dry,ETH-USD,7,place,sell,2723.6,0.0091,quote-ask,rejoin best,db11273091b4e34697affbfa735cfd9d
+2026-09-22T07:51:52.125Z,dry,ETH-USD,7,place,buy,2723.1,0.0091,quote-bid,back off: book leaning down,b8ace0422d9d965f8f5b45b8f2ad9031
+2026-09-22T07:51:52.524Z,dry,BTC-USD,6,cancel,sell,85261,0.00029,quote-ask,target moved 85261 -> 85253,91c5ccb1b7a7fcd4ed9a37cc8aa094e8
+2026-09-22T07:51:52.621Z,dry,BTC-USD,6,place,sell,85253,0.00029,quote-ask,rejoin best,c32e21bea6b1bf535709bc174e901550
+2026-09-22T07:51:52.714Z,dry,ETH-USD,7,cancel,sell,2723.6,0.0091,quote-ask,target moved 2723.6 -> 2723.3,db11273091b4e34697affbfa735cfd9d
+2026-09-22T07:51:52.812Z,dry,ETH-USD,7,place,sell,2723.3,0.0091,quote-ask,rejoin best,06f23fe0e5badd22b97c72a18ad90206
+2026-09-22T07:51:59.653Z,dry,ETH-USD,7,cancel,sell,2723.3,0.0091,quote-ask,target moved 2723.3 -> 2723.1,06f23fe0e5badd22b97c72a18ad90206
+2026-09-22T07:51:59.747Z,dry,ETH-USD,7,place,sell,2723.1,0.0091,quote-ask,back off: book leaning up,9379fb421c094674d7508f0641b0c112
+2026-09-22T07:52:01.678Z,dry,ETH-USD,7,cancel,sell,2723.1,0.0091,quote-ask,target moved 2723.1 -> 2723.2,9379fb421c094674d7508f0641b0c112
+2026-09-22T07:52:01.772Z,dry,ETH-USD,7,place,sell,2723.2,0.0091,quote-ask,back off: book leaning up,4e04deff49641e07ebcdd047af9284ca
+2026-09-22T07:52:03.098Z,dry,BTC-USD,6,cancel,sell,85253,0.00029,quote-ask,target moved 85253 -> 85254,c32e21bea6b1bf535709bc174e901550
+2026-09-22T07:52:03.195Z,dry,BTC-USD,6,place,sell,85254,0.00029,quote-ask,back off: aggressive buying,c48a79299117d85602110db887b65605
+2026-09-22T07:52:06.748Z,dry,ETH-USD,7,place,buy,2723.4,0.0091,quote-bid,back off: holding inventory,53cf1df2e59d3d1a1869c3bb15cc5ed1
+2026-09-22T07:52:06.840Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: book leaning up,7167b95aac3f61cdb3fae55f80a50f6a
+2026-09-22T07:52:06.953Z,dry,BTC-USD,6,place,buy,85261,0.00029,quote-bid,back off: holding inventory,88a39c046cbe1a75159875c4e2633e3c
+2026-09-22T07:52:07.046Z,dry,BTC-USD,6,place,sell,85283,0.00029,quote-ask,back off: aggressive buying,f694f07d16b8a8205afbac33878811a1
+2026-09-22T07:52:07.355Z,dry,ETH-USD,7,cancel,buy,2723.4,0.0091,quote-bid,target moved 2723.4 -> 2724.1,53cf1df2e59d3d1a1869c3bb15cc5ed1
+2026-09-22T07:52:07.449Z,dry,ETH-USD,7,place,buy,2724.1,0.0091,quote-bid,back off: holding inventory,3c14bfe409aed71646c78e47e2dc3d10
+2026-09-22T07:52:07.558Z,dry,BTC-USD,6,cancel,sell,85283,0.00029,quote-ask,target moved 85283 -> 85264,f694f07d16b8a8205afbac33878811a1
+2026-09-22T07:52:07.653Z,dry,BTC-USD,6,place,sell,85264,0.00029,quote-ask,back off: aggressive buying,4505ac6bff2e657e8fe0d53c1ecd4896
+2026-09-22T07:52:07.742Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0091,quote-ask,target moved 2724.7 -> 2724.4,7167b95aac3f61cdb3fae55f80a50f6a
+2026-09-22T07:52:07.839Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,back off: book leaning up,3bb68a76939c6397be258fed7c42a4f4
+2026-09-22T07:52:09.378Z,dry,BTC-USD,6,place,sell,85280,0.00029,quote-ask,back off: book leaning up,8dee90808c8be9f7bea890c411d3e33a
+2026-09-22T07:52:09.782Z,dry,BTC-USD,6,cancel,buy,85261,0.00029,quote-bid,target moved 85261 -> 85270,88a39c046cbe1a75159875c4e2633e3c
+2026-09-22T07:52:09.877Z,dry,BTC-USD,6,place,buy,85270,0.00029,quote-bid,back off: holding inventory,fed08dd617055c4d5287449a6ad599f4
+2026-09-22T07:52:09.970Z,dry,ETH-USD,7,cancel,buy,2724.1,0.0091,quote-bid,target moved 2724.1 -> 2724.2,3c14bfe409aed71646c78e47e2dc3d10
+2026-09-22T07:52:10.063Z,dry,ETH-USD,7,cancel,sell,2724.4,0.0091,quote-ask,target moved 2724.4 -> 2724.5,3bb68a76939c6397be258fed7c42a4f4
+2026-09-22T07:52:10.157Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,back off: holding inventory,a607c9140c8300f535cc164263c2eca5
+2026-09-22T07:52:10.249Z,dry,ETH-USD,7,place,sell,2724.5,0.0091,quote-ask,back off: holding back-off,6a84041b460e6e26447cb0ec3ca0c04f
+2026-09-22T07:52:10.389Z,dry,BTC-USD,6,cancel,sell,85280,0.00029,quote-ask,target moved 85280 -> 85273,8dee90808c8be9f7bea890c411d3e33a
+2026-09-22T07:52:10.486Z,dry,BTC-USD,6,place,sell,85273,0.00029,quote-ask,back off: aggressive buying,cf3ff305d4ce0e86407ef48fba063ab3
+2026-09-22T07:52:10.578Z,dry,ETH-USD,7,cancel,sell,2724.5,0.0091,quote-ask,target moved 2724.5 -> 2724.4,6a84041b460e6e26447cb0ec3ca0c04f
+2026-09-22T07:52:10.674Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,rejoin best,9cc0a06ef34e3dd2ca5f878feb2145d6
+2026-09-22T07:52:11.204Z,dry,BTC-USD,6,place,buy,85262,0.00029,quote-bid,back off: holding inventory,ec3bb8f6d771cc4b846340e666bd30fc
+2026-09-22T07:52:11.297Z,dry,ETH-USD,7,cancel,buy,2724.2,0.0091,quote-bid,flatten owns instrument,a607c9140c8300f535cc164263c2eca5
+2026-09-22T07:52:11.387Z,dry,ETH-USD,7,cancel,sell,2724.4,0.0091,quote-ask,flatten owns instrument,9cc0a06ef34e3dd2ca5f878feb2145d6
+2026-09-22T07:52:11.485Z,dry,ETH-USD,7,place,sell,2724.4,0.0182,flatten-post,passive exit,2db596e828375606f0b45361eb8674be
+2026-09-22T07:52:11.605Z,dry,BTC-USD,6,cancel,sell,85273,0.00029,quote-ask,target moved 85273 -> 85265,cf3ff305d4ce0e86407ef48fba063ab3
+2026-09-22T07:52:11.701Z,dry,BTC-USD,6,place,sell,85265,0.00029,quote-ask,back off: book leaning up,1191bc4a84f708c66ccaa47e8396f3d3
+2026-09-22T07:52:16.451Z,dry,BTC-USD,6,cancel,buy,85262,0.00029,quote-bid,flatten owns instrument,ec3bb8f6d771cc4b846340e666bd30fc
+2026-09-22T07:52:16.543Z,dry,BTC-USD,6,cancel,sell,85265,0.00029,quote-ask,flatten owns instrument,1191bc4a84f708c66ccaa47e8396f3d3
+2026-09-22T07:52:16.641Z,dry,BTC-USD,6,place,sell,85264,0.00058,flatten-post,passive exit,35c04dc484182e4c15018d5a0fe266f7
+2026-09-22T07:52:22.739Z,dry,ETH-USD,7,cancel,sell,2724.4,0.0182,flatten-post,re-peg flatten,2db596e828375606f0b45361eb8674be
+2026-09-22T07:52:22.944Z,dry,ETH-USD,7,place,sell,2723.9,0.0182,flatten-post,passive exit,0a54168239629650c3da8ab374e354cf
+2026-09-22T07:52:23.554Z,dry,BTC-USD,6,cancel,sell,85264,0.00058,flatten-post,re-peg flatten,35c04dc484182e4c15018d5a0fe266f7
+2026-09-22T07:52:23.647Z,dry,ETH-USD,7,cancel,sell,2723.9,0.0182,flatten-post,re-peg flatten,0a54168239629650c3da8ab374e354cf
+2026-09-22T07:52:23.760Z,dry,BTC-USD,6,place,sell,85258,0.00058,flatten-post,passive exit,207e03168805a4a0460d3e9cd991a981
+2026-09-22T07:52:23.853Z,dry,ETH-USD,7,place,sell,2723.8,0.0182,flatten-post,passive exit,9a022c6a2a5cbc3d57ca39bb4d79fa97
+2026-09-22T07:52:24.575Z,dry,ETH-USD,7,place,buy,2723.8,0.0091,quote-bid,join best,0a7be46966c2764b9c1c78589dbb4a5d
+2026-09-22T07:52:24.670Z,dry,ETH-USD,7,place,sell,2723.9,0.0091,quote-ask,join best,e815aa1a232006827e8f2e568ad11c35
+2026-09-22T07:52:24.775Z,dry,ETH-USD,7,place,sell,2724.8,0.0091,quote-ask,back off: book leaning up,e9bb3432ddb2ce8c34a432d6ea03d481
+2026-09-22T07:52:24.976Z,dry,BTC-USD,6,place,buy,85265,0.00029,quote-bid,join best,3830be7a20fcff1178d20f22458da35d
+2026-09-22T07:52:25.072Z,dry,BTC-USD,6,place,sell,85267,0.00029,quote-ask,back off: book leaning up,2f78debbff181249973bb99acb62c200
+2026-09-22T07:52:25.593Z,dry,ETH-USD,7,cancel,buy,2723.8,0.0091,quote-bid,target moved 2723.8 -> 2724.2,0a7be46966c2764b9c1c78589dbb4a5d
+2026-09-22T07:52:25.687Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,back off: book leaning down,e2fd9746dddfad05c3878bb96adedf02
+2026-09-22T07:52:25.795Z,dry,ETH-USD,7,cancel,sell,2724.8,0.0091,quote-ask,target moved 2724.8 -> 2724.5,e9bb3432ddb2ce8c34a432d6ea03d481
+2026-09-22T07:52:25.891Z,dry,ETH-USD,7,place,sell,2724.5,0.0091,quote-ask,back off: holding inventory,cea72c36f01bd5390ce875a2465a4599
+2026-09-22T07:52:26.811Z,dry,ETH-USD,7,cancel,buy,2724.2,0.0091,quote-bid,target moved 2724.2 -> 2724.1,e2fd9746dddfad05c3878bb96adedf02
+2026-09-22T07:52:26.903Z,dry,ETH-USD,7,cancel,sell,2724.5,0.0091,quote-ask,target moved 2724.5 -> 2724.4,cea72c36f01bd5390ce875a2465a4599
+2026-09-22T07:52:26.997Z,dry,ETH-USD,7,place,buy,2724.1,0.0091,quote-bid,back off: holding back-off,731027e645791d064f701053f6af2ff1
+2026-09-22T07:52:27.092Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,back off: book leaning up,e81e6271be48c75ce1804d79f287e6e3
+2026-09-22T07:52:27.217Z,dry,ETH-USD,7,cancel,buy,2724.1,0.0091,quote-bid,target moved 2724.1 -> 2724.2,731027e645791d064f701053f6af2ff1
+2026-09-22T07:52:27.306Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,rejoin best,9fb8e427de17ed02c90d35492120dfb1
+2026-09-22T07:52:32.285Z,dry,ETH-USD,7,place,buy,2724,0.0091,quote-bid,join best,3429cea027bdb783aa6e93e9b1a0f2ea
+2026-09-22T07:52:33.091Z,dry,ETH-USD,7,cancel,buy,2724,0.0091,quote-bid,target moved 2724 -> 2724.1,3429cea027bdb783aa6e93e9b1a0f2ea
+2026-09-22T07:52:33.184Z,dry,ETH-USD,7,cancel,sell,2724.4,0.0091,quote-ask,target moved 2724.4 -> 2724.3,e81e6271be48c75ce1804d79f287e6e3
+2026-09-22T07:52:33.280Z,dry,ETH-USD,7,place,buy,2724.1,0.0091,quote-bid,rejoin best,3a1f343783e916cc3a353622d50740d8
+2026-09-22T07:52:33.374Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: holding back-off,9710114186f7d3b1a963e5d01af0403d
+2026-09-22T07:52:33.494Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,9710114186f7d3b1a963e5d01af0403d
+2026-09-22T07:52:33.589Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,ce571e66fd8a6862d209c4f8532c0a20
+2026-09-22T07:52:33.898Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,ce571e66fd8a6862d209c4f8532c0a20
+2026-09-22T07:52:33.992Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,2f2e1e13b37d3b11c42fca654011c2e3
+2026-09-22T07:52:37.755Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,2f2e1e13b37d3b11c42fca654011c2e3
+2026-09-22T07:52:37.850Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,8b16b2f3a49405506f3d5c9f65cfa935
+2026-09-22T07:52:38.159Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,8b16b2f3a49405506f3d5c9f65cfa935
+2026-09-22T07:52:38.254Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,2df4b4c64ed86ca3e5536f41cb20e033
+2026-09-22T07:52:39.168Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,2df4b4c64ed86ca3e5536f41cb20e033
+2026-09-22T07:52:39.263Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,ddf8b20528663c89f9c8b6c013e1ac31
+2026-09-22T07:52:39.574Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,ddf8b20528663c89f9c8b6c013e1ac31
+2026-09-22T07:52:39.668Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,fcb435157f996ef9e665abfa4b1066a0
+2026-09-22T07:52:40.183Z,dry,ETH-USD,7,cancel,buy,2724.1,0.0091,quote-bid,target moved 2724.1 -> 2724,3a1f343783e916cc3a353622d50740d8
+2026-09-22T07:52:40.280Z,dry,ETH-USD,7,place,buy,2724,0.0091,quote-bid,back off: book leaning down,5c878efe2f969c182b1fea622a68d70c
+2026-09-22T07:52:40.586Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,fcb435157f996ef9e665abfa4b1066a0
+2026-09-22T07:52:40.683Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,9b34191c890d88f2d351a42791deec31
+2026-09-22T07:52:45.656Z,dry,ETH-USD,7,cancel,buy,2724,0.0091,quote-bid,target moved 2724 -> 2724.1,5c878efe2f969c182b1fea622a68d70c
+2026-09-22T07:52:45.751Z,dry,ETH-USD,7,place,buy,2724.1,0.0091,quote-bid,rejoin best,f2f76336e90d2484eef2a017a0226804
+2026-09-22T07:52:47.273Z,dry,ETH-USD,7,cancel,buy,2724.1,0.0091,quote-bid,target moved 2724.1 -> 2724,f2f76336e90d2484eef2a017a0226804
+2026-09-22T07:52:47.367Z,dry,ETH-USD,7,place,buy,2724,0.0091,quote-bid,back off: book leaning down,58e3334f764c8713cd3ff7f1c8573a6c
+2026-09-22T07:52:48.283Z,dry,ETH-USD,7,cancel,buy,2724,0.0091,quote-bid,target moved 2724 -> 2724.1,58e3334f764c8713cd3ff7f1c8573a6c
+2026-09-22T07:52:48.378Z,dry,ETH-USD,7,place,buy,2724.1,0.0091,quote-bid,rejoin best,44e51921a3e40172362b35bd899eeeef
+2026-09-22T07:52:53.550Z,dry,ETH-USD,7,cancel,buy,2724.1,0.0091,quote-bid,target moved 2724.1 -> 2724,44e51921a3e40172362b35bd899eeeef
+2026-09-22T07:52:53.647Z,dry,ETH-USD,7,place,buy,2724,0.0091,quote-bid,back off: book leaning down,5aefb4a487a141f00d9bfefb2f715a37
+2026-09-22T07:52:54.160Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,9b34191c890d88f2d351a42791deec31
+2026-09-22T07:52:54.257Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,d0e6bb3af9fd6cfda2484d81eb0125f6
+2026-09-22T07:52:54.972Z,dry,ETH-USD,7,cancel,buy,2724,0.0091,quote-bid,target moved 2724 -> 2724.1,5aefb4a487a141f00d9bfefb2f715a37
+2026-09-22T07:52:55.068Z,dry,ETH-USD,7,place,buy,2724.1,0.0091,quote-bid,rejoin best,b0dbfdcadf66275cfec46e3445d0a9ec
+2026-09-22T07:52:55.177Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,d0e6bb3af9fd6cfda2484d81eb0125f6
+2026-09-22T07:52:55.271Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,7fb79bb99cf0f8e3c0a27d2d14d5c478
+2026-09-22T07:52:57.225Z,dry,ETH-USD,7,cancel,buy,2724.1,0.0091,quote-bid,target moved 2724.1 -> 2724,b0dbfdcadf66275cfec46e3445d0a9ec
+2026-09-22T07:52:57.320Z,dry,ETH-USD,7,place,buy,2724,0.0091,quote-bid,back off: book leaning down,4c77f204d80a0ad7ca7413fe654b5d7c
+2026-09-22T07:52:58.243Z,dry,ETH-USD,7,cancel,buy,2724,0.0091,quote-bid,target moved 2724 -> 2724.1,4c77f204d80a0ad7ca7413fe654b5d7c
+2026-09-22T07:52:58.338Z,dry,ETH-USD,7,place,buy,2724.1,0.0091,quote-bid,rejoin best,77b09e8b1b40832eca470d6e4737d7e2
+2026-09-22T07:52:58.448Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,7fb79bb99cf0f8e3c0a27d2d14d5c478
+2026-09-22T07:52:58.560Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,2a2d674a0daaf74e12151f12774771db
+2026-09-22T07:53:04.316Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,back off: book leaning up,b6dc74da0265cd52ae92a951a275bad3
+2026-09-22T07:53:04.406Z,dry,ETH-USD,7,reject,sell,2724.6,0.0091,quote-ask,post only order would cross,b6dc74da0265cd52ae92a951a275bad3
+2026-09-22T07:53:04.519Z,dry,BTC-USD,6,place,sell,85283,0.00029,quote-ask,back off: book leaning up,8975942f4b4ae2d729f02d9bb49128a7
+2026-09-22T07:53:04.622Z,dry,BTC-USD,6,reject,sell,85283,0.00029,quote-ask,post only order would cross,8975942f4b4ae2d729f02d9bb49128a7
+2026-09-22T07:53:04.629Z,dry,ETH-USD,7,place,sell,2725.5,0.0091,quote-ask,back off: holding inventory,d0d2187420827c4c776e391c19d3b3e5
+2026-09-22T07:53:04.721Z,dry,BTC-USD,6,place,sell,85292,0.00029,quote-ask,back off: book leaning up,3fdf62ce58ba0c7bf77eb8475264de31
+2026-09-22T07:53:05.127Z,dry,BTC-USD,6,place,sell,85298,0.00029,quote-ask,back off: book leaning up,83a2e6cd25237f62b4d740899fc9f192
+2026-09-22T07:53:05.531Z,dry,BTC-USD,6,cancel,buy,85265,0.00029,quote-bid,target moved 85265 -> 85296,3830be7a20fcff1178d20f22458da35d
+2026-09-22T07:53:05.628Z,dry,BTC-USD,6,place,buy,85296,0.00029,quote-bid,rejoin best,8b05d65dae70cfbaa47b101af77f5b1a
+2026-09-22T07:53:05.720Z,dry,ETH-USD,7,cancel,buy,2724.1,0.0091,quote-bid,target moved 2724.1 -> 2725.2,77b09e8b1b40832eca470d6e4737d7e2
+2026-09-22T07:53:05.814Z,dry,ETH-USD,7,place,buy,2725.2,0.0091,quote-bid,back off: holding back-off,949c3aaabd84fdbe131c5e1497150508
+2026-09-22T07:53:05.937Z,dry,ETH-USD,7,cancel,buy,2725.2,0.0091,quote-bid,target moved 2725.2 -> 2725.3,949c3aaabd84fdbe131c5e1497150508
+2026-09-22T07:53:06.033Z,dry,ETH-USD,7,place,buy,2725.3,0.0091,quote-bid,rejoin best,69b32f9a205d5924683970eeb3d3f591
+2026-09-22T07:53:06.545Z,dry,BTC-USD,6,cancel,buy,85296,0.00029,quote-bid,target moved 85296 -> 85295,8b05d65dae70cfbaa47b101af77f5b1a
+2026-09-22T07:53:06.640Z,dry,BTC-USD,6,place,buy,85295,0.00029,quote-bid,back off: aggressive selling,cbe07551673da4bce41550d56db91847
+2026-09-22T07:53:07.564Z,dry,BTC-USD,6,place,buy,85293,0.00029,quote-bid,back off: aggressive selling,60c176ed78409e37488cd927ce4a404a
+2026-09-22T07:53:07.658Z,dry,ETH-USD,7,place,buy,2724.7,0.0091,quote-bid,back off: book leaning down,ffda5147105ebd40cb3e93a591f5a79b
+2026-09-22T07:53:07.969Z,dry,BTC-USD,6,cancel,sell,85298,0.00029,quote-ask,target moved 85298 -> 85296,83a2e6cd25237f62b4d740899fc9f192
+2026-09-22T07:53:08.062Z,dry,BTC-USD,6,place,sell,85296,0.00029,quote-ask,back off: book leaning up,124803877f480078461546c6b41de27f
+2026-09-22T07:53:08.173Z,dry,ETH-USD,7,cancel,buy,2724.7,0.0091,quote-bid,target moved 2724.7 -> 2724.8,ffda5147105ebd40cb3e93a591f5a79b
+2026-09-22T07:53:08.265Z,dry,ETH-USD,7,cancel,sell,2725.5,0.0091,quote-ask,target moved 2725.5 -> 2725.1,d0d2187420827c4c776e391c19d3b3e5
+2026-09-22T07:53:08.361Z,dry,ETH-USD,7,place,buy,2724.8,0.0091,quote-bid,back off: holding back-off,48d5727cd2c565ac33ebaef4300494aa
+2026-09-22T07:53:08.455Z,dry,ETH-USD,7,place,sell,2725.1,0.0091,quote-ask,back off: holding back-off,f22310859c997f129030dede942e6f3d
+2026-09-22T07:53:08.582Z,dry,ETH-USD,7,place,buy,2724.6,0.0091,quote-bid,back off: holding inventory,bde5af7cffea663ce2509d06c00a04bc
+2026-09-22T07:53:08.987Z,dry,ETH-USD,7,cancel,sell,2725.1,0.0091,quote-ask,target moved 2725.1 -> 2724.9,f22310859c997f129030dede942e6f3d
+2026-09-22T07:53:09.083Z,dry,ETH-USD,7,place,sell,2724.9,0.0091,quote-ask,back off: book leaning up,de82cc1feac1d484ce231892d8d56195
+2026-09-22T07:53:11.218Z,dry,BTC-USD,6,place,buy,85290,0.00029,quote-bid,back off: aggressive selling,667b9befc035dea64280a5cd41a77d22
+2026-09-22T07:53:11.622Z,dry,BTC-USD,6,cancel,sell,85296,0.00029,quote-ask,target moved 85296 -> 85293,124803877f480078461546c6b41de27f
+2026-09-22T07:53:11.719Z,dry,BTC-USD,6,place,sell,85293,0.00029,quote-ask,back off: book leaning up,f46efafcd4dc67b584373ef8b0b7106a
+2026-09-22T07:53:11.812Z,dry,ETH-USD,7,cancel,sell,2724.9,0.0091,quote-ask,target moved 2724.9 -> 2724.8,de82cc1feac1d484ce231892d8d56195
+2026-09-22T07:53:11.905Z,dry,ETH-USD,7,place,sell,2724.8,0.0091,quote-ask,rejoin best,ce76d4a0711a1a43b5ff49c5279717a9
+2026-09-22T07:53:12.651Z,dry,BTC-USD,6,place,buy,85288,0.00029,quote-bid,back off: book leaning down,5f17cab2a65edcb747952cba02c9e66b
+2026-09-22T07:53:12.745Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,back off: holding inventory,a360e36b73657356a3b74e37703be975
+2026-09-22T07:53:13.053Z,dry,BTC-USD,6,cancel,sell,85293,0.00029,quote-ask,target moved 85293 -> 85290,f46efafcd4dc67b584373ef8b0b7106a
+2026-09-22T07:53:13.150Z,dry,BTC-USD,6,place,sell,85290,0.00029,quote-ask,rejoin best,f809c9e13a582579f8b91bfdf4882b97
+2026-09-22T07:53:13.242Z,dry,ETH-USD,7,cancel,sell,2724.8,0.0091,quote-ask,target moved 2724.8 -> 2724.4,ce76d4a0711a1a43b5ff49c5279717a9
+2026-09-22T07:53:13.338Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,rejoin best,e0d663cbf550cd440f2e639c57738a8e
+2026-09-22T07:53:14.078Z,dry,ETH-USD,7,cancel,sell,2724.4,0.0091,quote-ask,target moved 2724.4 -> 2724.5,e0d663cbf550cd440f2e639c57738a8e
+2026-09-22T07:53:14.173Z,dry,ETH-USD,7,place,sell,2724.5,0.0091,quote-ask,back off: book leaning up,10ef6e160f3da42e9022ec0758c75c21
+2026-09-22T07:53:14.683Z,dry,ETH-USD,7,cancel,buy,2724.2,0.0091,quote-bid,target moved 2724.2 -> 2724.3,a360e36b73657356a3b74e37703be975
+2026-09-22T07:53:14.777Z,dry,ETH-USD,7,cancel,sell,2724.5,0.0091,quote-ask,target moved 2724.5 -> 2724.6,10ef6e160f3da42e9022ec0758c75c21
+2026-09-22T07:53:14.873Z,dry,ETH-USD,7,place,buy,2724.3,0.0091,quote-bid,back off: holding inventory,3754fc37436f8324c3292ec77d126a7d
+2026-09-22T07:53:14.966Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,back off: holding back-off,bddcd7c0eda5c5251041dd9f0452eae3
+2026-09-22T07:53:15.290Z,dry,ETH-USD,7,cancel,sell,2724.6,0.0091,quote-ask,target moved 2724.6 -> 2724.5,bddcd7c0eda5c5251041dd9f0452eae3
+2026-09-22T07:53:15.384Z,dry,ETH-USD,7,place,sell,2724.5,0.0091,quote-ask,rejoin best,40797e42e6d091f6ba2e034cb773a51d
+2026-09-22T07:53:15.699Z,dry,BTC-USD,6,place,buy,85285,0.00029,quote-bid,back off: book leaning down,8077cc4836903c33e626e46dad3d5096
+2026-09-22T07:53:15.789Z,dry,ETH-USD,7,cancel,buy,2724.3,0.0091,quote-bid,target moved 2724.3 -> 2724.2,3754fc37436f8324c3292ec77d126a7d
+2026-09-22T07:53:15.882Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,back off: holding inventory,988bb46d7afb458ef8d450e13b9d6e5b
+2026-09-22T07:53:16.101Z,dry,ETH-USD,7,cancel,sell,2724.5,0.0091,quote-ask,target moved 2724.5 -> 2724.4,40797e42e6d091f6ba2e034cb773a51d
+2026-09-22T07:53:16.197Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,rejoin best,0deeb880ecc5cf8c3c0f4da1710a7c93
+2026-09-22T07:53:16.505Z,dry,BTC-USD,6,cancel,sell,85290,0.00029,quote-ask,target moved 85290 -> 85285,f809c9e13a582579f8b91bfdf4882b97
+2026-09-22T07:53:16.603Z,dry,BTC-USD,6,place,sell,85285,0.00029,quote-ask,rejoin best,2af3c9a4150786cfe44f774ccdfb414e
+2026-09-22T07:53:17.924Z,dry,BTC-USD,6,cancel,sell,85285,0.00029,quote-ask,target moved 85285 -> 85280,2af3c9a4150786cfe44f774ccdfb414e
+2026-09-22T07:53:18.018Z,dry,BTC-USD,6,place,sell,85280,0.00029,quote-ask,rejoin best,296ba8e529d758781451c86a4ed7ecbb
+2026-09-22T07:53:18.932Z,dry,BTC-USD,6,cancel,sell,85280,0.00029,quote-ask,target moved 85280 -> 85281,296ba8e529d758781451c86a4ed7ecbb
+2026-09-22T07:53:19.028Z,dry,BTC-USD,6,place,sell,85281,0.00029,quote-ask,back off: book leaning up,321d5e7d1b7f153bbfc9fa13c1040c84
+2026-09-22T07:53:21.569Z,dry,BTC-USD,6,cancel,sell,85281,0.00029,quote-ask,target moved 85281 -> 85280,321d5e7d1b7f153bbfc9fa13c1040c84
+2026-09-22T07:53:21.665Z,dry,BTC-USD,6,place,sell,85280,0.00029,quote-ask,rejoin best,300e0272f5543fe4e2d26d2a1d1f3ec5
+2026-09-22T07:53:25.224Z,dry,BTC-USD,6,cancel,sell,85280,0.00029,quote-ask,target moved 85280 -> 85281,300e0272f5543fe4e2d26d2a1d1f3ec5
+2026-09-22T07:53:25.328Z,dry,BTC-USD,6,place,sell,85281,0.00029,quote-ask,back off: book leaning up,6718b135a2fdc283ebf54e3aff70af42
+2026-09-22T07:53:27.466Z,dry,BTC-USD,6,cancel,sell,85281,0.00029,quote-ask,target moved 85281 -> 85280,6718b135a2fdc283ebf54e3aff70af42
+2026-09-22T07:53:27.556Z,dry,BTC-USD,6,place,sell,85280,0.00029,quote-ask,rejoin best,7a5d79cb826fa8b45c9d7b8429339963
+2026-09-22T07:53:31.322Z,dry,BTC-USD,6,cancel,sell,85280,0.00029,quote-ask,target moved 85280 -> 85279,7a5d79cb826fa8b45c9d7b8429339963
+2026-09-22T07:53:31.416Z,dry,BTC-USD,6,place,sell,85279,0.00029,quote-ask,rejoin best,8939f0d44863982c3a0942c3587860aa
+2026-09-22T07:53:33.144Z,dry,ETH-USD,7,cancel,buy,2724.2,0.0091,quote-bid,target moved 2724.2 -> 2724.1,988bb46d7afb458ef8d450e13b9d6e5b
+2026-09-22T07:53:33.236Z,dry,ETH-USD,7,cancel,sell,2724.4,0.0091,quote-ask,target moved 2724.4 -> 2724.3,0deeb880ecc5cf8c3c0f4da1710a7c93
+2026-09-22T07:53:33.331Z,dry,ETH-USD,7,place,buy,2724.1,0.0091,quote-bid,back off: book leaning down,21df2bda4773ad641d1ca4a0e999662d
+2026-09-22T07:53:33.420Z,dry,ETH-USD,7,reject,buy,2724.1,0.0091,quote-bid,post only order would cross,21df2bda4773ad641d1ca4a0e999662d
+2026-09-22T07:53:33.428Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,rejoin best,cfbef3b460de5c61befd0ef3074c9b50
+2026-09-22T07:53:33.954Z,dry,BTC-USD,6,cancel,sell,85279,0.00029,quote-ask,target moved 85279 -> 85277,8939f0d44863982c3a0942c3587860aa
+2026-09-22T07:53:34.050Z,dry,BTC-USD,6,place,sell,85277,0.00029,quote-ask,rejoin best,7e4cb1e036435c440ff249d99a5a4573
+2026-09-22T07:53:34.142Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2723.9,cfbef3b460de5c61befd0ef3074c9b50
+2026-09-22T07:53:34.237Z,dry,ETH-USD,7,place,sell,2723.9,0.0091,quote-ask,back off: book leaning up,61366975c397c04d835a9c71ba124f1f
+2026-09-22T07:53:36.782Z,dry,BTC-USD,6,cancel,sell,85277,0.00029,quote-ask,target moved 85277 -> 85273,7e4cb1e036435c440ff249d99a5a4573
+2026-09-22T07:53:36.871Z,dry,BTC-USD,6,place,sell,85273,0.00029,quote-ask,rejoin best,bba711d64b0909e605783497286311de
+2026-09-22T07:53:36.968Z,dry,ETH-USD,7,cancel,sell,2723.9,0.0091,quote-ask,target moved 2723.9 -> 2723.6,61366975c397c04d835a9c71ba124f1f
+2026-09-22T07:53:37.064Z,dry,ETH-USD,7,place,sell,2723.6,0.0091,quote-ask,back off: book leaning up,a1f48ae45e47ac63348a8df2fbb8f38b
+2026-09-22T07:53:39.206Z,dry,ETH-USD,7,place,buy,2723.5,0.0091,quote-bid,back off: book leaning down,6ff317d35fb4ed3dd3e033c40b2f0b6a
+2026-09-22T07:53:39.292Z,dry,ETH-USD,7,place,sell,2723.8,0.0091,quote-ask,back off: holding back-off,8e11113086dd7f1342ad3714cc46c868
+2026-09-22T07:53:40.022Z,dry,ETH-USD,7,cancel,sell,2723.8,0.0091,quote-ask,target moved 2723.8 -> 2723.7,8e11113086dd7f1342ad3714cc46c868
+2026-09-22T07:53:40.118Z,dry,ETH-USD,7,place,sell,2723.7,0.0091,quote-ask,rejoin best,0d79c1c641934e130717ac1820b1f248
+2026-09-22T07:53:44.076Z,dry,ETH-USD,7,cancel,sell,2723.7,0.0091,quote-ask,target moved 2723.7 -> 2723.8,0d79c1c641934e130717ac1820b1f248
+2026-09-22T07:53:44.173Z,dry,ETH-USD,7,place,sell,2723.8,0.0091,quote-ask,back off: book leaning up,2bed610c12ea5d8831750028c8184f0e
+2026-09-22T07:53:44.264Z,dry,ETH-USD,7,reject,sell,2723.8,0.0091,quote-ask,post only order would cross,2bed610c12ea5d8831750028c8184f0e
+2026-09-22T07:53:44.281Z,dry,ETH-USD,7,place,sell,2724,0.0091,quote-ask,back off: book leaning up,cb8569685fc7b5e1c57a56d2e7a6ad94
+2026-09-22T07:53:44.373Z,dry,ETH-USD,7,reject,sell,2724,0.0091,quote-ask,post only order would cross,cb8569685fc7b5e1c57a56d2e7a6ad94
+2026-09-22T07:53:44.483Z,dry,BTC-USD,6,place,buy,85275,0.00029,quote-bid,back off: holding inventory,9c6635b2d41ba583e62b6918c3d9b3d0
+2026-09-22T07:53:44.575Z,dry,BTC-USD,6,place,sell,85278,0.00029,quote-ask,back off: book leaning up,acbf3b504b670f869d1a349953211d47
+2026-09-22T07:53:44.670Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,a4cdb5568f376807daa5499d5df3c731
+2026-09-22T07:53:44.889Z,dry,BTC-USD,6,place,sell,85292,0.00029,quote-ask,back off: holding back-off,0fd1775a186a165e1e57c188f98772d7
+2026-09-22T07:53:44.981Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,back off: holding back-off,92cb5236892baa7cb2c6ab8df542b387
+2026-09-22T07:53:45.290Z,dry,BTC-USD,6,cancel,buy,85275,0.00029,quote-bid,target moved 85275 -> 85285,9c6635b2d41ba583e62b6918c3d9b3d0
+2026-09-22T07:53:45.385Z,dry,BTC-USD,6,place,buy,85285,0.00029,quote-bid,back off: holding inventory,b2902033d0b1778d167666078500ddc1
+2026-09-22T07:53:45.478Z,dry,ETH-USD,7,cancel,buy,2723.5,0.0091,quote-bid,target moved 2723.5 -> 2724.3,6ff317d35fb4ed3dd3e033c40b2f0b6a
+2026-09-22T07:53:45.574Z,dry,ETH-USD,7,place,buy,2724.3,0.0091,quote-bid,back off: holding inventory,54f31f093826bf5addc29dd040d3b849
+2026-09-22T07:53:45.697Z,dry,BTC-USD,6,cancel,sell,85292,0.00029,quote-ask,target moved 85292 -> 85288,0fd1775a186a165e1e57c188f98772d7
+2026-09-22T07:53:45.793Z,dry,BTC-USD,6,place,sell,85288,0.00029,quote-ask,back off: book leaning up,491ce2ff631c2c0e1c7509145df8f095
+2026-09-22T07:53:45.886Z,dry,ETH-USD,7,cancel,sell,2724.6,0.0091,quote-ask,target moved 2724.6 -> 2724.7,92cb5236892baa7cb2c6ab8df542b387
+2026-09-22T07:53:45.982Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: holding back-off,0c6d8cf16b2bc3c3ff3aa5990a24b7fd
+2026-09-22T07:53:46.507Z,dry,ETH-USD,7,cancel,buy,2724.3,0.0091,quote-bid,target moved 2724.3 -> 2724.4,54f31f093826bf5addc29dd040d3b849
+2026-09-22T07:53:46.596Z,dry,ETH-USD,7,place,buy,2724.4,0.0091,quote-bid,back off: holding inventory,83b3e23f4f9d812ab55d9a11d7e1ff24
+2026-09-22T07:53:46.713Z,dry,BTC-USD,6,place,sell,85297,0.00029,quote-ask,back off: book leaning up,28e0e057fca484dbea66531a652c2c97
+2026-09-22T07:53:46.805Z,dry,ETH-USD,7,place,sell,2725,0.0091,quote-ask,back off: book leaning up,e98961c107a115237f4dbc0489d748c1
+2026-09-22T07:53:47.320Z,dry,BTC-USD,6,cancel,buy,85285,0.00029,quote-bid,target moved 85285 -> 85294,b2902033d0b1778d167666078500ddc1
+2026-09-22T07:53:47.414Z,dry,BTC-USD,6,place,buy,85294,0.00029,quote-bid,back off: holding back-off,4d77a05386f975e1fabe66022b9fff93
+2026-09-22T07:53:47.503Z,dry,ETH-USD,7,cancel,buy,2724.4,0.0091,quote-bid,target moved 2724.4 -> 2724.8,83b3e23f4f9d812ab55d9a11d7e1ff24
+2026-09-22T07:53:47.601Z,dry,ETH-USD,7,cancel,sell,2725,0.0091,quote-ask,target moved 2725 -> 2725.1,e98961c107a115237f4dbc0489d748c1
+2026-09-22T07:53:47.696Z,dry,ETH-USD,7,place,buy,2724.8,0.0091,quote-bid,back off: holding back-off,14352e340193cd420260c2e8ac68977e
+2026-09-22T07:53:47.790Z,dry,ETH-USD,7,place,sell,2725.1,0.0091,quote-ask,back off: holding back-off,8b9a33329ba04c9c2c1eb1e2ed49b6c1
+2026-09-22T07:53:47.928Z,dry,BTC-USD,6,cancel,buy,85294,0.00029,quote-bid,target moved 85294 -> 85295,4d77a05386f975e1fabe66022b9fff93
+2026-09-22T07:53:48.025Z,dry,BTC-USD,6,cancel,sell,85297,0.00029,quote-ask,target moved 85297 -> 85296,28e0e057fca484dbea66531a652c2c97
+2026-09-22T07:53:48.122Z,dry,BTC-USD,6,place,buy,85295,0.00029,quote-bid,rejoin best,b810bb7edeedfb855c7777c7ee12eeae
+2026-09-22T07:53:48.213Z,dry,BTC-USD,6,place,sell,85296,0.00029,quote-ask,rejoin best,1a93c6f1d8b799050636c67dd58b0c35
+2026-09-22T07:53:48.304Z,dry,ETH-USD,7,cancel,buy,2724.8,0.0091,quote-bid,target moved 2724.8 -> 2724.9,14352e340193cd420260c2e8ac68977e
+2026-09-22T07:53:48.395Z,dry,ETH-USD,7,cancel,sell,2725.1,0.0091,quote-ask,target moved 2725.1 -> 2725,8b9a33329ba04c9c2c1eb1e2ed49b6c1
+2026-09-22T07:53:48.494Z,dry,ETH-USD,7,place,buy,2724.9,0.0091,quote-bid,rejoin best,ecc9837ce5cc09c1ce7670cb0406add4
+2026-09-22T07:53:48.587Z,dry,ETH-USD,7,place,sell,2725,0.0091,quote-ask,rejoin best,76ed312b17e666323b77412970d47aa2
+2026-09-22T07:53:48.679Z,dry,ETH-USD,7,reject,sell,2725,0.0091,quote-ask,post only order would cross,76ed312b17e666323b77412970d47aa2
+2026-09-22T07:53:48.740Z,dry,BTC-USD,6,cancel,sell,85296,0.00029,quote-ask,target moved 85296 -> 85297,1a93c6f1d8b799050636c67dd58b0c35
+2026-09-22T07:53:48.836Z,dry,BTC-USD,6,place,sell,85297,0.00029,quote-ask,back off: book leaning up,fb0e8e63663d3a7168b3d460fb783751
+2026-09-22T07:53:48.930Z,dry,ETH-USD,7,place,sell,2725.1,0.0091,quote-ask,join best,72a12c23bd635141c6e1fb9d2b8a4d9f
+2026-09-22T07:53:55.044Z,dry,ETH-USD,7,cancel,buy,2724.9,0.0091,quote-bid,target moved 2724.9 -> 2725,ecc9837ce5cc09c1ce7670cb0406add4
+2026-09-22T07:53:55.139Z,dry,ETH-USD,7,place,buy,2725,0.0091,quote-bid,rejoin best,116f27db8ddc4c8536c78146464ccfa4
+2026-09-22T07:53:55.449Z,dry,ETH-USD,7,place,buy,2724.8,0.0091,quote-bid,back off: holding inventory,87aeb774f861d93158caf54e52ec5d26
+2026-09-22T07:53:55.542Z,dry,ETH-USD,7,reject,buy,2724.8,0.0091,quote-bid,post only order would cross,87aeb774f861d93158caf54e52ec5d26
+2026-09-22T07:53:55.655Z,dry,ETH-USD,7,place,buy,2724.4,0.0091,quote-bid,back off: holding inventory,79fdaa8fa5a13b440789bd90cabcd591
+2026-09-22T07:53:56.056Z,dry,ETH-USD,7,cancel,sell,2725.1,0.0091,quote-ask,target moved 2725.1 -> 2724.7,72a12c23bd635141c6e1fb9d2b8a4d9f
+2026-09-22T07:53:56.151Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: book leaning up,d87607c7752aa5f6341c14385d6ec9df
+2026-09-22T07:53:56.664Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,back off: holding inventory,33bdcac59728f663d99e20dbd0f032df
+2026-09-22T07:53:57.069Z,dry,BTC-USD,6,cancel,sell,85297,0.00029,quote-ask,target moved 85297 -> 85296,fb0e8e63663d3a7168b3d460fb783751
+2026-09-22T07:53:57.166Z,dry,BTC-USD,6,place,sell,85296,0.00029,quote-ask,rejoin best,ca1958692e6f51129922919d8c83a4bb
+2026-09-22T07:53:57.270Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0091,quote-ask,target moved 2724.7 -> 2724.5,d87607c7752aa5f6341c14385d6ec9df
+2026-09-22T07:53:57.380Z,dry,ETH-USD,7,place,sell,2724.5,0.0091,quote-ask,back off: book leaning up,a96cbc7baa2af576bc0ff6202be803e5
+2026-09-22T07:53:57.696Z,dry,BTC-USD,6,place,buy,85293,0.00029,quote-bid,back off: aggressive selling,77b502e8384cb84f9dc6de92becbdb9e
+2026-09-22T07:54:00.959Z,dry,BTC-USD,6,cancel,buy,85293,0.00029,quote-bid,target moved 85293 -> 85292,77b502e8384cb84f9dc6de92becbdb9e
+2026-09-22T07:54:01.053Z,dry,BTC-USD,6,cancel,sell,85296,0.00029,quote-ask,target moved 85296 -> 85294,ca1958692e6f51129922919d8c83a4bb
+2026-09-22T07:54:01.148Z,dry,BTC-USD,6,place,buy,85292,0.00029,quote-bid,back off: aggressive selling,af3d53784b5ef8033c39a904e77791c5
+2026-09-22T07:54:01.243Z,dry,BTC-USD,6,place,sell,85294,0.00029,quote-ask,rejoin best,e45be081997168b4681a72bcce87ed49
+2026-09-22T07:54:01.363Z,dry,ETH-USD,7,cancel,sell,2724.5,0.0091,quote-ask,target moved 2724.5 -> 2724.4,a96cbc7baa2af576bc0ff6202be803e5
+2026-09-22T07:54:01.459Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,rejoin best,310c188eb0f8dfeead17214d855c0cf4
+2026-09-22T07:54:02.980Z,dry,ETH-USD,7,cancel,sell,2724.4,0.0091,quote-ask,target moved 2724.4 -> 2724.5,310c188eb0f8dfeead17214d855c0cf4
+2026-09-22T07:54:03.076Z,dry,ETH-USD,7,place,sell,2724.5,0.0091,quote-ask,back off: book leaning up,72baed3914461e58b020cda8e7826480
+2026-09-22T07:54:05.221Z,dry,BTC-USD,6,place,buy,85290,0.00029,quote-bid,back off: book leaning down,645358e903b8cd28c2ce5dddb9244b01
+2026-09-22T07:54:05.307Z,dry,ETH-USD,7,cancel,buy,2724.2,0.0091,quote-bid,target moved 2724.2 -> 2724.1,33bdcac59728f663d99e20dbd0f032df
+2026-09-22T07:54:05.407Z,dry,ETH-USD,7,cancel,sell,2724.5,0.0091,quote-ask,target moved 2724.5 -> 2724.4,72baed3914461e58b020cda8e7826480
+2026-09-22T07:54:05.498Z,dry,ETH-USD,7,place,buy,2724.1,0.0091,quote-bid,back off: book leaning down,301cbb3bf1b7a3d11e8d654f0e4203d1
+2026-09-22T07:54:05.596Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,back off: holding back-off,ba79c727fbfbba9f71de5b210dfe7d98
+2026-09-22T07:54:05.828Z,dry,ETH-USD,7,cancel,buy,2724.1,0.0091,quote-bid,inventory cap $80,301cbb3bf1b7a3d11e8d654f0e4203d1
+2026-09-22T07:54:06.232Z,dry,ETH-USD,7,place,buy,2724.6,0.0091,quote-bid,back off: holding inventory,0229cddf686d08e33648a73120eea066
+2026-09-22T07:54:06.327Z,dry,ETH-USD,7,place,sell,2725.7,0.0091,quote-ask,back off: book leaning up,014a6f9024c14d6cf183e5d7dc3fad30
+2026-09-22T07:54:06.435Z,dry,BTC-USD,6,place,buy,85305,0.00029,quote-bid,back off: holding inventory,1e48522743149da67704b6fe84399f81
+2026-09-22T07:54:06.528Z,dry,BTC-USD,6,place,sell,85318,0.00029,quote-ask,join best,85b030051202147bc9f79e4b83945100
+2026-09-22T07:54:07.040Z,dry,ETH-USD,7,cancel,buy,2724.6,0.0091,quote-bid,target moved 2724.6 -> 2725.4,0229cddf686d08e33648a73120eea066
+2026-09-22T07:54:07.135Z,dry,ETH-USD,7,place,buy,2725.4,0.0091,quote-bid,back off: holding inventory,1f408b7f4049004f394ba64d6cf19751
+2026-09-22T07:54:07.241Z,dry,BTC-USD,6,cancel,buy,85305,0.00029,quote-bid,target moved 85305 -> 85313,1e48522743149da67704b6fe84399f81
+2026-09-22T07:54:07.335Z,dry,BTC-USD,6,cancel,sell,85318,0.00029,quote-ask,target moved 85318 -> 85315,85b030051202147bc9f79e4b83945100
+2026-09-22T07:54:07.432Z,dry,BTC-USD,6,place,buy,85313,0.00029,quote-bid,back off: holding inventory,44d42299e9ae915a5824fbd9a6e01685
+2026-09-22T07:54:07.525Z,dry,BTC-USD,6,place,sell,85315,0.00029,quote-ask,rejoin best,088f41c87c8d2f54f693915ce60e5306
+2026-09-22T07:54:07.647Z,dry,ETH-USD,7,cancel,buy,2725.4,0.0091,quote-bid,target moved 2725.4 -> 2725.5,1f408b7f4049004f394ba64d6cf19751
+2026-09-22T07:54:07.741Z,dry,ETH-USD,7,cancel,sell,2725.7,0.0091,quote-ask,target moved 2725.7 -> 2725.8,014a6f9024c14d6cf183e5d7dc3fad30
+2026-09-22T07:54:07.838Z,dry,ETH-USD,7,place,buy,2725.5,0.0091,quote-bid,back off: book leaning down,306adffcc069d27eecfdbe1c9d30673d
+2026-09-22T07:54:07.930Z,dry,ETH-USD,7,place,sell,2725.8,0.0091,quote-ask,back off: aggressive buying,a8d68fa39b13d5fb131583d6b9bf9d0c
+2026-09-22T07:54:10.100Z,dry,BTC-USD,6,cancel,sell,85315,0.00029,quote-ask,target moved 85315 -> 85310,088f41c87c8d2f54f693915ce60e5306
+2026-09-22T07:54:10.194Z,dry,BTC-USD,6,place,sell,85310,0.00029,quote-ask,back off: book leaning up,ceaf027ef5a573c1a98448e15102d531
+2026-09-22T07:54:11.935Z,dry,ETH-USD,7,cancel,buy,2725.5,0.0091,quote-bid,target moved 2725.5 -> 2725.4,306adffcc069d27eecfdbe1c9d30673d
+2026-09-22T07:54:12.029Z,dry,ETH-USD,7,cancel,sell,2725.8,0.0091,quote-ask,target moved 2725.8 -> 2725.7,a8d68fa39b13d5fb131583d6b9bf9d0c
+2026-09-22T07:54:12.125Z,dry,ETH-USD,7,place,buy,2725.4,0.0091,quote-bid,back off: holding inventory,0e2d229ebd77e8536b040ac0ff0dde31
+2026-09-22T07:54:12.217Z,dry,ETH-USD,7,place,sell,2725.7,0.0091,quote-ask,back off: aggressive buying,5863aa021155360a40729c6b5c8f2b37
+2026-09-22T07:54:14.375Z,dry,ETH-USD,7,cancel,buy,2725.4,0.0091,quote-bid,target moved 2725.4 -> 2725.5,0e2d229ebd77e8536b040ac0ff0dde31
+2026-09-22T07:54:14.467Z,dry,ETH-USD,7,cancel,sell,2725.7,0.0091,quote-ask,target moved 2725.7 -> 2725.8,5863aa021155360a40729c6b5c8f2b37
+2026-09-22T07:54:14.566Z,dry,ETH-USD,7,place,buy,2725.5,0.0091,quote-bid,back off: book leaning down,93598d919dd3b701dbdcb031f9453e20
+2026-09-22T07:54:14.657Z,dry,ETH-USD,7,place,sell,2725.8,0.0091,quote-ask,back off: aggressive buying,b00fe856473001cddae9064747fbc1e7
+2026-09-22T07:54:15.187Z,dry,ETH-USD,7,cancel,buy,2725.5,0.0091,quote-bid,target moved 2725.5 -> 2725.4,93598d919dd3b701dbdcb031f9453e20
+2026-09-22T07:54:15.297Z,dry,ETH-USD,7,place,buy,2725.4,0.0091,quote-bid,back off: holding inventory,a32b66a45249336b4b2fc05878e7eca6
+2026-09-22T07:54:15.390Z,dry,ETH-USD,7,cancel,sell,2725.8,0.0091,quote-ask,target moved 2725.8 -> 2725.7,b00fe856473001cddae9064747fbc1e7
+2026-09-22T07:54:15.484Z,dry,ETH-USD,7,place,sell,2725.7,0.0091,quote-ask,back off: book leaning up,8e73e836e348813a7470f20f5fe5ef64
+2026-09-22T07:54:17.011Z,dry,ETH-USD,7,cancel,sell,2725.7,0.0091,quote-ask,target moved 2725.7 -> 2725.6,8e73e836e348813a7470f20f5fe5ef64
+2026-09-22T07:54:17.105Z,dry,ETH-USD,7,place,sell,2725.6,0.0091,quote-ask,rejoin best,c553f69af6c9572d09fd47261baa6f2c
+2026-09-22T07:54:22.894Z,dry,BTC-USD,6,cancel,sell,85310,0.00029,quote-ask,target moved 85310 -> 85307,ceaf027ef5a573c1a98448e15102d531
+2026-09-22T07:54:22.989Z,dry,BTC-USD,6,place,sell,85307,0.00029,quote-ask,back off: holding back-off,ac0886079151ea10c6eca56b78dfcc5b
+2026-09-22T07:54:23.301Z,dry,BTC-USD,6,cancel,sell,85307,0.00029,quote-ask,target moved 85307 -> 85306,ac0886079151ea10c6eca56b78dfcc5b
+2026-09-22T07:54:23.396Z,dry,BTC-USD,6,place,sell,85306,0.00029,quote-ask,rejoin best,027ea4df79997c90f873cce9dd460f8d
+2026-09-22T07:54:28.818Z,dry,BTC-USD,6,cancel,sell,85306,0.00029,quote-ask,target moved 85306 -> 85300,027ea4df79997c90f873cce9dd460f8d
+2026-09-22T07:54:28.909Z,dry,BTC-USD,6,place,sell,85300,0.00029,quote-ask,back off: book leaning up,3d3a65988b0dca6516534640a9288f0e
+2026-09-22T07:54:29.834Z,dry,BTC-USD,6,cancel,sell,85300,0.00029,quote-ask,target moved 85300 -> 85299,3d3a65988b0dca6516534640a9288f0e
+2026-09-22T07:54:29.929Z,dry,BTC-USD,6,place,sell,85299,0.00029,quote-ask,rejoin best,98c3e79416c81254fe69769295a17717
+2026-09-22T07:54:35.935Z,dry,BTC-USD,6,cancel,sell,85299,0.00029,quote-ask,target moved 85299 -> 85300,98c3e79416c81254fe69769295a17717
+2026-09-22T07:54:36.032Z,dry,BTC-USD,6,place,sell,85300,0.00029,quote-ask,back off: book leaning up,a1447da5282011dad03a92fb6171f1d4
+2026-09-22T07:54:55.577Z,dry,ETH-USD,7,cancel,buy,2725.4,0.0091,quote-bid,flatten owns instrument,a32b66a45249336b4b2fc05878e7eca6
+2026-09-22T07:54:55.668Z,dry,ETH-USD,7,cancel,sell,2725.6,0.0091,quote-ask,flatten owns instrument,c553f69af6c9572d09fd47261baa6f2c
+2026-09-22T07:54:55.764Z,dry,ETH-USD,7,place,sell,2725.6,0.0182,flatten-post,passive exit,a5df5ba66410bb7d7453a3695829634c
+2026-09-22T07:54:57.600Z,dry,BTC-USD,6,cancel,sell,85300,0.00029,quote-ask,flatten owns instrument,a1447da5282011dad03a92fb6171f1d4
+2026-09-22T07:54:57.695Z,dry,BTC-USD,6,place,sell,85299,0.00087,flatten-post,passive exit,0f332c78d78f2c5d5f0a5e116dc70f68
+2026-09-22T07:55:00.659Z,dry,ETH-USD,7,cancel,sell,2725.6,0.0182,flatten-post,re-peg flatten,a5df5ba66410bb7d7453a3695829634c
+2026-09-22T07:55:00.867Z,dry,ETH-USD,7,place,sell,2725.4,0.0182,flatten-post,passive exit,6268d2f2402470fad7784ac80c525cc0
+2026-09-22T07:55:01.269Z,dry,ETH-USD,7,cancel,sell,2725.4,0.0182,flatten-post,re-peg flatten,6268d2f2402470fad7784ac80c525cc0
+2026-09-22T07:55:01.475Z,dry,ETH-USD,7,place,sell,2724.7,0.0182,flatten-post,passive exit,bef351c39984852ce60d534625997850
+2026-09-22T07:55:02.490Z,dry,BTC-USD,6,cancel,sell,85299,0.00087,flatten-post,re-peg flatten,0f332c78d78f2c5d5f0a5e116dc70f68
+2026-09-22T07:55:02.582Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0182,flatten-post,re-peg flatten,bef351c39984852ce60d534625997850
+2026-09-22T07:55:02.692Z,dry,BTC-USD,6,place,sell,85296,0.00087,flatten-post,passive exit,e97244a00f6b97469dafd0af21ef5418
+2026-09-22T07:55:02.793Z,dry,ETH-USD,7,place,sell,2724.5,0.0182,flatten-post,passive exit,4c491b086ecc7071472a60939e518cf4
+2026-09-22T07:55:03.720Z,dry,BTC-USD,6,cancel,sell,85296,0.00087,flatten-post,re-peg flatten,e97244a00f6b97469dafd0af21ef5418
+2026-09-22T07:55:03.812Z,dry,ETH-USD,7,cancel,sell,2724.5,0.0182,flatten-post,re-peg flatten,4c491b086ecc7071472a60939e518cf4
+2026-09-22T07:55:03.925Z,dry,BTC-USD,6,place,sell,85290,0.00087,flatten-post,passive exit,f2b6c9d4ef848be46b77a5047f237525
+2026-09-22T07:55:04.018Z,dry,ETH-USD,7,place,sell,2724.2,0.0182,flatten-post,passive exit,43dc5fd94c6992b0bee1727197592980
+2026-09-22T07:55:05.339Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0182,flatten-post,re-peg flatten,43dc5fd94c6992b0bee1727197592980
+2026-09-22T07:55:05.545Z,dry,ETH-USD,7,place,sell,2724.1,0.0182,flatten-post,passive exit,fe313f3eaa6bebb992bb02f594fc25f7
+2026-09-22T07:55:05.947Z,dry,ETH-USD,7,cancel,sell,2724.1,0.0182,flatten-post,re-peg flatten,fe313f3eaa6bebb992bb02f594fc25f7
+2026-09-22T07:55:06.153Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,join best,3aafc99bb9f49de3cdfa9b1256762efd
+2026-09-22T07:55:06.248Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,join best,54bd48657d8e490e8c33bfe192369562
+2026-09-22T07:55:06.760Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.4,54bd48657d8e490e8c33bfe192369562
+2026-09-22T07:55:06.856Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,back off: book leaning up,3f534dc87ed7b7cd6d3a273d2f49a168
+2026-09-22T07:55:06.949Z,dry,ETH-USD,7,reject,sell,2724.4,0.0091,quote-ask,post only order would cross,3f534dc87ed7b7cd6d3a273d2f49a168
+2026-09-22T07:55:06.966Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,back off: holding back-off,786f565eebb256504660ac7ac9d0b430
+2026-09-22T07:55:07.373Z,dry,ETH-USD,7,cancel,buy,2724.2,0.0091,quote-bid,target moved 2724.2 -> 2724.4,3aafc99bb9f49de3cdfa9b1256762efd
+2026-09-22T07:55:07.468Z,dry,ETH-USD,7,place,buy,2724.4,0.0091,quote-bid,rejoin best,d3fcddb1ae425c584adfc84f2fad8c77
+2026-09-22T07:55:08.180Z,dry,ETH-USD,7,cancel,buy,2724.4,0.0091,quote-bid,target moved 2724.4 -> 2724.5,d3fcddb1ae425c584adfc84f2fad8c77
+2026-09-22T07:55:08.278Z,dry,ETH-USD,7,place,buy,2724.5,0.0091,quote-bid,rejoin best,04cdd261ec30a8c5e3eb2e6c08f89131
+2026-09-22T07:55:08.383Z,dry,ETH-USD,7,cancel,sell,2724.6,0.0091,quote-ask,target moved 2724.6 -> 2724.7,786f565eebb256504660ac7ac9d0b430
+2026-09-22T07:55:08.477Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: holding back-off,3a64079eba6fb3bacbf9e85dc73119b3
+2026-09-22T07:55:08.784Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0091,quote-ask,target moved 2724.7 -> 2724.6,3a64079eba6fb3bacbf9e85dc73119b3
+2026-09-22T07:55:08.878Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,rejoin best,0f33e41d3ce43b2d71eaf03b795c0b78
+2026-09-22T07:55:09.189Z,dry,ETH-USD,7,cancel,sell,2724.6,0.0091,quote-ask,target moved 2724.6 -> 2724.7,0f33e41d3ce43b2d71eaf03b795c0b78
+2026-09-22T07:55:09.285Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: holding back-off,4e59633d929af42ab8c246bc3f2f0aa6
+2026-09-22T07:55:10.002Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0091,quote-ask,target moved 2724.7 -> 2724.6,4e59633d929af42ab8c246bc3f2f0aa6
+2026-09-22T07:55:10.098Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,rejoin best,8c8de56982c69013a4d6de58e67f8a2e
+2026-09-22T07:55:10.409Z,dry,ETH-USD,7,cancel,sell,2724.6,0.0091,quote-ask,target moved 2724.6 -> 2724.7,8c8de56982c69013a4d6de58e67f8a2e
+2026-09-22T07:55:10.503Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: book leaning up,f98f4feaa2397f66b2378c52d5de5339
+2026-09-22T07:55:12.030Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0091,quote-ask,target moved 2724.7 -> 2724.6,f98f4feaa2397f66b2378c52d5de5339
+2026-09-22T07:55:12.125Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,rejoin best,0f9c92ea4fbd73c44d04f9ca4fd8438d
+2026-09-22T07:55:12.435Z,dry,ETH-USD,7,cancel,sell,2724.6,0.0091,quote-ask,target moved 2724.6 -> 2724.7,0f9c92ea4fbd73c44d04f9ca4fd8438d
+2026-09-22T07:55:12.530Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: book leaning up,d070b13c3eccc6278f183ceb150c623a
+2026-09-22T07:55:12.637Z,dry,BTC-USD,6,cancel,sell,85290,0.00087,flatten-post,flatten escalating to taker,f2b6c9d4ef848be46b77a5047f237525
+2026-09-22T07:55:13.648Z,dry,BTC-USD,6,place,sell,85247,0.00087,flatten-ioc,taker exit (passive window elapsed),d746bdd21c402672efa968e6ec907d3c
+2026-09-22T07:55:13.853Z,dry,BTC-USD,6,place,buy,85289,0.00029,quote-bid,join best,fd852462cedec25e0b90a15e3648c255
+2026-09-22T07:55:13.943Z,dry,BTC-USD,6,place,sell,85290,0.00029,quote-ask,join best,f4d6a8a21e2de47d100b4341b5228851
+2026-09-22T07:55:15.264Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0091,quote-ask,target moved 2724.7 -> 2724.6,d070b13c3eccc6278f183ceb150c623a
+2026-09-22T07:55:15.360Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,rejoin best,1b5a1f8a6c3e2e44792b836ef8a9c46c
+2026-09-22T07:55:15.673Z,dry,ETH-USD,7,cancel,sell,2724.6,0.0091,quote-ask,target moved 2724.6 -> 2724.7,1b5a1f8a6c3e2e44792b836ef8a9c46c
+2026-09-22T07:55:15.767Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: holding back-off,570dde91f731b030d5064c7dcd6fd82a
+2026-09-22T07:55:15.874Z,dry,ETH-USD,7,cancel,buy,2724.5,0.0091,quote-bid,target moved 2724.5 -> 2724.4,04cdd261ec30a8c5e3eb2e6c08f89131
+2026-09-22T07:55:15.970Z,dry,ETH-USD,7,place,buy,2724.4,0.0091,quote-bid,back off: book leaning down,371e65c91ed04a2fc7fa2cc1b8c714c1
+2026-09-22T07:55:16.480Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0091,quote-ask,target moved 2724.7 -> 2724.6,570dde91f731b030d5064c7dcd6fd82a
+2026-09-22T07:55:16.576Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,rejoin best,e5d5a2a1ca570f7f0c684868cd478d03
+2026-09-22T07:55:18.707Z,dry,ETH-USD,7,place,buy,2724,0.0091,quote-bid,back off: book leaning down,74fd8b78603dc005221d1105cbcbe9a6
+2026-09-22T07:55:19.111Z,dry,ETH-USD,7,cancel,sell,2724.6,0.0091,quote-ask,target moved 2724.6 -> 2724.2,e5d5a2a1ca570f7f0c684868cd478d03
+2026-09-22T07:55:19.207Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,9b7dffaddead5144b3fef3afb0147e40
+2026-09-22T07:55:28.459Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,9b7dffaddead5144b3fef3afb0147e40
+2026-09-22T07:55:28.554Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,43477937041d83ea45c1f0c4b6707b64
+2026-09-22T07:55:29.467Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,43477937041d83ea45c1f0c4b6707b64
+2026-09-22T07:55:29.564Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,4373dbfc1090eec6269bc5cf15cf1815
+2026-09-22T07:55:31.287Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,4373dbfc1090eec6269bc5cf15cf1815
+2026-09-22T07:55:31.382Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,b2a6bdb8e9c67c19ba76b65752a6fbb3
+2026-09-22T07:55:32.707Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,b2a6bdb8e9c67c19ba76b65752a6fbb3
+2026-09-22T07:55:32.803Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,fae6baaba9d27b3decd6e8478315bae1
+2026-09-22T07:55:36.552Z,dry,BTC-USD,6,cancel,buy,85289,0.00029,quote-bid,target moved 85289 -> 85288,fd852462cedec25e0b90a15e3648c255
+2026-09-22T07:55:36.649Z,dry,BTC-USD,6,place,buy,85288,0.00029,quote-bid,back off: thin bid queue,c963c26397b18066afc6116d4af1dd15
+2026-09-22T07:55:40.203Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,fae6baaba9d27b3decd6e8478315bae1
+2026-09-22T07:55:40.300Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,b00ebcb269a186cd14369da8adc7635a
+2026-09-22T07:55:41.422Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,b00ebcb269a186cd14369da8adc7635a
+2026-09-22T07:55:41.519Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,8a6797dfff24d7e052187d2709e1cb27
+2026-09-22T07:55:44.859Z,dry,BTC-USD,6,cancel,sell,85290,0.00029,quote-ask,target moved 85290 -> 85291,f4d6a8a21e2de47d100b4341b5228851
+2026-09-22T07:55:44.956Z,dry,BTC-USD,6,place,sell,85291,0.00029,quote-ask,back off: aggressive buying,5786621d7c277a24844b86685984dedb
+2026-09-22T07:55:45.871Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,8a6797dfff24d7e052187d2709e1cb27
+2026-09-22T07:55:45.967Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,902f756fb5c15f4f02cd2b817e909ede
+2026-09-22T07:55:46.881Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,902f756fb5c15f4f02cd2b817e909ede
+2026-09-22T07:55:46.975Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,cf07494334148a4ba78f16066c3fd736
+2026-09-22T07:55:49.130Z,dry,BTC-USD,6,place,buy,85283,0.00029,quote-bid,back off: holding inventory,76627068feb90f8168dd06bedbfe80b5
+2026-09-22T07:55:49.524Z,dry,BTC-USD,6,cancel,sell,85291,0.00029,quote-ask,target moved 85291 -> 85286,5786621d7c277a24844b86685984dedb
+2026-09-22T07:55:49.619Z,dry,BTC-USD,6,place,sell,85286,0.00029,quote-ask,back off: aggressive buying,18bf2df53d2c1b903cc92787603cda99
+2026-09-22T07:55:50.737Z,dry,BTC-USD,6,cancel,sell,85286,0.00029,quote-ask,target moved 85286 -> 85285,18bf2df53d2c1b903cc92787603cda99
+2026-09-22T07:55:50.832Z,dry,BTC-USD,6,place,sell,85285,0.00029,quote-ask,rejoin best,c3ed84bd04bb448217ab4cf39d0837dd
+2026-09-22T07:55:52.758Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.3,cf07494334148a4ba78f16066c3fd736
+2026-09-22T07:55:52.848Z,dry,ETH-USD,7,place,sell,2724.3,0.0091,quote-ask,back off: book leaning up,f7a7af4b8a84208a9b8f1c704380ebfc
+2026-09-22T07:55:57.403Z,dry,BTC-USD,6,cancel,sell,85285,0.00029,quote-ask,target moved 85285 -> 85286,c3ed84bd04bb448217ab4cf39d0837dd
+2026-09-22T07:55:57.493Z,dry,BTC-USD,6,place,sell,85286,0.00029,quote-ask,back off: book leaning up,3204cef9d0ed8cc7610d6c579012c67d
+2026-09-22T07:55:59.240Z,dry,BTC-USD,6,cancel,sell,85286,0.00029,quote-ask,target moved 85286 -> 85285,3204cef9d0ed8cc7610d6c579012c67d
+2026-09-22T07:55:59.335Z,dry,BTC-USD,6,place,sell,85285,0.00029,quote-ask,rejoin best,c26a6980c4a9037af41b2cb2a054fa31
+2026-09-22T07:56:01.268Z,dry,ETH-USD,7,cancel,sell,2724.3,0.0091,quote-ask,target moved 2724.3 -> 2724.2,f7a7af4b8a84208a9b8f1c704380ebfc
+2026-09-22T07:56:01.364Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,rejoin best,a2768e6b0b0d04d7647f22dbb5174cc4
+2026-09-22T07:56:01.880Z,dry,ETH-USD,7,cancel,buy,2724,0.0091,quote-bid,target moved 2724 -> 2723.9,74fd8b78603dc005221d1105cbcbe9a6
+2026-09-22T07:56:01.973Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.1,a2768e6b0b0d04d7647f22dbb5174cc4
+2026-09-22T07:56:02.070Z,dry,ETH-USD,7,place,buy,2723.9,0.0091,quote-bid,back off: book leaning down,7190fba4590ca7189d639c53bd99bd90
+2026-09-22T07:56:02.165Z,dry,ETH-USD,7,place,sell,2724.1,0.0091,quote-ask,rejoin best,2efd42e7a283441845d5dd9af06f9975
+2026-09-22T07:56:06.555Z,dry,ETH-USD,7,cancel,sell,2724.1,0.0091,quote-ask,target moved 2724.1 -> 2724.2,2efd42e7a283441845d5dd9af06f9975
+2026-09-22T07:56:06.650Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,back off: aggressive buying,26c845ea5c22e10d40a26dec082ae859
+2026-09-22T07:56:07.973Z,dry,ETH-USD,7,place,buy,2723.5,0.0091,quote-bid,back off: holding inventory,9a2aca2deee0eaed103595d6bfce8042
+2026-09-22T07:56:08.380Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2723.9,26c845ea5c22e10d40a26dec082ae859
+2026-09-22T07:56:08.474Z,dry,ETH-USD,7,place,sell,2723.9,0.0091,quote-ask,back off: aggressive buying,992e8e0991769145986a3c684ebe29b1
+2026-09-22T07:56:08.583Z,dry,ETH-USD,7,cancel,buy,2723.5,0.0091,quote-bid,target moved 2723.5 -> 2723.6,9a2aca2deee0eaed103595d6bfce8042
+2026-09-22T07:56:08.677Z,dry,ETH-USD,7,place,buy,2723.6,0.0091,quote-bid,back off: holding inventory,e5acec46c234ee1c5cd29388df305118
+2026-09-22T07:56:12.240Z,dry,ETH-USD,7,cancel,buy,2723.6,0.0091,quote-bid,target moved 2723.6 -> 2723.5,e5acec46c234ee1c5cd29388df305118
+2026-09-22T07:56:12.333Z,dry,ETH-USD,7,cancel,sell,2723.9,0.0091,quote-ask,target moved 2723.9 -> 2723.7,992e8e0991769145986a3c684ebe29b1
+2026-09-22T07:56:12.429Z,dry,ETH-USD,7,place,buy,2723.5,0.0091,quote-bid,back off: book leaning down,5039fde07683d30b9dedabdd8ce07ad8
+2026-09-22T07:56:12.522Z,dry,ETH-USD,7,place,sell,2723.7,0.0091,quote-ask,rejoin best,f59e3fe2acabef22490be127a8d3745a
+2026-09-22T07:56:12.647Z,dry,BTC-USD,6,place,buy,85280,0.00029,quote-bid,back off: thin bid queue,ca55eb56f5c490bcff6321ff75b223dc
+2026-09-22T07:56:13.054Z,dry,BTC-USD,6,cancel,sell,85285,0.00029,quote-ask,target moved 85285 -> 85282,c26a6980c4a9037af41b2cb2a054fa31
+2026-09-22T07:56:13.150Z,dry,BTC-USD,6,place,sell,85282,0.00029,quote-ask,rejoin best,8ed1b6e97d6dca9240b3b055d0ee6a21
+2026-09-22T07:56:16.521Z,dry,ETH-USD,7,cancel,sell,2723.7,0.0091,quote-ask,target moved 2723.7 -> 2723.8,f59e3fe2acabef22490be127a8d3745a
+2026-09-22T07:56:16.608Z,dry,ETH-USD,7,place,sell,2723.8,0.0091,quote-ask,back off: book leaning up,e9ae681485d282f28a200252e4507f65
+2026-09-22T07:56:17.129Z,dry,ETH-USD,7,cancel,sell,2723.8,0.0091,quote-ask,target moved 2723.8 -> 2723.5,e9ae681485d282f28a200252e4507f65
+2026-09-22T07:56:17.227Z,dry,ETH-USD,7,place,sell,2723.5,0.0091,quote-ask,back off: holding back-off,a1be3ab686f6fa0e7de1e3272463cadc
+2026-09-22T07:56:17.537Z,dry,ETH-USD,7,cancel,sell,2723.5,0.0091,quote-ask,target moved 2723.5 -> 2723.4,a1be3ab686f6fa0e7de1e3272463cadc
+2026-09-22T07:56:17.632Z,dry,ETH-USD,7,place,sell,2723.4,0.0091,quote-ask,rejoin best,9605cc8d1eff7eefcc3d8157a841b150
+2026-09-22T07:56:18.548Z,dry,ETH-USD,7,cancel,sell,2723.4,0.0091,quote-ask,flatten owns instrument,9605cc8d1eff7eefcc3d8157a841b150
+2026-09-22T07:56:18.645Z,dry,ETH-USD,7,place,sell,2723.4,0.0273,flatten-post,passive exit,2e6b9d936a58434998e1bdd803539f69
+2026-09-22T07:56:19.969Z,dry,ETH-USD,7,cancel,sell,2723.4,0.0273,flatten-post,re-peg flatten,2e6b9d936a58434998e1bdd803539f69
+2026-09-22T07:56:20.173Z,dry,ETH-USD,7,place,buy,2723.4,0.0091,quote-bid,back off: book leaning down,8577386b8b94f9c0265324537097569c
+2026-09-22T07:56:20.266Z,dry,ETH-USD,7,place,sell,2723.6,0.0091,quote-ask,join best,ab9ec7b64f26885505789f7ab541f08b
+2026-09-22T07:56:20.984Z,dry,ETH-USD,7,cancel,sell,2723.6,0.0091,quote-ask,target moved 2723.6 -> 2723.7,ab9ec7b64f26885505789f7ab541f08b
+2026-09-22T07:56:21.078Z,dry,ETH-USD,7,place,sell,2723.7,0.0091,quote-ask,back off: book leaning up,b9162c52aec5788ab04fb754a9bc1070
+2026-09-22T07:56:21.795Z,dry,ETH-USD,7,cancel,buy,2723.4,0.0091,quote-bid,target moved 2723.4 -> 2723.5,8577386b8b94f9c0265324537097569c
+2026-09-22T07:56:21.891Z,dry,ETH-USD,7,place,buy,2723.5,0.0091,quote-bid,rejoin best,bdc7572be9f1b267f1b0e812df82ecbc
+2026-09-22T07:56:22.606Z,dry,ETH-USD,7,place,sell,2723.9,0.0091,quote-ask,back off: holding inventory,ce245a92518810f4487b72f318638f30
+2026-09-22T07:56:23.002Z,dry,ETH-USD,7,cancel,buy,2723.5,0.0091,quote-bid,target moved 2723.5 -> 2723.7,bdc7572be9f1b267f1b0e812df82ecbc
+2026-09-22T07:56:23.091Z,dry,ETH-USD,7,place,buy,2723.7,0.0091,quote-bid,rejoin best,a660fa8211508bd12bc4e4ee74f9c19c
+2026-09-22T07:56:26.252Z,dry,ETH-USD,7,cancel,sell,2723.9,0.0091,quote-ask,target moved 2723.9 -> 2724,ce245a92518810f4487b72f318638f30
+2026-09-22T07:56:26.347Z,dry,ETH-USD,7,place,sell,2724,0.0091,quote-ask,back off: holding inventory,f0c7066a03b337cc346401f078055e91
+2026-09-22T07:56:29.303Z,dry,ETH-USD,7,cancel,buy,2723.7,0.0091,quote-bid,target moved 2723.7 -> 2723.8,a660fa8211508bd12bc4e4ee74f9c19c
+2026-09-22T07:56:29.396Z,dry,ETH-USD,7,place,buy,2723.8,0.0091,quote-bid,rejoin best,9a764a50d8d16f2a09ede1620d55220f
+2026-09-22T07:56:29.707Z,dry,ETH-USD,7,cancel,buy,2723.8,0.0091,quote-bid,target moved 2723.8 -> 2723.7,9a764a50d8d16f2a09ede1620d55220f
+2026-09-22T07:56:29.802Z,dry,ETH-USD,7,place,buy,2723.7,0.0091,quote-bid,back off: book leaning down,02b8a6d9ba0d96f7b091e14841af13e0
+2026-09-22T07:56:32.136Z,dry,ETH-USD,7,cancel,buy,2723.7,0.0091,quote-bid,target moved 2723.7 -> 2723.8,02b8a6d9ba0d96f7b091e14841af13e0
+2026-09-22T07:56:32.232Z,dry,ETH-USD,7,place,buy,2723.8,0.0091,quote-bid,rejoin best,6eb94a9c372bc02dc2d2e79c1ea9a72d
+2026-09-22T07:56:32.950Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,back off: book leaning up,3362b25792252b7ad10caf56b73425c6
+2026-09-22T07:56:33.359Z,dry,BTC-USD,6,place,sell,85290,0.00029,quote-ask,back off: book leaning up,8775dc0d9b55407df634321f16eb7b56
+2026-09-22T07:56:33.763Z,dry,BTC-USD,6,cancel,buy,85280,0.00029,quote-bid,target moved 85280 -> 85287,ca55eb56f5c490bcff6321ff75b223dc
+2026-09-22T07:56:33.859Z,dry,BTC-USD,6,place,buy,85287,0.00029,quote-bid,back off: holding inventory,dc5d532d6467b7f7b678d0d7315f7605
+2026-09-22T07:56:33.950Z,dry,ETH-USD,7,cancel,buy,2723.8,0.0091,quote-bid,target moved 2723.8 -> 2724.8,6eb94a9c372bc02dc2d2e79c1ea9a72d
+2026-09-22T07:56:34.047Z,dry,ETH-USD,7,place,buy,2724.8,0.0091,quote-bid,rejoin best,850f7034f60a730087f0c6742550742a
+2026-09-22T07:56:34.170Z,dry,ETH-USD,7,cancel,buy,2724.8,0.0091,quote-bid,target moved 2724.8 -> 2724.7,850f7034f60a730087f0c6742550742a
+2026-09-22T07:56:34.264Z,dry,ETH-USD,7,place,buy,2724.7,0.0091,quote-bid,back off: book leaning down,b89403dafa10a40a2b6ac89264fd5228
+2026-09-22T07:56:35.182Z,dry,BTC-USD,6,place,sell,85315,0.00029,quote-ask,back off: holding back-off,c59f72b3dce25a3c127400cf38eb31f1
+2026-09-22T07:56:35.787Z,dry,BTC-USD,6,cancel,buy,85287,0.00029,quote-bid,target moved 85287 -> 85307,dc5d532d6467b7f7b678d0d7315f7605
+2026-09-22T07:56:35.882Z,dry,BTC-USD,6,cancel,sell,85315,0.00029,quote-ask,target moved 85315 -> 85310,c59f72b3dce25a3c127400cf38eb31f1
+2026-09-22T07:56:35.978Z,dry,BTC-USD,6,place,buy,85307,0.00029,quote-bid,back off: holding back-off,dd18b0687819ad2deefa76414ce517e2
+2026-09-22T07:56:36.073Z,dry,BTC-USD,6,place,sell,85310,0.00029,quote-ask,back off: book leaning up,125f0d58c0aef56718c0912b80789445
+2026-09-22T07:56:36.165Z,dry,ETH-USD,7,cancel,buy,2724.7,0.0091,quote-bid,target moved 2724.7 -> 2725.1,b89403dafa10a40a2b6ac89264fd5228
+2026-09-22T07:56:36.261Z,dry,ETH-USD,7,place,buy,2725.1,0.0091,quote-bid,rejoin best,f54d3f4b873ee62c27b7f70878a76988
+2026-09-22T07:56:36.398Z,dry,BTC-USD,6,cancel,buy,85307,0.00029,quote-bid,target moved 85307 -> 85308,dd18b0687819ad2deefa76414ce517e2
+2026-09-22T07:56:36.497Z,dry,BTC-USD,6,place,buy,85308,0.00029,quote-bid,rejoin best,bddd4c963a4ec416c962a4882596d6c7
+2026-09-22T07:56:40.858Z,dry,ETH-USD,7,cancel,buy,2725.1,0.0091,quote-bid,target moved 2725.1 -> 2725,f54d3f4b873ee62c27b7f70878a76988
+2026-09-22T07:56:40.954Z,dry,ETH-USD,7,place,buy,2725,0.0091,quote-bid,back off: book leaning down,ca5da2b244a5e2bb3fc950f7b7b37d5e
+2026-09-22T07:56:42.679Z,dry,ETH-USD,7,cancel,buy,2725,0.0091,quote-bid,target moved 2725 -> 2725.1,ca5da2b244a5e2bb3fc950f7b7b37d5e
+2026-09-22T07:56:42.776Z,dry,ETH-USD,7,place,buy,2725.1,0.0091,quote-bid,rejoin best,e71f57d7adcf43b43ad7bc3d520b893f
+2026-09-22T07:56:47.140Z,dry,BTC-USD,6,cancel,sell,85310,0.00029,quote-ask,target moved 85310 -> 85309,125f0d58c0aef56718c0912b80789445
+2026-09-22T07:56:47.232Z,dry,BTC-USD,6,place,sell,85309,0.00029,quote-ask,rejoin best,99a5cc72db4fdd081e6c96dd747a6119
+2026-09-22T07:56:47.746Z,dry,ETH-USD,7,place,buy,2724.7,0.0091,quote-bid,back off: book leaning down,b6ec0039e36aa499d9cc58fb18469072
+2026-09-22T07:56:47.840Z,dry,ETH-USD,7,place,sell,2725,0.0091,quote-ask,back off: holding inventory,d2e490a3bffabc70ec57738413d9b81b
+2026-09-22T07:56:48.554Z,dry,ETH-USD,7,cancel,sell,2725,0.0091,quote-ask,target moved 2725 -> 2725.1,d2e490a3bffabc70ec57738413d9b81b
+2026-09-22T07:56:48.649Z,dry,ETH-USD,7,place,sell,2725.1,0.0091,quote-ask,back off: holding inventory,a912c1d2a49fda3e351de5e13b502b1f
+2026-09-22T07:56:48.757Z,dry,ETH-USD,7,cancel,buy,2724.7,0.0091,quote-bid,target moved 2724.7 -> 2724.8,b6ec0039e36aa499d9cc58fb18469072
+2026-09-22T07:56:48.853Z,dry,ETH-USD,7,place,buy,2724.8,0.0091,quote-bid,back off: book leaning down,8b596a5e34303dd2c098d6a40bf6ebac
+2026-09-22T07:56:49.770Z,dry,ETH-USD,7,cancel,buy,2724.8,0.0091,quote-bid,target moved 2724.8 -> 2724.9,8b596a5e34303dd2c098d6a40bf6ebac
+2026-09-22T07:56:49.874Z,dry,ETH-USD,7,place,buy,2724.9,0.0091,quote-bid,rejoin best,7d44f3472efd25152e0a885f7d4c20fa
+2026-09-22T07:56:50.783Z,dry,ETH-USD,7,cancel,buy,2724.9,0.0091,quote-bid,target moved 2724.9 -> 2724.8,7d44f3472efd25152e0a885f7d4c20fa
+2026-09-22T07:56:50.879Z,dry,ETH-USD,7,place,buy,2724.8,0.0091,quote-bid,back off: book leaning down,fe9c37e8bff13ca448da13b9dfed041f
+2026-09-22T07:56:55.443Z,dry,ETH-USD,7,cancel,buy,2724.8,0.0091,quote-bid,target moved 2724.8 -> 2724.9,fe9c37e8bff13ca448da13b9dfed041f
+2026-09-22T07:56:55.534Z,dry,ETH-USD,7,place,buy,2724.9,0.0091,quote-bid,rejoin best,73665352f58124b24e3c128b32de2c59
+2026-09-22T07:56:55.649Z,dry,BTC-USD,6,place,buy,85300,0.00029,quote-bid,back off: holding inventory,a46fdba11fba37916edfe0919db2fc25
+2026-09-22T07:56:55.853Z,dry,ETH-USD,7,place,buy,2724.7,0.0091,quote-bid,back off: holding back-off,95505deac3ee5fc3d822f13f2d3f3537
+2026-09-22T07:56:56.258Z,dry,BTC-USD,6,cancel,buy,85300,0.00029,quote-bid,target moved 85300 -> 85299,a46fdba11fba37916edfe0919db2fc25
+2026-09-22T07:56:56.347Z,dry,BTC-USD,6,cancel,sell,85309,0.00029,quote-ask,target moved 85309 -> 85302,99a5cc72db4fdd081e6c96dd747a6119
+2026-09-22T07:56:56.447Z,dry,BTC-USD,6,place,buy,85299,0.00029,quote-bid,back off: holding inventory,149da0df399c68b3830098898abf432f
+2026-09-22T07:56:56.541Z,dry,BTC-USD,6,place,sell,85302,0.00029,quote-ask,back off: book leaning up,1520aaabd4e8193fba78200df31ca6da
+2026-09-22T07:56:56.649Z,dry,ETH-USD,7,cancel,sell,2725.1,0.0091,quote-ask,target moved 2725.1 -> 2725,a912c1d2a49fda3e351de5e13b502b1f
+2026-09-22T07:56:56.743Z,dry,ETH-USD,7,place,sell,2725,0.0091,quote-ask,back off: holding inventory,5c749171a257d1900110958cc830fda2
+2026-09-22T07:56:57.274Z,dry,BTC-USD,6,cancel,sell,85302,0.00029,quote-ask,target moved 85302 -> 85301,1520aaabd4e8193fba78200df31ca6da
+2026-09-22T07:56:57.370Z,dry,BTC-USD,6,place,sell,85301,0.00029,quote-ask,rejoin best,88b0cedf3743e407fd6a365e610e25a8
+2026-09-22T07:56:58.905Z,dry,BTC-USD,6,cancel,buy,85299,0.00029,quote-bid,target moved 85299 -> 85298,149da0df399c68b3830098898abf432f
+2026-09-22T07:56:58.999Z,dry,BTC-USD,6,cancel,sell,85301,0.00029,quote-ask,target moved 85301 -> 85300,88b0cedf3743e407fd6a365e610e25a8
+2026-09-22T07:56:59.096Z,dry,BTC-USD,6,place,buy,85298,0.00029,quote-bid,back off: holding inventory,8245aff3532033dd4c6d5f0b1ea24416
+2026-09-22T07:56:59.191Z,dry,BTC-USD,6,place,sell,85300,0.00029,quote-ask,rejoin best,075add744cf24a8349783884962c0d78
+2026-09-22T07:57:00.333Z,dry,BTC-USD,6,cancel,sell,85300,0.00029,quote-ask,target moved 85300 -> 85301,075add744cf24a8349783884962c0d78
+2026-09-22T07:57:00.419Z,dry,BTC-USD,6,place,sell,85301,0.00029,quote-ask,back off: book leaning up,bba51ac742da7d4f2b2d81b76c2b5fe9
+2026-09-22T07:57:01.150Z,dry,ETH-USD,7,cancel,buy,2724.7,0.0091,quote-bid,target moved 2724.7 -> 2724.8,95505deac3ee5fc3d822f13f2d3f3537
+2026-09-22T07:57:01.246Z,dry,ETH-USD,7,place,buy,2724.8,0.0091,quote-bid,rejoin best,4df3be63ac82824962474a0fe332255a
+2026-09-22T07:57:02.573Z,dry,ETH-USD,7,place,sell,2725.2,0.0091,quote-ask,back off: holding inventory,85d4c9f7f24eb6ad49ebb87e0491c654
+2026-09-22T07:57:02.974Z,dry,ETH-USD,7,cancel,buy,2724.8,0.0091,quote-bid,target moved 2724.8 -> 2724.9,4df3be63ac82824962474a0fe332255a
+2026-09-22T07:57:03.068Z,dry,ETH-USD,7,place,buy,2724.9,0.0091,quote-bid,back off: book leaning down,dc04dd48db3e9ec6565ac2533d4544f8
+2026-09-22T07:57:03.982Z,dry,ETH-USD,7,cancel,buy,2724.9,0.0091,quote-bid,target moved 2724.9 -> 2725,dc04dd48db3e9ec6565ac2533d4544f8
+2026-09-22T07:57:04.078Z,dry,ETH-USD,7,place,buy,2725,0.0091,quote-bid,rejoin best,faf939dd4eadf2cf6c07e8188d32a84d
+2026-09-22T07:57:04.590Z,dry,ETH-USD,7,cancel,buy,2725,0.0091,quote-bid,target moved 2725 -> 2724.9,faf939dd4eadf2cf6c07e8188d32a84d
+2026-09-22T07:57:04.688Z,dry,ETH-USD,7,place,buy,2724.9,0.0091,quote-bid,back off: book leaning down,5a5fc7913b255e1520ea787d7c530325
+2026-09-22T07:57:05.601Z,dry,ETH-USD,7,cancel,buy,2724.9,0.0091,quote-bid,target moved 2724.9 -> 2725,5a5fc7913b255e1520ea787d7c530325
+2026-09-22T07:57:05.698Z,dry,ETH-USD,7,place,buy,2725,0.0091,quote-bid,rejoin best,49554b1bad78f00f29c47adcbc5631f5
+2026-09-22T07:57:08.843Z,dry,ETH-USD,7,cancel,buy,2725,0.0091,quote-bid,target moved 2725 -> 2724.9,49554b1bad78f00f29c47adcbc5631f5
+2026-09-22T07:57:08.939Z,dry,ETH-USD,7,place,buy,2724.9,0.0091,quote-bid,back off: book leaning down,bfe519e4dde49020db508f7d04fc34b4
+2026-09-22T07:57:09.032Z,dry,ETH-USD,7,reject,buy,2724.9,0.0091,quote-bid,post only order would cross,bfe519e4dde49020db508f7d04fc34b4
+2026-09-22T07:57:09.050Z,dry,ETH-USD,7,place,buy,2724.5,0.0091,quote-bid,back off: book leaning down,730aed5331482592518223d21e8e127b
+2026-09-22T07:57:09.456Z,dry,ETH-USD,7,cancel,sell,2725.2,0.0091,quote-ask,target moved 2725.2 -> 2724.8,85d4c9f7f24eb6ad49ebb87e0491c654
+2026-09-22T07:57:09.551Z,dry,ETH-USD,7,place,sell,2724.8,0.0091,quote-ask,back off: holding inventory,bc6fac553b37c8fe6479eec5fd3f344b
+2026-09-22T07:57:09.636Z,dry,ETH-USD,7,reject,sell,2724.8,0.0091,quote-ask,post only order would cross,bc6fac553b37c8fe6479eec5fd3f344b
+2026-09-22T07:57:09.660Z,dry,BTC-USD,6,cancel,sell,85301,0.00029,quote-ask,target moved 85301 -> 85300,bba51ac742da7d4f2b2d81b76c2b5fe9
+2026-09-22T07:57:09.749Z,dry,BTC-USD,6,place,sell,85300,0.00029,quote-ask,rejoin best,27f83df36b3b7e29b5c45d67931186cc
+2026-09-22T07:57:09.840Z,dry,ETH-USD,7,place,sell,2725.7,0.0091,quote-ask,back off: holding inventory,10d683dd79078d6a50357a818181e45c
+2026-09-22T07:57:10.471Z,dry,ETH-USD,7,cancel,buy,2724.5,0.0091,quote-bid,target moved 2724.5 -> 2725.1,730aed5331482592518223d21e8e127b
+2026-09-22T07:57:10.564Z,dry,ETH-USD,7,cancel,sell,2725.7,0.0091,quote-ask,target moved 2725.7 -> 2725.4,10d683dd79078d6a50357a818181e45c
+2026-09-22T07:57:10.659Z,dry,ETH-USD,7,place,buy,2725.1,0.0091,quote-bid,back off: holding back-off,31edea54e54ef930f406332d6f728ea1
+2026-09-22T07:57:10.754Z,dry,ETH-USD,7,place,sell,2725.4,0.0091,quote-ask,back off: book leaning up,c86ef6b9ed0f3608b2a4f718481c4dd3
+2026-09-22T07:57:10.876Z,dry,ETH-USD,7,cancel,buy,2725.1,0.0091,quote-bid,target moved 2725.1 -> 2725.2,31edea54e54ef930f406332d6f728ea1
+2026-09-22T07:57:10.971Z,dry,ETH-USD,7,place,buy,2725.2,0.0091,quote-bid,rejoin best,b55616f834daae82463a78fe63f79b4b
+2026-09-22T07:57:11.688Z,dry,ETH-USD,7,place,buy,2725,0.0091,quote-bid,back off: book leaning down,1171f1dd18114a8ae19d16ef488f9653
+2026-09-22T07:57:12.090Z,dry,ETH-USD,7,cancel,sell,2725.4,0.0091,quote-ask,target moved 2725.4 -> 2725.3,c86ef6b9ed0f3608b2a4f718481c4dd3
+2026-09-22T07:57:12.187Z,dry,ETH-USD,7,place,sell,2725.3,0.0091,quote-ask,back off: holding inventory,9a7641489805ba53d98cf0a85452b85f
+2026-09-22T07:57:16.339Z,dry,ETH-USD,7,cancel,buy,2725,0.0091,quote-bid,target moved 2725 -> 2725.1,1171f1dd18114a8ae19d16ef488f9653
+2026-09-22T07:57:16.433Z,dry,ETH-USD,7,place,buy,2725.1,0.0091,quote-bid,rejoin best,672a28c9611281b50923088361950d83
+2026-09-22T07:57:16.745Z,dry,ETH-USD,7,cancel,buy,2725.1,0.0091,quote-bid,target moved 2725.1 -> 2725,672a28c9611281b50923088361950d83
+2026-09-22T07:57:16.840Z,dry,ETH-USD,7,place,buy,2725,0.0091,quote-bid,back off: book leaning down,ddbaf238e7bb4d0ab185499f1f6b81f2
+2026-09-22T07:57:18.355Z,dry,ETH-USD,7,cancel,buy,2725,0.0091,quote-bid,target moved 2725 -> 2725.1,ddbaf238e7bb4d0ab185499f1f6b81f2
+2026-09-22T07:57:18.449Z,dry,ETH-USD,7,cancel,sell,2725.3,0.0091,quote-ask,target moved 2725.3 -> 2725.4,9a7641489805ba53d98cf0a85452b85f
+2026-09-22T07:57:18.545Z,dry,ETH-USD,7,place,buy,2725.1,0.0091,quote-bid,back off: holding back-off,57f21ce029f94c069ecc63adb1a935da
+2026-09-22T07:57:18.638Z,dry,ETH-USD,7,place,sell,2725.4,0.0091,quote-ask,back off: holding inventory,6942395ab4938349b0ad3ace4abd5326
+2026-09-22T07:57:20.798Z,dry,BTC-USD,6,place,buy,85264,0.00029,quote-bid,back off: thin bid queue,39bf8b38e1d4a36560bf460f2301bff6
+2026-09-22T07:57:20.891Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,back off: book leaning down,710940f30e113291847bb43719635f42
+2026-09-22T07:57:21.402Z,dry,BTC-USD,6,cancel,buy,85264,0.00029,quote-bid,target moved 85264 -> 85265,39bf8b38e1d4a36560bf460f2301bff6
+2026-09-22T07:57:21.483Z,dry,BTC-USD,6,cancel,sell,85300,0.00029,quote-ask,target moved 85300 -> 85268,27f83df36b3b7e29b5c45d67931186cc
+2026-09-22T07:57:21.579Z,dry,BTC-USD,6,place,buy,85265,0.00029,quote-bid,back off: holding inventory,6902591d9b306bab877c6548b8a27ef2
+2026-09-22T07:57:21.671Z,dry,BTC-USD,6,place,sell,85268,0.00029,quote-ask,back off: holding back-off,05906e7610a8425e940a4864b0993b91
+2026-09-22T07:57:21.811Z,dry,ETH-USD,7,cancel,sell,2725.4,0.0091,quote-ask,target moved 2725.4 -> 2724.4,6942395ab4938349b0ad3ace4abd5326
+2026-09-22T07:57:21.901Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,rejoin best,3a83ee4a1d58063344faf225f58fbfe2
+2026-09-22T07:57:23.030Z,dry,BTC-USD,6,cancel,sell,85268,0.00029,quote-ask,target moved 85268 -> 85264,05906e7610a8425e940a4864b0993b91
+2026-09-22T07:57:23.126Z,dry,BTC-USD,6,place,sell,85264,0.00029,quote-ask,back off: holding back-off,cbedd64f553854d982d36a6d4aecd5cb
+2026-09-22T07:57:23.220Z,dry,ETH-USD,7,place,buy,2723.9,0.0091,quote-bid,back off: aggressive selling,7eb33df7539be271fa6954220558710d
+2026-09-22T07:57:23.439Z,dry,ETH-USD,7,cancel,sell,2724.4,0.0091,quote-ask,target moved 2724.4 -> 2724.2,3a83ee4a1d58063344faf225f58fbfe2
+2026-09-22T07:57:23.534Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,back off: book leaning up,41c21857291c94a5c1267ba17fb49484
+2026-09-22T07:57:23.642Z,dry,BTC-USD,6,cancel,sell,85264,0.00029,quote-ask,target moved 85264 -> 85263,cbedd64f553854d982d36a6d4aecd5cb
+2026-09-22T07:57:23.737Z,dry,BTC-USD,6,place,sell,85263,0.00029,quote-ask,rejoin best,5a4bc3f9d6d56088dcd3ecdb15444b8e
+2026-09-22T07:57:25.686Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.1,41c21857291c94a5c1267ba17fb49484
+2026-09-22T07:57:25.779Z,dry,ETH-USD,7,place,sell,2724.1,0.0091,quote-ask,rejoin best,9c36cfa7478231907aeec3f41eae5389
+2026-09-22T07:57:26.910Z,dry,BTC-USD,6,cancel,sell,85263,0.00029,quote-ask,target moved 85263 -> 85261,5a4bc3f9d6d56088dcd3ecdb15444b8e
+2026-09-22T07:57:27.005Z,dry,BTC-USD,6,place,sell,85261,0.00029,quote-ask,back off: book leaning up,d1898016c4766add7358228a16e7eed0
+2026-09-22T07:57:27.100Z,dry,ETH-USD,7,place,sell,2724.8,0.0091,quote-ask,join best,c568949e0855d0548f32a9949922911b
+2026-09-22T07:57:27.927Z,dry,BTC-USD,6,place,buy,85260,0.00029,quote-bid,back off: holding inventory,d63c233b565eb591b2393dfb398b4837
+2026-09-22T07:57:28.020Z,dry,BTC-USD,6,place,sell,85263,0.00029,quote-ask,back off: book leaning up,1e2f3c5fdb69a6cb8605842f15b0d62f
+2026-09-22T07:57:28.111Z,dry,ETH-USD,7,cancel,buy,2723.9,0.0091,quote-bid,target moved 2723.9 -> 2724.5,7eb33df7539be271fa6954220558710d
+2026-09-22T07:57:28.220Z,dry,ETH-USD,7,cancel,sell,2724.8,0.0091,quote-ask,target moved 2724.8 -> 2724.7,c568949e0855d0548f32a9949922911b
+2026-09-22T07:57:28.317Z,dry,ETH-USD,7,place,buy,2724.5,0.0091,quote-bid,rejoin best,8fe791743146476a99a4050fa36cc017
+2026-09-22T07:57:28.423Z,dry,ETH-USD,7,place,sell,2724.7,0.0091,quote-ask,back off: holding back-off,607b4df9007b1e3c2181846cf7311683
+2026-09-22T07:57:28.529Z,dry,ETH-USD,7,cancel,buy,2724.5,0.0091,quote-bid,target moved 2724.5 -> 2724.4,8fe791743146476a99a4050fa36cc017
+2026-09-22T07:57:28.621Z,dry,ETH-USD,7,cancel,sell,2724.7,0.0091,quote-ask,target moved 2724.7 -> 2724.6,607b4df9007b1e3c2181846cf7311683
+2026-09-22T07:57:28.718Z,dry,ETH-USD,7,place,buy,2724.4,0.0091,quote-bid,back off: book leaning down,0782e5e9505a787bdd23a6268cccc5b1
+2026-09-22T07:57:28.811Z,dry,ETH-USD,7,place,sell,2724.6,0.0091,quote-ask,rejoin best,a2d1fde7fd7224c82d1d368c2c1f930c
+2026-09-22T07:57:29.944Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,back off: holding inventory,7dc14c3aad767fba4f081feeadc848b2
+2026-09-22T07:57:30.348Z,dry,ETH-USD,7,cancel,sell,2724.6,0.0091,quote-ask,target moved 2724.6 -> 2724.5,a2d1fde7fd7224c82d1d368c2c1f930c
+2026-09-22T07:57:30.443Z,dry,ETH-USD,7,place,sell,2724.5,0.0091,quote-ask,back off: holding back-off,6d04feb96ca0a955067271a5eb5d3b3d
+2026-09-22T07:57:31.764Z,dry,ETH-USD,7,cancel,buy,2724.2,0.0091,quote-bid,target moved 2724.2 -> 2724.3,7dc14c3aad767fba4f081feeadc848b2
+2026-09-22T07:57:31.860Z,dry,ETH-USD,7,place,buy,2724.3,0.0091,quote-bid,back off: holding inventory,99bb7484b823836746fd118e344828c9
+2026-09-22T07:57:40.262Z,dry,ETH-USD,7,cancel,buy,2724.3,0.0091,quote-bid,target moved 2724.3 -> 2724.2,99bb7484b823836746fd118e344828c9
+2026-09-22T07:57:40.355Z,dry,ETH-USD,7,cancel,sell,2724.5,0.0091,quote-ask,target moved 2724.5 -> 2724.4,6d04feb96ca0a955067271a5eb5d3b3d
+2026-09-22T07:57:40.451Z,dry,ETH-USD,7,place,buy,2724.2,0.0091,quote-bid,back off: holding inventory,d270b3a46b94028dbe69f142de571a40
+2026-09-22T07:57:40.546Z,dry,ETH-USD,7,place,sell,2724.4,0.0091,quote-ask,rejoin best,ed83e9c3a9643ea4e8346445baa7e3ca
+2026-09-22T07:57:44.302Z,dry,BTC-USD,6,cancel,sell,85263,0.00029,quote-ask,target moved 85263 -> 85262,1e2f3c5fdb69a6cb8605842f15b0d62f
+2026-09-22T07:57:44.397Z,dry,BTC-USD,6,place,sell,85262,0.00029,quote-ask,rejoin best,2e298ec7f19d8d79bbb3184169ed98c8
+2026-09-22T07:57:44.912Z,dry,ETH-USD,7,place,buy,2723.9,0.0091,quote-bid,back off: holding inventory,ab3240c6634d18032ed4c927ad9cadc2
+2026-09-22T07:57:45.316Z,dry,ETH-USD,7,cancel,sell,2724.4,0.0091,quote-ask,target moved 2724.4 -> 2724.2,ed83e9c3a9643ea4e8346445baa7e3ca
+2026-09-22T07:57:45.414Z,dry,ETH-USD,7,place,sell,2724.2,0.0091,quote-ask,back off: book leaning up,cc3f8b60b8948b1a012a1f07679c8f88
+2026-09-22T07:57:46.734Z,dry,BTC-USD,6,cancel,sell,85262,0.00029,quote-ask,target moved 85262 -> 85251,2e298ec7f19d8d79bbb3184169ed98c8
+2026-09-22T07:57:46.830Z,dry,BTC-USD,6,place,sell,85251,0.00029,quote-ask,back off: book leaning up,13ff47dfce368aa803d6e71e410ab69a
+2026-09-22T07:57:50.582Z,dry,ETH-USD,7,cancel,sell,2724.2,0.0091,quote-ask,target moved 2724.2 -> 2724.1,cc3f8b60b8948b1a012a1f07679c8f88
+2026-09-22T07:57:50.677Z,dry,ETH-USD,7,place,sell,2724.1,0.0091,quote-ask,rejoin best,8369ae0e8b48f84302a55d3be2dc263a
+2026-09-22T07:57:55.665Z,dry,BTC-USD,6,cancel,sell,85251,0.00029,quote-ask,flatten owns instrument,13ff47dfce368aa803d6e71e410ab69a
+2026-09-22T07:57:55.761Z,dry,BTC-USD,6,place,sell,85250,0.00087,flatten-post,passive exit,9d3ece76ddfae7b6b9fc2be34297d40e
+2026-09-22T07:57:56.071Z,dry,BTC-USD,6,cancel,sell,85250,0.00087,flatten-post,re-peg flatten,9d3ece76ddfae7b6b9fc2be34297d40e
+2026-09-22T07:57:56.274Z,dry,BTC-USD,6,place,sell,85291,0.00087,flatten-post,passive exit,e82c35385643a66252ca5343cd965ee5
+2026-09-22T07:57:56.477Z,dry,ETH-USD,7,cancel,sell,2724.1,0.0091,quote-ask,target moved 2724.1 -> 2725,8369ae0e8b48f84302a55d3be2dc263a
+2026-09-22T07:57:56.574Z,dry,ETH-USD,7,place,sell,2725,0.0091,quote-ask,rejoin best,650aa81bf1b6b63c01aae92b08233228
+2026-09-22T07:58:10.693Z,dry,BTC-USD,6,cancel,sell,85291,0.00087,flatten-post,flatten escalating to taker,e82c35385643a66252ca5343cd965ee5
+2026-09-22T07:58:11.706Z,dry,BTC-USD,6,place,sell,85207,0.00087,flatten-ioc,taker exit (passive window elapsed),c51433820f546e7f2f9630346f0c07b4
+2026-09-22T07:58:11.905Z,dry,BTC-USD,6,place,buy,85249,0.00029,quote-bid,join best,dd2c48dbfe8c03724951f900f6e2b416
+2026-09-22T07:58:11.998Z,dry,BTC-USD,6,place,sell,85292,0.00029,quote-ask,back off: book leaning up,2029e7f1afb18a89cc3d42d9263c1201
+2026-09-22T07:58:12.507Z,dry,BTC-USD,6,cancel,sell,85292,0.00029,quote-ask,target moved 85292 -> 85301,2029e7f1afb18a89cc3d42d9263c1201
+2026-09-22T07:58:12.603Z,dry,BTC-USD,6,place,sell,85301,0.00029,quote-ask,back off: holding back-off,f5b7b86588a269caa0f75770552cb18b
+2026-09-22T07:58:12.913Z,dry,BTC-USD,6,cancel,sell,85301,0.00029,quote-ask,target moved 85301 -> 85300,f5b7b86588a269caa0f75770552cb18b
+2026-09-22T07:58:13.025Z,dry,BTC-USD,6,place,sell,85300,0.00029,quote-ask,rejoin best,08c016ca81cd5dd81a24d69f01cd09b0
+2026-09-22T07:58:13.521Z,dry,BTC-USD,6,cancel,sell,85300,0.00029,quote-ask,target moved 85300 -> 85304,08c016ca81cd5dd81a24d69f01cd09b0
+2026-09-22T07:58:13.616Z,dry,BTC-USD,6,place,sell,85304,0.00029,quote-ask,rejoin best,48ff94274f5e045683ae3227d3bfa862
+2026-09-22T07:58:14.331Z,dry,ETH-USD,7,cancel,sell,2725,0.0091,quote-ask,target moved 2725 -> 2726,650aa81bf1b6b63c01aae92b08233228
+2026-09-22T07:58:14.424Z,dry,ETH-USD,7,place,sell,2726,0.0091,quote-ask,rejoin best,142246a217189dbe528b435c34008329
+2026-09-22T07:58:29.966Z,dry,ETH-USD,7,cancel,buy,2723.9,0.0091,quote-bid,flatten owns instrument,ab3240c6634d18032ed4c927ad9cadc2
+2026-09-22T07:58:30.059Z,dry,ETH-USD,7,cancel,sell,2726,0.0091,quote-ask,flatten owns instrument,142246a217189dbe528b435c34008329
+2026-09-22T07:58:30.153Z,dry,ETH-USD,7,place,sell,2726,0.0182,flatten-post,passive exit,356982556625ff1beb5a852730125c40
+2026-09-22T07:58:32.803Z,dry,ETH-USD,7,cancel,sell,2726,0.0182,flatten-post,re-peg flatten,356982556625ff1beb5a852730125c40
+2026-09-22T07:58:33.009Z,dry,ETH-USD,7,place,sell,2727,0.0182,flatten-post,passive exit,a123faec013e0eb6a70f2ea5dd549f75
+2026-09-22T07:58:33.207Z,dry,BTC-USD,6,cancel,buy,85249,0.00029,quote-bid,target moved 85249 -> 85202,dd2c48dbfe8c03724951f900f6e2b416
+2026-09-22T07:58:33.304Z,dry,BTC-USD,6,cancel,sell,85304,0.00029,quote-ask,target moved 85304 -> 85331,48ff94274f5e045683ae3227d3bfa862
+2026-09-22T07:58:33.399Z,dry,BTC-USD,6,place,buy,85202,0.00029,quote-bid,rejoin best,340919b7797d50027d72c200c64a51ed
+2026-09-22T07:58:33.492Z,dry,BTC-USD,6,place,sell,85331,0.00029,quote-ask,back off: thin ask queue,6658bf584d47d869ef171febe586880b
+2026-09-22T07:58:46.556Z,dry,BTC-USD,6,cancel,buy,85202,0.00029,quote-bid,target moved 85202 -> 85186,340919b7797d50027d72c200c64a51ed
+2026-09-22T07:58:46.654Z,dry,BTC-USD,6,place,buy,85186,0.00029,quote-bid,back off: thin bid queue,57d3d8f0bf38fcf31bd930b3540584ba
+2026-09-22T07:58:55.295Z,dry,ETH-USD,7,cancel,sell,2727,0.0182,flatten-post,flatten escalating to taker,a123faec013e0eb6a70f2ea5dd549f75
+2026-09-22T07:58:55.704Z,dry,BTC-USD,6,cancel,sell,85331,0.00029,quote-ask,target moved 85331 -> 85362,6658bf584d47d869ef171febe586880b
+2026-09-22T07:58:55.802Z,dry,BTC-USD,6,place,sell,85362,0.00029,quote-ask,back off: thin ask queue,7b536ff407dfae20980248462b8022b5
+2026-09-22T07:58:56.320Z,dry,ETH-USD,7,place,sell,2722.7,0.0182,flatten-ioc,taker exit (extension elapsed),9cbd5308dad8539bfb0c58e09dcfa0c2
+2026-09-22T07:58:56.525Z,dry,ETH-USD,7,place,buy,2723.9,0.0091,quote-bid,back off: book leaning down,a4024234755a56edcc5ba245381a696e
+2026-09-22T07:58:56.620Z,dry,ETH-USD,7,place,sell,2727,0.0091,quote-ask,join best,efabe89c4351ef416c379c7dbb5a8be4
+2026-09-22T07:59:01.201Z,dry,ETH-USD,7,cancel,sell,2727,0.0091,quote-ask,target moved 2727 -> 2730.1,efabe89c4351ef416c379c7dbb5a8be4
+2026-09-22T07:59:01.297Z,dry,ETH-USD,7,place,sell,2730.1,0.0091,quote-ask,back off: thin ask queue,e389a53b3be316deba9d8ef2b4882270
+2026-09-22T07:59:01.605Z,dry,ETH-USD,7,cancel,buy,2723.9,0.0091,quote-bid,target moved 2723.9 -> 2724,a4024234755a56edcc5ba245381a696e
+2026-09-22T07:59:01.703Z,dry,ETH-USD,7,place,buy,2724,0.0091,quote-bid,rejoin best,12b51e6b7315097301682978e47a668f
+2026-09-22T08:00:01.443Z,dry,BTC-USD,6,cancel,buy,85186,0.00029,quote-bid,target moved 85186 -> 85081,57d3d8f0bf38fcf31bd930b3540584ba
+2026-09-22T08:00:01.536Z,dry,BTC-USD,6,cancel,sell,85362,0.00029,quote-ask,target moved 85362 -> 85379,7b536ff407dfae20980248462b8022b5
+2026-09-22T08:00:01.631Z,dry,BTC-USD,6,place,buy,85081,0.00029,quote-bid,back off: thin bid queue,f3fc2665f51b2a56212e911fb49d8c53
+2026-09-22T08:00:01.723Z,dry,BTC-USD,6,place,sell,85379,0.00029,quote-ask,back off: thin ask queue,285a283f32e43c59faedef8e4ac86f57
+2026-09-22T08:00:43.816Z,dry,ETH-USD,7,cancel,buy,2724,0.0091,quote-bid,target moved 2724 -> 2723.9,12b51e6b7315097301682978e47a668f
+2026-09-22T08:00:43.912Z,dry,ETH-USD,7,place,buy,2723.9,0.0091,quote-bid,rejoin best,c258a78ecb50ad45e1aad74ec08dbfa5
+2026-09-22T08:01:01.070Z,dry,ETH-USD,7,cancel,buy,2723.9,0.0091,quote-bid,target moved 2723.9 -> 2714.9,c258a78ecb50ad45e1aad74ec08dbfa5
+2026-09-22T08:01:01.164Z,dry,ETH-USD,7,place,buy,2714.9,0.0092,quote-bid,back off: thin bid queue,f894fce5bfe2a70eabb367d35e19f67f

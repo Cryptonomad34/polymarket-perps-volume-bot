@@ -1,0 +1,80 @@
+{
+  "mode": "dry",
+  "depositedUsd": 100,
+  "markets": [
+    "BTC-USD",
+    "ETH-USD"
+  ],
+  "envFile": "../proxy-tool/credentials/proxy-0xYOUR_PROXY_ADDRESS.env",
+  "quote": {
+    "notionalUsd": 25,
+    "debounceMs": 300,
+    "minReplaceMs": 250,
+    "maxPlacesPerMinute": 300,
+    "adverse": {
+      "enabled": false,
+      "minQueueUsd": 500,
+      "imbalance": 0.75,
+      "flowWindowMs": 5000,
+      "flowRatio": 0.75,
+      "minFlowUsd": 500,
+      "inventoryBackoff": true,
+      "backoffTicks": 1,
+      "holdMs": 1000
+    }
+  },
+  "reference": {
+    "mode": "off",
+    "basisHalfLifeSec": 300,
+    "warmupSec": 120,
+    "staleMs": 2000,
+    "gateBps": 0.6
+  },
+  "inventory": {
+    "maxNotionalUsd": 80,
+    "skewAtUsd": 25
+  },
+  "flatten": {
+    "maxPositionAgeSec": 90,
+    "passiveSec": 15,
+    "extendSec": 10,
+    "maxHoldSec": 180,
+    "iocSlippageBps": 5,
+    "iocRetryMs": 1000,
+    "liqDistancePct": 4
+  },
+  "budget": {
+    "dailyCostUsd": 10
+  },
+  "risk": {
+    "dailyLossUsd": 10,
+    "maxConsecutiveErrors": 3,
+    "staleMs": 5000,
+    "staleGraceSec": 30,
+    "reconnectGraceSec": 30,
+    "maxDisconnectsPerDay": 3
+  },
+  "leverage": {
+    "value": 10,
+    "cross": false
+  },
+  "autoCancel": {
+    "enabled": true,
+    "aheadSec": 15,
+    "rearmSec": 5,
+    "pollSec": 60
+  },
+  "sim": {
+    "latencyMs": 80,
+    "startingEquityUsd": 200,
+    "useFeeOverride": true,
+    "makerFeeBps": -0.5,
+    "takerFeeBps": 2
+  },
+  "report": {
+    "summaryEveryMin": 15
+  },
+  "log": {
+    "level": "info"
+  }
+}

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Volume Bot Desk</title>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #151b24; --panel2: #1a212c; --line: #262f3d;
+    --fg: #e6edf3; --muted: #8b96a5; --dim: #5d6878;
+    --green: #3fb950; --red: #f0625d; --amber: #d9b36c; --blue: #6ea8fe;
+    --mono: ui-monospace, "SF Mono", Consolas, "Liberation Mono", monospace;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1320px; margin: 0 auto; padding: 22px 16px 48px; }
+  header { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+  .status { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--dim); box-shadow: 0 0 0 3px rgba(255,255,255,.04); }
+  .dot.ok { background: var(--green); } .dot.bad { background: var(--red); } .dot.warn { background: var(--amber); }
+  .badge { font: 600 11px var(--mono); padding: 3px 8px; border-radius: 5px; letter-spacing: .04em; text-transform: uppercase; }
+  .badge.live { background: rgba(240,98,93,.15); color: var(--red); } .badge.dry { background: rgba(110,168,254,.15); color: var(--blue); }
+  .spacer { flex: 1; }
+  .clock { font: 14px var(--mono); color: var(--muted); }
+  button { background: var(--amber); color: #1b1406; border: 0; border-radius: 7px; padding: 8px 16px; font: 600 14px system-ui; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+  label.auto { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); cursor: pointer; }
+  .sub { color: var(--muted); font-size: 13px; margin: -8px 0 18px; font-family: var(--mono); word-break: break-all; }
+
+  .grid { display: grid; gap: 14px; }
+  .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 14px; }
+  .costs { grid-template-columns: repeat(6, minmax(0, 1fr)); margin-bottom: 14px; }
+  .main { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; min-width: 0; }
+  .card h3 { margin: 0 0 8px; font: 600 11px system-ui; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+  .big { font: 600 26px var(--mono); letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mid { font: 600 17px var(--mono); }
+  .note { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+  .pos { color: var(--green); } .neg { color: var(--red); } .muted { color: var(--muted); }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 0; }
+  .panel-head { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 18px; border-bottom: 1px solid var(--line); gap: 10px; }
+  .panel-head h2 { margin: 0; font: 600 13px system-ui; letter-spacing: .08em; text-transform: uppercase; }
+  .panel-head span { font: 12.5px var(--mono); color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; }
+  th { font: 600 11px system-ui; letter-spacing: .08em; color: var(--muted); text-align: right; padding: 10px 14px; border-bottom: 1px solid var(--line); text-transform: uppercase; }
+  td { padding: 9px 14px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  tr:last-child td { border-bottom: 0; }
+  .pill { font: 600 11px system-ui; padding: 2px 8px; border-radius: 4px; letter-spacing: .03em; }
+  .pill.buy { background: rgba(63,185,80,.14); color: var(--green); } .pill.sell { background: rgba(240,98,93,.14); color: var(--red); }
+  .pill.maker { background: rgba(217,179,108,.16); color: var(--amber); } .pill.taker { background: rgba(110,168,254,.16); color: var(--blue); }
+  .ladder td { padding: 8px 18px; }
+  .ladder .lvl { color: var(--dim); font-size: 12px; width: 44px; }
+  .ladder .spread td { background: var(--panel2); color: var(--muted); font-family: system-ui; }
+  .ladder .spread td:last-child { color: var(--fg); font-family: var(--mono); }
+  .empty { padding: 22px 18px; color: var(--muted); text-align: center; font-size: 13px; }
+  .chart { display: block; width: 100%; height: 120px; background: linear-gradient(180deg, rgba(240,98,93,.06), transparent); }
+  .scroll { max-height: 520px; overflow: auto; }
+  .bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--panel2); margin-top: 10px; }
+  .bar > div { height: 100%; }
+  .alerts li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; list-style: none; }
+  .alerts li:last-child { border-bottom: 0; }
+  .alerts ul { margin: 0; padding: 0; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 13px; }
+  .kv dt { color: var(--muted); } .kv dd { margin: 0; text-align: right; font-family: var(--mono); }
+  .stack > * + * { margin-top: 14px; }
+  .banner { display: none; padding: 12px 16px; border-radius: 8px; margin-bottom: 14px; font-weight: 600; }
+  .banner.show { display: block; }
+  .banner.stop { background: rgba(240,98,93,.14); color: var(--red); border: 1px solid rgba(240,98,93,.35); }
+  .banner.info { background: rgba(110,168,254,.12); color: var(--blue); border: 1px solid rgba(110,168,254,.3); }
+  @media (max-width: 1050px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .costs { grid-template-columns: repeat(3, minmax(0, 1fr)); } .main { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 560px) { .kpis, .costs { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .big { font-size: 21px; } td, th { padding: 8px 10px; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Volume Bot Desk</h1>
+    <span class="status"><span class="dot" id="dot"></span><span id="statusText">loading…</span></span>
+    <span class="badge" id="modeBadge"></span>
+    <span class="spacer"></span>
+    <span class="clock" id="clock"></span>
+    <button id="refresh" type="button">Refresh</button>
+    <label class="auto"><input type="checkbox" id="auto" checked /> auto every 10s</label>
+  </header>
+  <div class="sub" id="sub"></div>
+  <div class="banner" id="banner"></div>
+
+  <section class="grid kpis">
+    <div class="card"><h3 id="k1t">Equity</h3><div class="big" id="k1">—</div><div class="note" id="k1n"></div></div>
+    <div class="card"><h3>Net P&amp;L today</h3><div class="big" id="k2">—</div><div class="note" id="k2n"></div></div>
+    <div class="card"><h3>Volume today</h3><div class="big" id="k3">—</div><div class="note" id="k3n"></div></div>
+    <div class="card"><h3>Cost per $1M volume</h3><div class="big" id="k4">—</div><div class="note" id="k4n"></div></div>
+  </section>
+
+  <section class="grid costs" aria-label="Cost breakdown today">
+    <div class="card"><h3>Maker fees</h3><div class="mid" id="c1">—</div></div>
+    <div class="card"><h3>Taker fees</h3><div class="mid" id="c2">—</div></div>
+    <div class="card"><h3>Funding</h3><div class="mid" id="c3">—</div></div>
+    <div class="card"><h3>Slippage</h3><div class="mid" id="c4">—</div><div class="note">vs decision mid</div></div>
+    <div class="card"><h3>Inventory drift</h3><div class="mid" id="c5">—</div><div class="note">after fills</div></div>
+    <div class="card"><h3>Cost budget</h3><div class="mid" id="c6">—</div><div class="bar"><div id="budgetBar"></div></div></div>
+  </section>
+
+  <section class="grid costs" id="lifetimeRow" aria-label="Since the bot started">
+    <div class="card"><h3>Total volume</h3><div class="mid" id="l1">—</div><div class="note" id="l1n"></div></div>
+    <div class="card"><h3>Total cost</h3><div class="mid" id="l2">—</div><div class="note" id="l2n"></div></div>
+    <div class="card"><h3>Total net P&amp;L</h3><div class="mid" id="l3">—</div><div class="note">all days</div></div>
+    <div class="card"><h3>Total fees</h3><div class="mid" id="l4">—</div><div class="note" id="l4n"></div></div>
+    <div class="card"><h3>Capital</h3><div class="mid" id="l5">—</div><div class="note" id="l5n"></div></div>
+    <div class="card"><h3>Avg cost per $1M</h3><div class="mid" id="l6">—</div><div class="note">since the start</div></div>
+  </section>
+
+  <section class="grid main">
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><h2>Live quotes</h2><span id="quotesCount"></span></div>
+        <div id="ladders"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Positions</h2><span id="posNote"></span></div>
+        <div id="positions"></div>
+      </div>
+      <div class="card">
+        <h3>Quoting activity · last 15 min</h3>
+        <dl class="kv" id="activity"></dl>
+      </div>
+      <div class="card alerts">
+        <h3>Recent warnings &amp; errors</h3>
+        <ul id="alerts"></ul>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><h2>Realized P&amp;L (net of fees)</h2><span id="curveNote"></span></div>
+        <svg class="chart" id="chart" viewBox="0 0 800 120" preserveAspectRatio="none" role="img" aria-label="Cumulative realized P&L net of fees"></svg>
+        <div class="panel-head" style="border-top:1px solid var(--line)"><h2>Recent fills</h2><span id="fillsNote"></span></div>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Time</th><th>Mkt</th><th>Side</th><th>Size</th><th>Price</th><th>Role</th><th>Fee</th><th>Slip bps</th><th>PnL</th></tr></thead>
+            <tbody id="fills"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Bot settings</h3>
+        <dl class="kv" id="settings"></dl>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const fin = (x) => typeof x === "number" && Number.isFinite(x);
+const usd = (x, d = 2) => (fin(x) ? (x < 0 ? "-$" : "$") + Math.abs(x).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—");
+const num = (x, d = 2) => (fin(x) ? x.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—");
+const signCls = (x) => (fin(x) ? (x > 0 ? "pos" : x < 0 ? "neg" : "") : "muted");
+const time = (ts) => (ts ? new Date(ts).toLocaleTimeString([], { hour12: false }) : "—");
+const qtyStr = (q) => (fin(q) ? String(Number(q.toPrecision(5))) : "—");
+const setText = (id, text, cls) => { const el = $(id); el.textContent = text; if (cls !== undefined) el.className = el.className.split(" ").filter((c) => !["pos", "neg", "muted"].includes(c)).concat(cls ? [cls] : []).join(" "); };
+
+function render(d) {
+  // --- header / status ---
+  const stopped = d.bot.stop;
+  const running = d.bot.running;
+  const stale = d.bot.stateUpdatedAt && Date.now() - d.bot.stateUpdatedAt > 120_000;
+  $("dot").className = "dot " + (!running ? "" : stopped ? "bad" : stale ? "warn" : "ok");
+  const quoting = d.openOrders?.length ?? 0;
+  $("statusText").textContent = !running ? "bot not running" : stopped ? `stopped: ${stopped.reason}` : `trading · ${quoting} order${quoting === 1 ? "" : "s"}`;
+  $("modeBadge").textContent = d.mode;
+  $("modeBadge").className = "badge " + d.mode;
+  $("sub").textContent = d.account ? `${d.account.owner} · proxy ${d.account.proxy} (expires ${new Date(d.account.proxyExpires).toLocaleDateString()})` : `${d.mode} data · ${d.logsDir}`;
+
+  const banner = $("banner");
+  if (stopped) { banner.className = "banner stop show"; banner.textContent = `STOPPED for the rest of the UTC day: ${stopped.reason}${stopped.at ? " (at " + time(stopped.at) + ")" : ""}`; }
+  else if (d.exchangeError) { banner.className = "banner info show"; banner.textContent = `Exchange data unavailable: ${d.exchangeError}`; }
+  else if (!running) { banner.className = "banner info show"; banner.textContent = d.mode === "live" ? "The bot isn't running. Start it with: node bot.mjs --live" : "The bot isn't running. Showing the last saved data."; }
+  else banner.className = "banner";
+
+  // --- KPIs ---
+  const t = d.today;
+  if (d.account) {
+    $("k1t").textContent = "Equity";
+    setText("k1", usd(d.account.equity));
+    const base = d.account.equityAtDayStart;
+    const chg = fin(base) && fin(d.account.equity) ? d.account.equity - base : null;
+    const at = d.account.equityBaselineAt;
+    const since = at && new Date(at).getUTCHours() * 60 + new Date(at).getUTCMinutes() > 5 ? `since ${time(at)}` : "today";
+    const dep = d.depositedUsd;
+    const vsDep = fin(dep) && fin(d.account.equity) ? d.account.equity - dep : null;
+    $("k1n").innerHTML = fin(vsDep)
+      ? `deposited ${esc(usd(dep))} · <span class="${signCls(vsDep)}">${esc(vsDep >= 0 ? "+" : "")}${esc(usd(vsDep))}</span> all time`
+      : fin(base)
+        ? `start ${esc(usd(base))} · <span class="${signCls(chg)}">${esc(chg >= 0 ? "+" : "")}${esc(usd(chg))}</span> ${esc(since)}`
+        : `available ${esc(usd(d.account.available))}`;
+  } else {
+    $("k1t").textContent = "All-time realized (net of fees)";
+    setText("k1", usd(d.allTime.netRealized, 4), signCls(d.allTime.netRealized));
+    $("k1n").textContent = `${d.allTime.fills.toLocaleString()} fills · ${usd(d.allTime.volume, 0)} volume`;
+  }
+  if (t) {
+    setText("k2", usd(t.net_pnl, 4), signCls(t.net_pnl));
+    $("k2n").textContent = `loss stop at -$${num(d.config.dailyLossUsd)} · max drawdown ${usd(t.max_drawdown, 4)}`;
+    setText("k3", usd(t.gross_volume, 0));
+    $("k3n").textContent = `${t.fills.toLocaleString()} fills · maker ${usd(t.maker_volume, 0)} / taker ${usd(t.taker_volume, 0)}`;
+    setText("k4", usd(t["cost_per_$1M_volume"]));
+    $("k4n").textContent = fin(t["projected_days_to_$1M_tier"]) ? `$1M tier in ~${num(t["projected_days_to_$1M_tier"], 1)} days at this pace` : "no volume yet";
+    setText("c1", usd(t.maker_fees, 4));
+    setText("c2", usd(t.taker_fees, 4));
+    setText("c3", usd(t.funding, 4));
+    setText("c4", usd(t.slippage, 4), signCls(-t.slippage));
+    setText("c5", usd(t.inventory_drift, 4), signCls(t.inventory_drift));
+    setText("c6", `${usd(t.budget_used)} / ${usd(t.budget_limit)}`);
+    const pct = Math.max(0, Math.min(100, (t.budget_used / t.budget_limit) * 100));
+    const bar = $("budgetBar");
+    bar.style.width = pct + "%";
+    bar.style.background = pct > 85 ? "var(--red)" : pct > 60 ? "var(--amber)" : "var(--green)";
+  } else {
+    for (const id of ["k2", "k3", "k4", "c1", "c2", "c3", "c4", "c5", "c6"]) setText(id, "—");
+    $("k2n").textContent = $("k3n").textContent = $("k4n").textContent = "no state for today yet";
+  }
+
+  // --- lifetime (all days this bot has traded) ---
+  const lt = d.lifetime;
+  setText("l1", usd(lt.volume, 0));
+  $("l1n").textContent = `${lt.fills.toLocaleString()} fills · ${lt.days} day${lt.days === 1 ? "" : "s"}`;
+  setText("l2", usd(lt.netCost, 4), signCls(-lt.netCost));
+  $("l2n").textContent = lt.firstDay ? `since ${lt.firstDay}` : "";
+  setText("l3", usd(lt.netPnl, 4), signCls(lt.netPnl));
+  const ltFees = lt.makerFees + lt.takerFees + lt.funding;
+  setText("l4", usd(ltFees, 4), signCls(-ltFees));
+  $("l4n").textContent = `maker ${usd(lt.makerFees, 3)} · taker ${usd(lt.takerFees, 3)} · funding ${usd(lt.funding, 3)}`;
+  setText("l5", usd(d.account ? d.account.equity : null, 2));
+  $("l5n").textContent = d.account
+    ? `${fin(d.depositedUsd) ? "deposited " + usd(d.depositedUsd, 0) + " · " : ""}margin in use ${usd(d.account.marginUsed)}`
+    : "dry run: no account";
+  setText("l6", usd(lt.costPer1M, 2));
+
+  // --- quote ladders per market ---
+  const bySym = {};
+  for (const o of d.openOrders ?? []) (bySym[o.symbol] ??= []).push(o);
+  $("quotesCount").textContent = `${quoting} resting`;
+  const syms = d.config.markets;
+  $("ladders").innerHTML = syms.map((sym) => {
+    const orders = bySym[sym] ?? [];
+    const asks = orders.filter((o) => o.side === "sell").sort((a, b) => b.price - a.price);
+    const bids = orders.filter((o) => o.side === "buy").sort((a, b) => b.price - a.price);
+    const bbo = d.bbo?.[sym];
+    const row = (o, i, side) => `<tr><td class="lvl">${side === "sell" ? "S" : "B"}${i}</td><td class="${side === "sell" ? "neg" : "pos"}">${esc(num(o.price, o.price > 1000 ? 1 : 2))}${o.ro ? ' <span class="muted" title="reduce-only exit">exit</span>' : ""}</td><td>${esc(qtyStr(o.qty))}</td></tr>`;
+    let spread = "";
+    if (asks.length && bids.length) {
+      const a = asks[asks.length - 1].price, b = bids[0].price, m = (a + b) / 2;
+      spread = `<tr class="spread"><td colspan="2">${esc(sym)} own spread</td><td>${esc(usd(a - b))} · ${esc(num(((a - b) / m) * 1e4, 1))} bps</td></tr>`;
+    } else {
+      spread = `<tr class="spread"><td colspan="2">${esc(sym)}${bbo ? ` · book ${esc(num(bbo.bid, 1))} / ${esc(num(bbo.ask, 1))}` : ""}</td><td>${orders.length ? "one side only" : "no quotes"}</td></tr>`;
+    }
+    return `<table class="ladder"><tbody>${asks.map((o, i) => row(o, asks.length - 1 - i, "sell")).join("")}${spread}${bids.map((o, i) => row(o, i, "buy")).join("")}</tbody></table>`;
+  }).join("");
+
+  // --- positions ---
+  const ps = (d.positions ?? []).filter((p) => p.size);
+  $("posNote").textContent = `${d.config.leverage.value}x ${d.config.leverage.cross ? "cross" : "isolated"} · cap $${d.config.capUsd}/market`;
+  $("positions").innerHTML = ps.length
+    ? `<table><thead><tr><th>Mkt</th><th>Size</th><th>Entry</th><th>uPnL</th><th>Liq</th></tr></thead><tbody>${ps.map((p) => `<tr><td>${esc(p.symbol)}</td><td class="${p.size > 0 ? "pos" : "neg"}">${esc(qtyStr(p.size))}</td><td>${esc(num(p.entry, 1))}</td><td class="${signCls(p.upnl)}">${esc(usd(p.upnl, 4))}</td><td>${esc(fin(p.liq) && p.liq > 0 ? num(p.liq, 1) : "—")}</td></tr>`).join("")}</tbody></table>`
+    : `<div class="empty">Flat on all markets</div>`;
+
+  // --- activity ---
+  const a = d.activity;
+  const bo = Object.entries(a.backoffs).sort((x, y) => y[1] - x[1]);
+  $("activity").innerHTML =
+    `<dt>Orders placed</dt><dd>${a.places15m}</dd><dt>Cancelled</dt><dd>${a.cancels15m}</dd><dt>Rejected</dt><dd class="${a.rejects15m ? "neg" : ""}">${a.rejects15m}</dd>` +
+    (bo.length ? bo.map(([k, v]) => `<dt>back-off: ${esc(k)}</dt><dd>${v}</dd>`).join("") : `<dt>Back-offs</dt><dd>${d.config.adverse ? "0" : "filters off"}</dd>`);
+
+  // --- alerts ---
+  $("alerts").innerHTML = d.alerts.length
+    ? d.alerts.map((x) => `<li><span class="${x.level === "error" ? "neg" : "muted"}">${esc(time(x.ts))} ${esc(x.level.toUpperCase())}</span> ${esc(x.msg)}</li>`).join("")
+    : `<li class="muted">None</li>`;
+
+  // --- chart ---
+  drawCurve(d.curve);
+  $("curveNote").textContent = d.curve.length ? `all-time · ${usd(d.allTime.netRealized, 4)}` : "no fills yet";
+
+  // --- fills ---
+  $("fillsNote").textContent = `latest ${Math.min(40, d.allTime.fills)} of ${d.allTime.fills.toLocaleString()}`;
+  $("fills").innerHTML = d.recentFills.length
+    ? d.recentFills.map((f) => `<tr><td>${esc(time(f.ts))}</td><td class="muted">${esc(f.symbol.replace("-USD", ""))}</td><td><span class="pill ${esc(f.side)}">${esc(f.side.toUpperCase())}</span></td><td>${esc(qtyStr(f.qty))}</td><td>${esc(num(f.price, f.price > 1000 ? 1 : 2))}</td><td><span class="pill ${esc(f.liquidity)}" title="${esc(f.intent)}">${esc(f.liquidity.toUpperCase())}</span></td><td class="muted">${esc(num(f.fee, 4))}</td><td class="${signCls(-f.slipBps)}">${esc(num(f.slipBps, 2))}</td><td class="${signCls(f.pnl)}">${f.pnl ? esc(num(f.pnl, 4)) : "—"}</td></tr>`).join("")
+    : `<tr><td colspan="9" class="empty">No fills yet</td></tr>`;
+
+  // --- settings ---
+  const c = d.config;
+  $("settings").innerHTML = [
+    ["Markets", c.markets.join(", ")],
+    ["Quote size", usd(c.quoteUsd, 0) + " per side"],
+    ["Inventory cap", usd(c.capUsd, 0) + " per market"],
+    ["Leverage", `${c.leverage.value}x ${c.leverage.cross ? "cross" : "isolated"}`],
+    ["Daily loss stop", "-$" + num(c.dailyLossUsd)],
+    ["Daily cost budget", usd(c.dailyCostUsd)],
+    ["Adverse filters", c.adverse ? "on" : "off"],
+    ["WS disconnects today", String(d.bot.disconnectsToday)],
+    ...(d.account ? [["Fee tier", String(d.account.feeTier)], ["Withdrawable", usd(d.account.withdrawable)]] : []),
+    ["State saved", d.bot.stateUpdatedAt ? time(d.bot.stateUpdatedAt) : "—"],
+  ].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+}
+
+function drawCurve(points) {
+  const svg = $("chart");
+  if (!points.length) { svg.innerHTML = ""; return; }
+  const W = 800, H = 120, pad = 6;
+  const xs = points.map((p) => p[0]), ys = points.map((p) => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs) || x0 + 1;
+  const y0 = Math.min(0, ...ys), y1 = Math.max(0, ...ys);
+  const sx = (x) => ((x - x0) / (x1 - x0 || 1)) * W;
+  const sy = (y) => pad + (1 - (y - y0) / (y1 - y0 || 1)) * (H - 2 * pad);
+  const pts = points.map((p) => `${sx(p[0]).toFixed(1)},${sy(p[1]).toFixed(1)}`).join(" ");
+  const last = ys[ys.length - 1];
+  const color = last >= 0 ? "var(--green)" : "var(--red)";
+  svg.innerHTML =
+    `<line x1="0" x2="${W}" y1="${sy(0)}" y2="${sy(0)}" stroke="var(--line)" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"/>` +
+    `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>` +
+    `<circle cx="${sx(points[points.length - 1][0])}" cy="${sy(last)}" r="3" fill="${color}"/>`;
+}
+
+let timer = null;
+async function load() {
+  try {
+    const r = await fetch("/api/data", { cache: "no-store" });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    render(d);
+  } catch (e) {
+    $("dot").className = "dot bad";
+    $("statusText").textContent = "dashboard server unreachable";
+    const b = $("banner"); b.className = "banner stop show"; b.textContent = `Can't load data: ${e.message}. Is "node dashboard.mjs" still running?`;
+  }
+}
+function schedule() {
+  clearInterval(timer);
+  if ($("auto").checked) timer = setInterval(load, 10_000);
+}
+$("refresh").addEventListener("click", load);
+$("auto").addEventListener("change", schedule);
+setInterval(() => ($("clock").textContent = new Date().toLocaleTimeString([], { hour12: false })), 1000);
+load();
+schedule();
+</script>
+</body>
+</html>
