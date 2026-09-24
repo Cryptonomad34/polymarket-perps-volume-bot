@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
 import { createReference, edgeBps, emaStep, warnedSide } from "../src/reference.mjs";
-import { decideQuotes, refWarns } from "../src/strategy.mjs";
+import { decideQuotes, fastPullSides, refWarns } from "../src/strategy.mjs";
 import { BTC, ETH, testConfig } from "./fixtures.mjs";
 
 const log = { debug() {}, info() {}, warn() {}, error() {} };
@@ -279,4 +279,49 @@ test("an instrument with no Binance symbol gets no signal instead of an error", 
   const v = ref.view(99, 90.5);
   assert.equal(v.ok, false, "unmapped instruments must fail closed, not throw");
   ref.observe(99, 90.5); // must not throw
+});
+
+// ------------------------------------------------------------- fast pull
+
+const live = (price) => ({ coid: `c${price}`, price, qty: 0.0003, status: "live" });
+
+test("fast pull: a warned opening quote is pulled on the tick", () => {
+  const cfg = refCfg({ gateBps: 1.5 });
+  const sides = fastPullSides({ ref: { ok: true, acting: true, edgeBps: 2 }, position: { size: 0 }, quotes: { buy: live(85_000), sell: live(85_001) }, cfg });
+  assert.deepEqual(sides, ["sell"], "Polymarket is about to rise, so only the ask is stale");
+});
+
+test("fast pull: the reducing side is never pulled", () => {
+  const cfg = refCfg({ gateBps: 1.5 });
+  // Long: the ask reduces the position, so it stays even though it is warned.
+  const sides = fastPullSides({ ref: { ok: true, acting: true, edgeBps: 2 }, position: { size: 0.0003 }, quotes: { buy: null, sell: live(85_001) }, cfg });
+  assert.deepEqual(sides, []);
+});
+
+test("fast pull: nothing happens in observe mode, below the threshold or without a signal", () => {
+  const cfg = refCfg({ gateBps: 1.5 });
+  const quotes = { buy: live(85_000), sell: live(85_001) };
+  const pos = { size: 0 };
+  assert.deepEqual(fastPullSides({ ref: { ok: true, acting: false, edgeBps: 5 }, position: pos, quotes, cfg }), []);
+  assert.deepEqual(fastPullSides({ ref: { ok: true, acting: true, edgeBps: 1 }, position: pos, quotes, cfg }), []);
+  assert.deepEqual(fastPullSides({ ref: { ok: false, acting: true, edgeBps: NaN }, position: pos, quotes, cfg }), []);
+});
+
+test("fast pull: only live quotes, never pending or already cancelling ones", () => {
+  const cfg = refCfg({ gateBps: 1.5 });
+  const ref = { ok: true, acting: true, edgeBps: -2 }; // warns the bid
+  for (const status of ["pending", "cancelling", "done"]) {
+    const sides = fastPullSides({ ref, position: { size: 0 }, quotes: { buy: { ...live(85_000), status }, sell: null }, cfg });
+    assert.deepEqual(sides, [], `status ${status}`);
+  }
+});
+
+test("reference emits a tick per Binance update, so the engine can react before its next loop", () => {
+  const { ws, ref } = connected(refCfg());
+  const seen = [];
+  ref.on("tick", (iid) => seen.push(iid));
+  ws.push("BTCUSDT", 100_000, 100_000.2);
+  ws.push("ETHUSDT", 3_000, 3_000.01);
+  ws.push("BTCUSDT", 0, 100_000.2); // unusable: no tick
+  assert.deepEqual(seen, [BTC.iid, ETH.iid]);
 });

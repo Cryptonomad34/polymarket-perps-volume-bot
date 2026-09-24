@@ -151,6 +151,23 @@ export function decideQuotes(p) {
 }
 
 /**
+ * Sides whose resting quote should be cancelled right now, on a reference
+ * tick, without waiting for the engine loop. Same rule as the gate in
+ * decideQuotes - only the warned side, only if it would grow the position -
+ * applied to quotes that are live on the exchange. A pending quote is left to
+ * the loop: cancelling an order the exchange has not acknowledged yet can be
+ * rejected, and a tick-rate retry of that would hammer the API.
+ */
+export function fastPullSides({ ref, position, quotes, cfg }) {
+  const out = [];
+  for (const side of SIDES) {
+    if (quotes?.[side]?.status !== "live") continue;
+    if (isOpeningSide(side, position.size) && refWarns(ref, side, cfg)) out.push(side);
+  }
+  return out;
+}
+
+/**
  * True when the external reference warns that a fill on `side` is about to be
  * run over. Requires a usable signal AND `acting`, so "observe" mode measures
  * the signal without ever changing a decision.

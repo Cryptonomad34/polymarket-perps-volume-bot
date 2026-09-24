@@ -137,6 +137,9 @@ export function createReference({ cfg, markets, log, reporter = null, WebSocketI
     s.updatedAt = clock();
     s.exchTs = Number(d.T ?? d.E ?? 0) || 0;
     messages++;
+    // Lets the engine react to this tick directly instead of on its next
+    // loop; Binance leads Polymarket by ~100 ms, less than one loop period.
+    ev.emit("tick", iid);
   }
 
   function connect() {

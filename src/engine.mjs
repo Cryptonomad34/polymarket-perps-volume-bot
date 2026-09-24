@@ -12,7 +12,7 @@ import { mid as bookMid } from "./marketdata.mjs";
 import { autoCancelHeadroomLow, evaluate, netPnl } from "./risk.mjs";
 import { computeSummary, formatSummary } from "./report.mjs";
 import { emptyDaily, utcDay } from "./state.mjs";
-import { SIDES, decideQuotes } from "./strategy.mjs";
+import { SIDES, bookIsUsable, decideQuotes, fastPullSides } from "./strategy.mjs";
 
 const LOOP_MS = 200;
 const RECONCILE_MS = 10_000;
@@ -694,7 +694,34 @@ export function createEngine({ cfg, mode, insts, api, md, exec, store, state, re
     }
   }
 
+  // ---------------- reference fast pull ----------------
+
+  // The loop runs every LOOP_MS and awaits its REST calls one after another,
+  // so a gate warning waits on average over 100 ms before the loop acts on it.
+  // Binance leads Polymarket by about 100 ms, which means the arbitrageur has
+  // usually taken the stale quote by then. This applies the same gate on the
+  // Binance tick itself and cancels at once, outside the loop. cancel() marks
+  // the order "cancelling" before its request leaves, so the loop leaves it
+  // alone and re-quotes that side once the warning clears.
+  function fastPull(iid) {
+    if (!running || state.stop) return;
+    const b = book(iid);
+    if (!bookIsUsable(b)) return;
+    const quotes = quoteView(iid);
+    const ref = reference.view(iid, bookMid(b));
+    for (const side of fastPullSides({ ref, position: position(iid), quotes, cfg })) {
+      const o = orders.get(quotes[side].coid);
+      // One attempt per order. A failed cancel is retried by the loop at its
+      // own pace, never once per Binance tick.
+      if (o.fastPullTried) continue;
+      o.fastPullTried = true;
+      cancel(o.coid, `reference fast pull: edge ${ref.edgeBps.toFixed(2)} bps`).catch((e) => log.warn("fast pull cancel failed", { error: e.message }));
+    }
+  }
+
   // ---------------- lifecycle ----------------
+
+  reference?.on?.("tick", fastPull);
 
   md.on("book", (iid) => exec.onBook?.(iid));
   md.on("trade", (t) => {
