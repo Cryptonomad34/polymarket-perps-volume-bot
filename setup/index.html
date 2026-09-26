@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>volume-bot setup</title>
+<style>
+  :root { --bg:#f7f7f8; --card:#fff; --fg:#1a1a1a; --muted:#666; --border:#ddd; --accent:#2e5bff; --ok:#137333; --err:#b3261e; --warn-bg:#fff6e0; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#141416; --card:#1e1e22; --fg:#eee; --muted:#9a9aa0; --border:#333; --accent:#7c9cff; --ok:#6fd08c; --err:#ff8a80; --warn-bg:#2d2616; }
+  }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  h2 { font-size:17px; margin:0 0 12px; }
+  p.sub { color:var(--muted); margin:0 0 20px; }
+  section { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:18px; margin-bottom:16px; }
+  label { display:block; font-size:13px; color:var(--muted); margin:10px 0 4px; }
+  input { width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid var(--border); border-radius:6px; background:transparent; color:var(--fg); font:inherit; }
+  button { margin-top:14px; padding:9px 16px; border:0; border-radius:6px; background:var(--accent); color:#fff; font:inherit; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:default; }
+  button.secondary { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+  .log { white-space:pre-wrap; font:13px/1.45 ui-monospace, Consolas, monospace; margin-top:12px; word-break:break-all; }
+  .ok { color:var(--ok); } .err { color:var(--err); }
+  .note { background:var(--warn-bg); border-radius:6px; padding:10px 12px; font-size:13px; }
+  code { font-family:ui-monospace, Consolas, monospace; font-size:13px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  td, th { text-align:left; padding:6px 4px; border-bottom:1px solid var(--border); word-break:break-all; }
+</style>
+</head>
+<body>
+<main>
+  <h1>volume-bot setup: Polymarket Perps proxy</h1>
+  <p class="sub">Your wallet signs in the browser. The proxy key is created and saved on this computer and never goes into the browser.</p>
+
+  <section>
+    <h2>1. Connect your wallet</h2>
+    <button id="connect">Connect wallet</button>
+    <div id="connectLog" class="log"></div>
+  </section>
+
+  <section>
+    <h2>2. Create a proxy for your bot</h2>
+    <label for="days">Valid for (days)</label>
+    <input id="days" type="number" min="1" max="30" value="7" />
+    <label for="label">Label (optional)</label>
+    <input id="label" type="text" value="volume-bot" maxlength="64" />
+    <button id="create" disabled>Create proxy (your wallet will ask you to sign)</button>
+    <div id="createLog" class="log"></div>
+  </section>
+
+  <section>
+    <h2>3. Revoke a proxy</h2>
+    <label for="revokeAddr">Proxy address to revoke</label>
+    <input id="revokeAddr" type="text" placeholder="0x..." />
+    <button id="revoke" disabled>Revoke (your wallet will ask you to sign)</button>
+    <div id="revokeLog" class="log"></div>
+  </section>
+
+  <section>
+    <h2>Saved and active proxies</h2>
+    <button id="refresh" class="secondary">Refresh</button>
+    <div id="list" class="log"></div>
+  </section>
+
+  <p class="note">
+    <strong>Check before you sign:</strong> Creating a proxy shows a <code>CreateProxy</code> message whose <code>addr</code> is the new proxy address shown here.
+    Revoking shows an <code>Op</code> message. <strong>This tool never asks for a <code>Withdraw</code> signature.</strong>
+  </p>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let account = null;
+
+function show(el, text, cls) {
+  el.className = "log " + (cls || "");
+  el.textContent = text;
+}
+
+async function api(path, body) {
+  const res = await fetch(path, body ? {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body),
+  } : undefined);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+
+async function ensurePolygon() {
+  const chainId = await ethereum.request({ method: "eth_chainId" });
+  if (chainId !== "0x89") {
+    await ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x89" }] });
+  }
+}
+
+async function sign(typedData) {
+  await ensurePolygon();
+  return ethereum.request({
+    method: "eth_signTypedData_v4",
+    params: [account, JSON.stringify(typedData)],
+  });
+}
+
+$("connect").onclick = async () => {
+  if (!window.ethereum) {
+    show($("connectLog"), "No wallet found. Open this page in the browser where your wallet extension (Rabby, MetaMask, ...) is installed.", "err");
+    return;
+  }
+  try {
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    account = accounts[0];
+    show($("connectLog"), "Connected: " + account +
+      "\nUse the same wallet you log in to Polymarket with. Perps accounts are tied to this address.", "ok");
+    $("create").disabled = false;
+    $("revoke").disabled = false;
+  } catch (e) {
+    show($("connectLog"), "Connect failed: " + e.message, "err");
+  }
+};
+
+$("create").onclick = async () => {
+  const log = $("createLog");
+  $("create").disabled = true;
+  try {
+    show(log, "Generating proxy key on this computer...");
+    const prep = await api("/api/create/prepare", {
+      owner: account, days: $("days").value, label: $("label").value.trim(),
+    });
+    show(log, "New proxy address: " + prep.proxy +
+      "\nExpires: " + new Date(prep.expiresAt).toLocaleString() +
+      "\n\nCheck in your wallet that the message is CreateProxy and addr = " + prep.proxy + ", then sign.");
+    const signature = await sign(prep.typedData);
+    show(log, "Signed. Sending to Polymarket...");
+    const r = await api("/api/create/submit", { id: prep.id, signature });
+    show(log,
+      "Proxy created: " + r.proxy +
+      "\nExpires: " + r.expiresAt +
+      "\nAPI check: " + (r.verified ? "confirmed active" : "could not confirm" + (r.verifyError ? " (" + r.verifyError + ")" : "")) +
+      "\n\nSaved on this computer:\n  " + r.files.join("\n  ") +
+      "\n\nThe bot finds this file automatically. Start it with: node bot.mjs", "ok");
+    refresh();
+  } catch (e) {
+    show(log, "Failed: " + e.message, "err");
+  } finally {
+    $("create").disabled = !account;
+  }
+};
+
+$("revoke").onclick = async () => {
+  const log = $("revokeLog");
+  const proxy = $("revokeAddr").value.trim();
+  $("revoke").disabled = true;
+  try {
+    const prep = await api("/api/delete/prepare", { owner: account, proxy });
+    show(log, "Check in your wallet that the message type is Op, then sign to revoke " + proxy + "...");
+    const signature = await sign(prep.typedData);
+    const r = await api("/api/delete/submit", { id: prep.id, signature });
+    show(log, "Revoked " + r.proxy + ". It can no longer trade.", "ok");
+    refresh();
+  } catch (e) {
+    show(log, "Failed: " + e.message, "err");
+  } finally {
+    $("revoke").disabled = !account;
+  }
+};
+
+async function refresh() {
+  const el = $("list");
+  try {
+    const r = await api("/api/proxies");
+    let out = "Saved on this computer:\n";
+    out += r.saved.length
+      ? r.saved.map((s) => "  " + s.proxy + "  expires " + s.expiresAtIso).join("\n")
+      : "  (none)";
+    if (r.active) {
+      out += "\n\nActive on Polymarket for " + r.active.address + ":\n" +
+        (r.active.keys || []).map((k) => "  " + k.proxy + "  expires " + new Date(k.expiry).toLocaleString() + (k.label ? "  [" + k.label + "]" : "")).join("\n");
+    } else if (r.error) {
+      out += "\n\nCould not read active proxies: " + r.error;
+    }
+    show(el, out);
+  } catch (e) {
+    show(el, "Failed: " + e.message, "err");
+  }
+}
+$("refresh").onclick = refresh;
+refresh();
+</script>
+</body>
+</html>

@@ -7,7 +7,9 @@
   "type": "module",
   "engines": { "node": ">=20" },
   "scripts": {
+    "setup": "node setup/server.mjs",
     "start": "node bot.mjs",
+    "dry": "node bot.mjs --dry",
     "test": "node --test test/*.test.mjs",
     "test:signing": "node test/signing-match.mjs",
     "dashboard": "node dashboard.mjs"
