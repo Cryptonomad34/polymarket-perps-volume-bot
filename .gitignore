@@ -7,3 +7,4 @@ config.json
 
 # local-only ops notes (server details)
 OPERATIONS.md
+credentials/

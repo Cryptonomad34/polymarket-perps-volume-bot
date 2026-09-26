@@ -5,7 +5,7 @@
     "BTC-USD",
     "ETH-USD"
   ],
-  "envFile": "../proxy-tool/credentials/proxy-0xYOUR_PROXY_ADDRESS.env",
+  "envFile": "credentials/perps.env",
   "quote": {
     "notionalUsd": 25,
     "debounceMs": 300,
