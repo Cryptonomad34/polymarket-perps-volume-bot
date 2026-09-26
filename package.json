@@ -2,6 +2,7 @@
   "name": "polymarket-perps-volume-bot",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT",
   "description": "Cost-minimizing volume bot for Polymarket Perps (BTC-USD, ETH-USD). Dry run by default.",
   "type": "module",
   "engines": { "node": ">=20" },

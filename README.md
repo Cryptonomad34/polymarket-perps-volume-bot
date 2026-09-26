@@ -223,3 +223,9 @@ On restart:
 - **Maker/taker in live mode:** WebSocket fills don't say whether we were maker or taker, so the order type decides (IOC = taker). REST fills, which do say, are used for reconciliation.
 - **Fee rates:** the fee schedule currently lists only an "equity" category, so those rates are used for crypto (this is logged). In live mode, the actual fee on each fill is what's recorded.
 - **Auto-cancel fire limit:** the docs say 1000 fires a day. The bot reads the real `daily_limit` from `GET /v1/account/auto-cancel` and never assumes a value.
+
+## Disclaimer
+This is experimental software, not financial advice. Trading perpetual futures with leverage can lose more than you expect, and bugs, exchange changes or market moves can cause losses. Run it in dry mode first, start small, and use it at your own risk.
+
+## License
+[MIT](LICENSE)
