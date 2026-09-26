@@ -1,11 +1,10 @@
 {
-  "mode": "dry",
+  "mode": "live",
   "depositedUsd": 100,
   "markets": [
     "BTC-USD",
     "ETH-USD"
   ],
-  "envFile": "credentials/perps.env",
   "quote": {
     "notionalUsd": 25,
     "debounceMs": 300,

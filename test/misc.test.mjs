@@ -8,7 +8,7 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { qtyForNotional, roundPrice, roundQty, sigFigs, stepAt, toDecimalString } from "../src/precision.mjs";
 import { makeCoid } from "../src/coid.mjs";
 import { createStateStore, freshState } from "../src/state.mjs";
-import { loadCredentials } from "../src/env.mjs";
+import { loadCredentials, resolveCredentialsFile } from "../src/env.mjs";
 import { redact } from "../src/log.mjs";
 import { computeSummary } from "../src/report.mjs";
 import { emptyDaily } from "../src/state.mjs";
@@ -98,6 +98,25 @@ test("credentials: key/address check, expiry check, secrets never serialised", (
   write({ PERPS_PROXY_ADDRESS: privateKeyToAccount(generatePrivateKey()).address });
   assert.throws(() => loadCredentials(file), /does not belong/);
   fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test("credentials: auto-discovery picks the newest unexpired proxy file", () => {
+  const base = fs.mkdtempSync(path.join(os.tmpdir(), "vb-creds-"));
+  const now = 1_700_000_000_000;
+  assert.equal(resolveCredentialsFile({ baseDir: base, now }), null); // no credentials/ folder yet
+  const dir = path.join(base, "credentials");
+  fs.mkdirSync(dir);
+  const put = (addr, exp) => fs.writeFileSync(path.join(dir, `proxy-0x${addr.repeat(40)}.env`), `PERPS_PROXY_EXPIRES_AT=${exp}
+`);
+  put("a", now - 1); // expired
+  put("b", now + 5 * 86_400_000);
+  put("c", now + 9 * 86_400_000); // newest
+  fs.writeFileSync(path.join(dir, `proxy-0x${"d".repeat(40)}.REVOKED.env`), `PERPS_PROXY_EXPIRES_AT=${now + 99 * 86_400_000}
+`);
+  assert.equal(resolveCredentialsFile({ baseDir: base, now }), path.join(dir, `proxy-0x${"c".repeat(40)}.env`));
+  assert.equal(resolveCredentialsFile({ baseDir: base, now: now + 10 * 86_400_000 }), null); // all expired
+  assert.equal(resolveCredentialsFile({ baseDir: base, cfgEnvFile: "x.env", now }), path.resolve(base, "x.env"));
+  assert.equal(resolveCredentialsFile({ baseDir: base, envVar: "/abs/y.env", cfgEnvFile: "x.env", now }), "/abs/y.env");
 });
 
 test("log redaction hides secret-looking keys", () => {

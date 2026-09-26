@@ -1,4 +1,4 @@
-// Live smoke test (node bot.mjs --live --smoke). Places nothing that can fill:
+// Live smoke test (node bot.mjs --smoke). Places nothing that can fill:
 //   1. one ~$10 post-only buy 3% below mid on the first market -> confirm it
 //      is in open orders -> cancel it -> confirm it is gone
 //   2. place a second one, arm auto-cancel 15 s ahead and DON'T re-arm (as if

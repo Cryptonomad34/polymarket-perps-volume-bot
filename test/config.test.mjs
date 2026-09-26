@@ -17,7 +17,7 @@ function errorsFor(mutate) {
 
 test("example config is valid and frozen", () => {
   const c = validateConfig(rawConfig());
-  assert.equal(c.mode, "dry");
+  assert.equal(c.mode, "live");
   assert.throws(() => {
     c.quote.notionalUsd = 1;
   });
@@ -26,6 +26,7 @@ test("example config is valid and frozen", () => {
 test("specific, human-readable errors", () => {
   assert.deepEqual(errorsFor((c) => (c.flatten.maxHoldSec = 900)), ["config.flatten.maxHoldSec must be ≤ 300 (got 900)"]);
   assert.deepEqual(errorsFor((c) => (c.mode = "paper")), ['config.mode must be one of "dry", "live" (got "paper")']);
+  assert.deepEqual(errorsFor((c) => delete c.mode), []); // optional: the bot defaults to live
   assert.deepEqual(errorsFor((c) => (c.leverage.value = 10.5)), ["config.leverage.value must be a whole number (got 10.5)"]);
   assert.deepEqual(errorsFor((c) => delete c.risk.dailyLossUsd), ["config.risk.dailyLossUsd is missing"]);
   assert.deepEqual(errorsFor((c) => (c.quote.notonalUsd = 5)), ["config.quote.notonalUsd is not a known setting"]);

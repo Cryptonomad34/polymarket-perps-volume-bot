@@ -17,7 +17,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createApi } from "./src/api.mjs";
 import { loadConfig } from "./src/config.mjs";
-import { loadCredentials } from "./src/env.mjs";
+import { loadCredentials, resolveCredentialsFile } from "./src/env.mjs";
 import { computeSummary } from "./src/report.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -141,11 +141,11 @@ function recentAlerts(logsDir, limit = 8) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const cfg = loadConfig(args.config);
-  const mode = args.mode ?? cfg.mode;
+  const mode = args.mode ?? cfg.mode ?? "live";
 
   let creds = null;
   if (mode === "live") {
-    const envFile = process.env.PERPS_ENV_FILE ?? (cfg.envFile ? path.resolve(HERE, cfg.envFile) : null);
+    const envFile = resolveCredentialsFile({ envVar: process.env.PERPS_ENV_FILE, cfgEnvFile: cfg.envFile, baseDir: HERE, now: 0 });
     try {
       creds = loadCredentials(envFile, { requireHoursLeft: 0 });
     } catch (e) {

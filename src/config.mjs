@@ -13,7 +13,7 @@ const REFERENCE_VENUES = ["binance", "bybit", "okx"];
 
 // Every field is required; config.example.json documents each one.
 export const SCHEMA = {
-  mode: oneOf("dry", "live"),
+  mode: { ...oneOf("dry", "live"), optional: true }, // default "live"; `node bot.mjs --dry` for a practice run
   depositedUsd: { ...num(0, 10_000_000), optional: true }, // what you funded the Perps account with; dashboard only
   markets: { type: "markets" },
   envFile: { type: "string", optional: true },

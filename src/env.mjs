@@ -1,8 +1,9 @@
-// Loads the proxy credentials produced by proxy-tool. The returned object
+// Loads the proxy credentials created by `npm run setup` (setup/server.mjs). The returned object
 // hides the private key and secret from JSON.stringify, util.inspect and
 // string conversion, so an accidental log line can't leak them.
 
 import fs from "node:fs";
+import path from "node:path";
 import { inspect } from "node:util";
 import { getAddress, isAddress } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
@@ -22,8 +23,27 @@ export function parseEnvFile(text) {
   return out;
 }
 
+// Which credentials file to use: PERPS_ENV_FILE, then config.envFile, then the
+// newest unexpired credentials/proxy-0x....env written by `npm run setup`.
+export function resolveCredentialsFile({ envVar, cfgEnvFile, baseDir, now = Date.now() }) {
+  if (envVar) return envVar;
+  if (cfgEnvFile) return path.resolve(baseDir, cfgEnvFile);
+  const dir = path.join(baseDir, "credentials");
+  if (!fs.existsSync(dir)) return null;
+  const found = fs
+    .readdirSync(dir)
+    .filter((f) => /^proxy-0x[0-9a-fA-F]{40}\.env$/.test(f))
+    .map((f) => {
+      const file = path.join(dir, f);
+      return { file, expiresAt: Number(parseEnvFile(fs.readFileSync(file, "utf8")).PERPS_PROXY_EXPIRES_AT) };
+    })
+    .filter((c) => c.expiresAt > now)
+    .sort((a, b) => b.expiresAt - a.expiresAt);
+  return found[0]?.file ?? null;
+}
+
 export function loadCredentials(file, { now = Date.now(), requireHoursLeft = 24 } = {}) {
-  if (!file) throw new EnvError("No credentials file. Set PERPS_ENV_FILE or config.envFile to the .env created by proxy-tool.");
+  if (!file) throw new EnvError("No credentials found. Run `npm run setup` to create them, or set PERPS_ENV_FILE / config.envFile.");
   if (!fs.existsSync(file)) throw new EnvError(`Credentials file not found: ${file}`);
   const env = parseEnvFile(fs.readFileSync(file, "utf8"));
 
@@ -45,7 +65,7 @@ export function loadCredentials(file, { now = Date.now(), requireHoursLeft = 24 
   const hoursLeft = (expiresAt - now) / 3_600_000;
   if (expiresAt - now < requireHoursLeft * 3_600_000) {
     throw new EnvError(
-      `Proxy expires ${new Date(expiresAt).toISOString()} (${hoursLeft.toFixed(1)} h left); need at least ${requireHoursLeft} h. Create a new proxy with proxy-tool.`,
+      `Proxy expires ${new Date(expiresAt).toISOString()} (${hoursLeft.toFixed(1)} h left); need at least ${requireHoursLeft} h. Create a new proxy with: npm run setup`,
     );
   }
 

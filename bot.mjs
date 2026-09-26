@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 // volume-bot entry point.
 //
-//   node bot.mjs            dry run (default): real market data, simulated fills, signs nothing
-//   node bot.mjs --live     live, ONLY if config.json also says "mode": "live"
-//   node bot.mjs --live --smoke   one-off live smoke test (see README)
+//   node bot.mjs            live trading (asks you to type "yes" first)
+//   node bot.mjs --yes      live trading without the prompt (servers, pm2)
+//   node bot.mjs --smoke    one-off live smoke test (see README)
+//   node bot.mjs --dry      practice run: real market data, simulated fills, signs nothing
 //   --config <file>         config path (default ./config.json)
 //   --clear-stop            clear today's stop reason (not allowed for the daily loss stop)
+//
+// Credentials: created with `npm run setup` and found automatically in credentials/.
 //
 // Stop: Ctrl+C, SIGTERM, or create control/STOP. The bot cancels its open
 // orders, saves state and a summary, and exits.
@@ -16,7 +19,7 @@ import readline from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 import { createApi } from "./src/api.mjs";
 import { ConfigError, loadConfig } from "./src/config.mjs";
-import { EnvError, loadCredentials } from "./src/env.mjs";
+import { EnvError, loadCredentials, resolveCredentialsFile } from "./src/env.mjs";
 import { createEngine } from "./src/engine.mjs";
 import { createLiveExec } from "./src/exec/live.mjs";
 import { createSimExec } from "./src/exec/sim.mjs";
@@ -35,16 +38,19 @@ const STOP_FILE = path.join(CONTROL_DIR, "STOP");
 const LOCK_FILE = path.join(CONTROL_DIR, ".lock");
 
 function parseArgs(argv) {
-  const a = { live: false, smoke: false, clearStop: false, config: path.join(HERE, "config.json") };
+  const a = { live: false, dry: false, yes: false, smoke: false, clearStop: false, config: path.join(HERE, "config.json") };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === "--live") a.live = true;
+    else if (k === "--dry") a.dry = true;
+    else if (k === "--yes" || k === "-y") a.yes = true;
     else if (k === "--smoke") a.smoke = true;
     else if (k === "--clear-stop") a.clearStop = true;
     else if (k === "--config") a.config = path.resolve(argv[++i]);
     else if (k === "--help" || k === "-h") a.help = true;
     else throw new Error(`unknown argument: ${k}`);
   }
+  if (a.live && a.dry) throw new Error("--live and --dry can't be used together");
   return a;
 }
 
@@ -110,7 +116,7 @@ function checkLeverage(cfg, inst) {
   return null;
 }
 
-async function confirmLive({ creds, portfolio, insts, cfg, smoke }) {
+async function confirmLive({ creds, portfolio, insts, cfg, smoke, yes }) {
   const lines = [
     "",
     "================ LIVE TRADING CONFIRMATION ================",
@@ -129,7 +135,8 @@ async function confirmLive({ creds, portfolio, insts, cfg, smoke }) {
   if (smoke) lines.push("SMOKE TEST: one $10 post-only order 3% from mid, then cancel; then a second one left for auto-cancel.");
   lines.push("===========================================================", "");
   process.stdout.write(lines.join("\n") + "\n");
-  if (!process.stdin.isTTY) throw new Error("live mode needs an interactive terminal for the confirmation prompt");
+  if (yes) return true;
+  if (!process.stdin.isTTY) throw new Error('live mode needs an interactive terminal to type "yes"; pass --yes to start unattended (servers, pm2)');
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   const answer = (await rl.question('Type "yes" to start live trading: ')).trim();
   rl.close();
@@ -139,18 +146,17 @@ async function confirmLive({ creds, portfolio, insts, cfg, smoke }) {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) {
-    process.stdout.write(fs.readFileSync(fileURLToPath(import.meta.url), "utf8").split("\n").slice(1, 13).join("\n").replace(/^\/\/ ?/gm, "") + "\n");
+    process.stdout.write(fs.readFileSync(fileURLToPath(import.meta.url), "utf8").split("\n").slice(1, 15).join("\n").replace(/^\/\/ ?/gm, "") + "\n");
     return 0;
   }
 
   const cfg = loadConfig(args.config);
   const log = createLogger({ dir: LOG_DIR, level: cfg.log.level });
 
-  let mode = "dry";
-  if (args.live && cfg.mode === "live") mode = "live";
-  else if (args.live) log.warn('--live given but config.mode is "dry": starting in DRY RUN. Set "mode": "live" in config.json to trade.');
-  else if (cfg.mode === "live") log.warn('config.mode is "live" but --live was not given: starting in DRY RUN.');
-  if (args.smoke && mode !== "live") throw new Error("--smoke needs live mode (--live and config.mode = live)");
+  // Live unless --dry is given (or config.json says "mode": "dry"); --live overrides the config.
+  const mode = args.dry ? "dry" : args.live ? "live" : (cfg.mode ?? "live");
+  if (mode === "dry" && !args.dry) log.warn('config.mode is "dry": starting a practice run. Remove it or pass --live to trade.');
+  if (args.smoke && mode !== "live") throw new Error("--smoke needs live mode");
   log.info(`volume-bot starting in ${mode.toUpperCase()} mode`, { markets: cfg.markets, pid: process.pid });
 
   acquireLock(log);
@@ -162,7 +168,7 @@ async function main() {
   let creds = null;
   let signer = null;
   if (mode === "live") {
-    const envFile = process.env.PERPS_ENV_FILE ?? (cfg.envFile ? path.resolve(HERE, cfg.envFile) : null);
+    const envFile = resolveCredentialsFile({ envVar: process.env.PERPS_ENV_FILE, cfgEnvFile: cfg.envFile, baseDir: HERE });
     creds = loadCredentials(envFile);
     signer = createSigner(creds.privateKey);
     log.info("credentials loaded", { owner: creds.owner, proxy: creds.proxy, expires: creds.expiresAtIso });
@@ -188,7 +194,7 @@ async function main() {
   }
 
   if (mode === "live") {
-    if (!(await confirmLive({ creds, portfolio, insts, cfg, smoke: args.smoke }))) {
+    if (!(await confirmLive({ creds, portfolio, insts, cfg, smoke: args.smoke, yes: args.yes }))) {
       log.warn("live start not confirmed; exiting without placing anything");
       return 0;
     }
