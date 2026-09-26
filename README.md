@@ -1,126 +1,292 @@
-# volume-bot
+# Polymarket Perps Volume Bot
 
-This bot generates real trading volume on Polymarket Perps (BTC-USD, ETH-USD) at the lowest total cost it can. It joins the best bid and best ask with post-only orders, trades only with other people, and exits positions cheaply.
+![Node](https://img.shields.io/badge/node-%E2%89%A520-339933?logo=nodedotjs&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-131%20passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Default](https://img.shields.io/badge/default-dry%20run-orange)
 
-The number to judge it by is **cost per $1 of volume**.
+A maker-only trading bot for **Polymarket Perps** (BTC-USD and ETH-USD). It generates real trading volume at the **lowest possible cost per $1**, for example to build volume for points or a better fee tier without paying heavy taker fees.
 
-- **Dry run is the default.** `node bot.mjs` uses real market data and simulated fills. It signs nothing and sends nothing.
-- **Live needs two switches to agree:** the `--live` flag and `"mode": "live"` in `config.json`. You then type `yes` at a confirmation prompt.
-- **It signs with a Polymarket proxy key only** (from `../proxy-tool`), never your wallet key. The proxy key can't withdraw, and this code contains no withdraw or transfer operations.
+It places post-only orders at the best bid and ask, so it only trades with other people. It exits positions cheaply and stops itself when a risk limit is hit. A local dashboard shows everything it does.
+
+> **Safe by default:** the bot starts in **dry run**, using real market data and simulated fills. It sends nothing to the exchange until you switch on live mode in **two** places and type `yes`.
 
 ---
 
-## Setup
+## Contents
+1. [Features](#features)
+2. [Quick start: dry run in 5 minutes](#quick-start-dry-run-in-5-minutes)
+3. [Going live, step by step](#going-live-step-by-step)
+4. [Everyday use](#everyday-use)
+5. [Settings you'll actually change](#settings-youll-actually-change)
+6. [Running 24/7 on a server](#running-247-on-a-server)
+7. [Troubleshooting](#troubleshooting)
+8. [How it trades](#how-it-trades)
+9. [Full reference](#full-reference)
+10. [Project structure](#project-structure)
+11. [Disclaimer](#disclaimer) · [License](#license)
 
-Requires Node 20 or later.
+---
 
+## Features
+- **Maker-only quoting:** post-only orders at the best bid and ask. The bot never crosses the spread except to exit a position.
+- **Two strategies:**
+  - `join` (default) sits at the top of the book.
+  - `fair` rests a ladder of orders around a fair price taken from Binance, Bybit and OKX.
+- **Cheap exits:** positions are first closed passively at maker fee, with a capped taker exit as the last resort.
+- **Risk controls:** daily loss stop, daily cost budget, position caps, a liquidation-distance guard, stale-data and disconnect guards, and the exchange's auto-cancel ("dead-man's switch").
+- **Key safety:** the bot signs with a **proxy key that can't withdraw**, never with your main wallet key. The code contains no withdraw or transfer operations, and secrets are redacted from logs.
+- **Crash-safe:** state is saved atomically. After a restart, the bot re-syncs orders and positions from the exchange.
+- **Dashboard:** a read-only web page showing P&L, volume, cost breakdown, quotes, positions and warnings.
+- **Detailed reports:** every fill and quote is logged to CSV, and each cost (maker fees, taker fees, funding, slippage) is reported separately.
+
+---
+
+## Quick start: dry run in 5 minutes
+
+Dry run needs **no wallet, no keys and no money**. It's the best way to see how the bot behaves.
+
+### 1. Install Node.js
+Install **Node.js 20 or newer** from [nodejs.org](https://nodejs.org), then check it:
 ```bash
-cd volume-bot
-npm ci                      # exact-pinned: viem 2.55.19, @msgpack/msgpack 3.1.3, ws 8.21.3
-npm audit signatures        # verify registry signatures
+node --version
+```
+This should print `v20.x` or higher.
+
+### 2. Download the bot
+```bash
+git clone https://github.com/Cryptonomad34/polymarket-perps-volume-bot.git
+cd polymarket-perps-volume-bot
+```
+If you don't use git, click **Code → Download ZIP** on GitHub and unzip it instead.
+
+### 3. Install dependencies
+```bash
+npm ci
+```
+The versions are pinned exactly. To also verify the packages' registry signatures, run `npm audit signatures`.
+
+### 4. Create your config
+```bash
 cp config.example.json config.json
 ```
+On Windows Command Prompt, use `copy config.example.json config.json` instead.
 
-For live mode, point `envFile` in `config.json` (or the environment variable `PERPS_ENV_FILE`) at the `.env` file that `proxy-tool` created. Dry run doesn't need credentials.
+The defaults are sensible, so you don't need to change anything for a dry run.
 
-## Run
+### 5. Start the bot
+```bash
+node bot.mjs
+```
+You should see `volume-bot starting in DRY mode`. After that, log lines appear as the bot quotes and gets simulated fills. Stop it with **Ctrl+C**.
 
-| What | Command |
+### 6. Open the dashboard (optional)
+In a **second terminal**, in the same folder:
+```bash
+npm run dashboard
+```
+Then open **http://localhost:5174** in your browser.
+
+Let the dry run go for a while, ideally a few hours. Watch `cost_per_$1` in the dashboard or in `logs/summary.csv`.
+
+---
+
+## Going live, step by step
+
+> ⚠️ Live mode trades real money with leverage. Start with a small balance and read the [Disclaimer](#disclaimer).
+
+### Step 1: Fund your Polymarket Perps account
+Deposit a small amount of **pUSD** into your Polymarket Perps account. $50–$100 is enough to start with the default settings.
+
+### Step 2: Create proxy credentials
+The bot trades through a **proxy key**. This is a separate key that your main wallet authorises for a limited time (for example 30 days). The proxy can place and cancel orders but **cannot withdraw**, so your main wallet's private key never goes near the bot.
+
+1. Create a proxy for your account.
+   - It's registered with a `CreateProxy` message that your main wallet signs.
+   - Use Polymarket's official client SDK (`@polymarket/client`) to do this.
+   - Polymarket returns a proxy **secret**. Keep the proxy's private key, its address, the secret and the expiry time.
+2. Copy the template and fill in your values:
+   ```bash
+   mkdir credentials
+   cp .env.example credentials/perps.env
+   ```
+   Open `credentials/perps.env` and fill in all five values. Each one is explained inside the file.
+3. Check that `config.json` points to that file:
+   ```json
+   "envFile": "credentials/perps.env"
+   ```
+   Or set the environment variable `PERPS_ENV_FILE` to the file's path instead.
+
+🔒 `credentials/` and `*.env` are already in `.gitignore`. **Never commit or share this file.**
+
+When the proxy is close to expiring, the bot refuses to start and tells you. It needs at least 24 hours left. Create a new proxy and update the file.
+
+### Step 3: Run the tests
+```bash
+npm test
+npm run test:signing
+```
+`npm test` runs 131 unit tests with no network access. `npm run test:signing` checks that the bot's signatures match the official SDK. Both must pass.
+
+### Step 4: Live smoke test
+Open `config.json` and set:
+```json
+"mode": "live"
+```
+Then run:
+```bash
+node bot.mjs --live --smoke
+```
+The bot shows your account, proxy, balance and settings, then asks you to type `yes`. It then:
+1. places a $10 post-only order 3% away from the price, checks it's open, and cancels it;
+2. places a second one and lets the exchange's auto-cancel remove it within about 15 seconds.
+
+If both steps pass, signing, orders and the safety switch all work.
+
+### Step 5: Go live, small
+```bash
+node bot.mjs --live
+```
+Check the startup summary and type `yes`. Before the first trade, the bot:
+1. cancels any open orders on BTC-USD and ETH-USD;
+2. sets leverage (default 10x isolated);
+3. takes the exchange's current positions as the truth;
+4. starts quoting.
+
+> **Important:** the bot treats BTC-USD and ETH-USD on this account as **its own**. It will manage and close any position you already hold there. Don't trade these two markets by hand while it runs.
+
+Live mode needs **both** `"mode": "live"` in `config.json` **and** the `--live` flag. If only one is set, the bot starts in dry run and logs why.
+
+---
+
+## Everyday use
+
+| I want to… | Command |
 |---|---|
-| Dry run | `node bot.mjs` |
-| Live | set `"mode": "live"` in `config.json`, then `node bot.mjs --live` |
-| Live smoke test | `node bot.mjs --live --smoke` |
-| Another config | `node bot.mjs --config other.json` |
-| Tests | `npm test` (unit tests, no network) and `npm run test:signing` (compares signatures with the official SDK) |
+| Dry run (safe test) | `node bot.mjs` |
+| Trade live | `node bot.mjs --live` (with `"mode": "live"` in config) |
+| Run the live smoke test | `node bot.mjs --live --smoke` |
+| Use another config file | `node bot.mjs --config my-config.json` |
+| Open the dashboard | `npm run dashboard`, then http://localhost:5174 |
+| View a saved run | `node dashboard.mjs --logs runs/<folder>` |
+| Clear today's stop (not the loss stop) | `node bot.mjs --live --clear-stop` |
+| Run the tests | `npm test` and `npm run test:signing` |
 
-If the `--live` flag and `config.mode` disagree, the bot starts in **dry run** and logs why.
+### Stopping the bot
+Any of these cancels the bot's open orders, saves its state and a summary, and exits cleanly:
+- press **Ctrl+C**;
+- send `SIGTERM` (for example from a process manager);
+- create an empty file named `control/STOP`. This works well on a server; the bot deletes the file on exit.
 
-### Starting live
-Before any real request, the bot prints:
-- the account and proxy (with the proxy's expiry)
-- equity and fee tier
-- leverage, quote size and inventory caps
-- the daily cost budget and loss stop
-- auto-cancel settings and any existing positions
-
-It then waits for you to type `yes`. After that it:
-1. cancels open orders on BTC and ETH;
-2. sets leverage (default 10x isolated, checked against the instrument's max and risk tier);
-3. adopts the exchange's positions as the truth;
-4. starts trading.
-
-**Note:** the bot treats BTC-USD and ETH-USD on this account as its own. It will manage and flatten any position you already hold there. It pauses quoting on an instrument if it sees orders there that it didn't place.
-
-### Stopping
-Any of the following cancels the bot's open orders, saves state and a summary, and exits:
-- Ctrl+C
-- `SIGTERM`
-- creating a file named `control/STOP` (the bot deletes it on exit)
-
-Open positions stay open. The next start manages them, since exchange state is re-synced on startup. To go back to testing, run without `--live`; no config change is needed.
+Open **positions stay open** when you stop. The next start picks them up and manages them. To go back to testing, just run without `--live`.
 
 ### When a risk limit trips
-The bot cancels its orders, flattens positions with a capped IOC order, and **stops trading for the rest of the UTC day**. The log line starts with `STOPPED for the rest of the UTC day: <reason>`.
-
+The bot cancels its orders, closes positions, and **stops trading for the rest of the UTC day**. The log line starts with `STOPPED for the rest of the UTC day: <reason>`.
 - The stop is saved, so restarting the same day doesn't bypass it.
-- Trading resumes by itself at 00:00 UTC if the process is still running.
-- `--clear-stop` clears a stop caused by stale data, disconnects or API errors. It never clears the daily loss stop.
+- If the process keeps running, trading resumes by itself at 00:00 UTC.
+- `--clear-stop` clears stops caused by stale data, disconnects or API errors. It **never** clears the daily loss stop.
 
-## Dashboard
-A read-only web dashboard for tracking the bot. It never places, cancels or signs anything. Run it in a second terminal while the bot runs:
+---
 
-```bash
-npm run dashboard            # or: node dashboard.mjs   -> http://localhost:5174
-```
+## Settings you'll actually change
 
-- **What it shows:**
-  - status (trading, stopped with reason, or not running)
-  - equity and its change since the start of the UTC day (live mode)
-  - today's net P&L, volume and cost per $1M
-  - cost breakdown: maker fees, taker fees, funding, slippage, inventory drift and the budget bar
-  - live quote ladder with own spread for each market, and open positions with liquidation price
-  - a realized P&L chart and recent fills
-  - quoting activity and back-off reasons
-  - recent warnings and errors, and the bot's settings
-- **Refresh:** every 10 s.
-- **Where the data comes from:** it reads `logs/` (state, fills, quotes, summaries). In live mode it also calls read-only account endpoints (portfolio, open orders) with the proxy credentials. Secrets never reach the browser, and it listens on `127.0.0.1` only.
-- **Options:**
-  - `--mode dry|live` overrides the mode from `config.json`.
-  - `--logs runs/<folder>` views a saved run.
-  - `--port N` uses another port.
-- **On a VPS:** don't open the port to the internet. Use an SSH tunnel instead: `ssh -L 5174:127.0.0.1:5174 user@vps`, then open http://localhost:5174 on your PC.
+All settings live in `config.json`. The bot checks it at startup, and any mistake stops it with a clear message. These are the ones worth knowing first:
+
+| Setting | Default | What it does | Tip |
+|---|---|---|---|
+| `quote.notionalUsd` | 25 | size of each order in USD (10–40) | bigger orders mean more volume and more risk |
+| `inventory.maxNotionalUsd` | 80 | maximum position per market | keep it a few times `notionalUsd` |
+| `budget.dailyCostUsd` | 10 | daily cost budget; after that, the bot only reduces positions | set it **below** `risk.dailyLossUsd` |
+| `risk.dailyLossUsd` | 10 | hard stop for the day at this loss | your real "max I can lose today" |
+| `leverage.value` | 10 | leverage set on each market | lower means safer |
+| `strategy.mode` | `"join"` | `"join"` or `"fair"` | see below |
+
+**Fair mode** (`"strategy": { "mode": "fair" }`) needs `"reference": { "mode": "gate" }` and the `fair` section, both already in `config.example.json`.
+- Instead of chasing the best price, the bot rests orders at fixed distances from a fair price taken from Binance, Bybit and OKX. That keeps its place in the queue.
+- Run `node tools/check-venues.mjs` first. Only list the venues that show updates from your machine in `reference.venues`.
+- Always try it in dry run first.
+
+Every setting is listed under [Full reference](#full-reference).
+
+---
+
+## Running 24/7 on a server
+
+1. Do a small live run on your own computer first.
+2. Copy the bot folder and your `credentials/perps.env` to a Linux server (VPS). Then lock down the credentials file:
+   ```bash
+   chmod 600 credentials/perps.env
+   ```
+3. Run the bot under a process manager so it restarts after a crash. For example, with [pm2](https://pm2.keymetrics.io/):
+   ```bash
+   npm install -g pm2
+   pm2 start bot.mjs --name volume-bot -- --live
+   pm2 logs volume-bot
+   ```
+   The first live start asks you to type `yes`, so do that start in a normal terminal, then switch to pm2.
+4. **Never open the dashboard port to the internet.** Use an SSH tunnel from your PC instead:
+   ```bash
+   ssh -L 5174:127.0.0.1:5174 user@your-server
+   ```
+   Then open http://localhost:5174 on your PC.
+
+---
+
+## Troubleshooting
+
+| Message or problem | What to do |
+|---|---|
+| `--live given but config.mode is "dry"` | Set `"mode": "live"` in `config.json`. |
+| `config.mode is "live" but --live was not given` | Add `--live` to the command. |
+| `No credentials file` | Set `envFile` in `config.json`, or `PERPS_ENV_FILE`, to your `.env` path. |
+| `Credentials file is missing: …` | One of the five values in your `.env` is empty. |
+| `PERPS_PROXY_PRIVATE_KEY does not belong to PERPS_PROXY_ADDRESS` | The key and address don't match. Recheck both. |
+| `Proxy expires … need at least 24 h` | Create a new proxy and update the `.env`. |
+| Config error at startup | The message names the exact key. Compare it with `config.example.json`. |
+| `another volume-bot is already running` | Only one bot can trade an account at a time. Stop the other one first (a leftover lock from a crash is removed automatically). |
+| Fair mode never quotes | Run `node tools/check-venues.mjs` and only list venues that show updates in `reference.venues`. |
+| Dashboard shows "not running" | Start the bot. The dashboard only reads `logs/`. |
+
+---
 
 ## How it trades
 
 **Quoting** (`src/strategy.mjs`)
-- One post-only order at the best bid and one at the best ask, per market. The bid never reaches our own ask, including an ask that's still being cancelled.
-- It replaces a quote only when the best price has moved and stayed moved for `debounceMs`, and no faster than `minReplaceMs`. Sub-tick flicker doesn't use up rate limits.
-- It stops quoting the side that would push the position beyond `inventory.maxNotionalUsd`.
-- Once the day's cost budget is spent, it quotes only the side that reduces the position.
+- One post-only order at the best bid and one at the best ask, per market. The bid never reaches the bot's own ask, even one still being cancelled.
+- It re-quotes only when the best price has moved and stayed moved for `debounceMs`, and no faster than `minReplaceMs`. Small flickers don't waste the rate limit.
+- It stops quoting the side that would push the position past `inventory.maxNotionalUsd`.
+- Once the day's cost budget is spent, it only quotes the side that reduces the position.
 
-**Fair mode** (`strategy.mode: "fair"`, `src/fairvalue.mjs` + `src/ladder.mjs`) replaces the above with a resting ladder priced from a fair value (median of Binance, Bybit and OKX plus Polymarket's book imbalance). Safe orders are never re-priced, so they keep their queue position; an order is pulled only when fair value comes within `fair.cancelEdgeBps` of it, checked on every reference tick. Inventory shifts fair value instead of switching a side off. See `OPERATIONS.md`, "Fair mode".
+**Fair mode** (`src/fairvalue.mjs` + `src/ladder.mjs`) replaces the above with a resting ladder.
+- The ladder is priced from a fair value: the median of Binance, Bybit and OKX, adjusted for Polymarket's order-book imbalance.
+- Safe orders are never re-priced, so they keep their queue position.
+- An order is pulled only when fair value comes within `fair.cancelEdgeBps` of it, checked on every reference tick.
+- The current position shifts fair value, instead of switching one side off.
 
-**Flattening** (`src/flatten.mjs`) is the main cost lever. It starts when the position exceeds the cap, is older than `maxPositionAgeSec`, or is within `liqDistancePct` of liquidation:
-1. **Passive exit:** a reduce-only post-only order at the best exit price for `passiveSec`, re-pegged when the best price moves. This exits at maker fee.
-2. **One extension:** if the mid has moved in our favour by at least one tick and the position isn't losing, it keeps the passive exit for `extendSec`, once.
-3. **Taker exit:** a reduce-only IOC with its limit capped at `iocSlippageBps` beyond the best price. It retries every `iocRetryMs` until flat.
-- Total hold is capped at `maxHoldSec`. Being close to liquidation skips straight to step 3.
-- Every flatten fill logs the decision mid, fill price and slippage.
-- Before any flatten order, all of that instrument's quotes are cancelled and confirmed gone.
+**Exits** (`src/flatten.mjs`) are the main cost lever. An exit starts when the position is too big, older than `maxPositionAgeSec`, or within `liqDistancePct` of liquidation:
+1. **Passive exit:** a reduce-only post-only order at the best exit price for `passiveSec`, re-pegged as the price moves. This exits at maker fee.
+2. **One extension:** if the price has moved in the bot's favour and the position isn't losing, it keeps waiting for `extendSec`, once.
+3. **Taker exit:** a reduce-only IOC order with its price capped at `iocSlippageBps` beyond the best price. It retries until flat.
 
-## Config reference (`config.json`)
-The config is checked at startup. Unknown keys, missing keys, wrong types and out-of-range values stop the bot with a specific message.
+Total hold time is capped at `maxHoldSec`. Being close to liquidation skips straight to step 3.
+
+---
+
+## Full reference
+
+<details>
+<summary><b>All config settings</b></summary>
 
 | Key | Default | Meaning |
 |---|---|---|
 | `mode` | `"dry"` | `"live"` only takes effect together with `--live` |
 | `markets` | BTC-USD, ETH-USD | only these two are supported |
-| `envFile` | — | path to the proxy `.env` (relative to this folder); `PERPS_ENV_FILE` overrides it |
+| `envFile` | `credentials/perps.env` | path to the proxy `.env` (relative to this folder); `PERPS_ENV_FILE` overrides it |
 | `quote.notionalUsd` | 25 | size of each quote in USD (10–40) |
 | `quote.debounceMs` | 300 | the new best price must hold this long before re-joining |
 | `quote.minReplaceMs` | 250 | minimum time between replaces on one side |
 | `quote.maxPlacesPerMinute` | 300 | the bot's own order-placement budget (cancels cost 0 on the exchange) |
-| `strategy.mode` | `"join"` | `"join"`: join the best bid/ask. `"fair"`: resting ladder around fair value (needs `reference.mode: "gate"` and the `fair` section). Optional; older configs load as join |
+| `strategy.mode` | `"join"` | `"join"`: join the best bid/ask. `"fair"`: resting ladder around fair value (needs `reference.mode: "gate"` and the `fair` section) |
 | `fair.edgeBps` / `.levelStepBps` | 1 / 1 | level *i* rests at fair ± (edgeBps + *i* × levelStepBps) |
 | `fair.levels` | 2 | resting orders per side |
 | `fair.cancelEdgeBps` | 0.3 | pull an order once fair value is this close (must be < edgeBps) |
@@ -130,21 +296,21 @@ The config is checked at startup. Unknown keys, missing keys, wrong types and ou
 | `fair.maxDeviationBps` | 15 | no fair value if it is further than this from Polymarket's mid |
 | `reference.venues` | `["binance"]` | reference venues (`binance`, `bybit`, `okx`); the signal is the median of the fresh ones |
 | `inventory.maxNotionalUsd` | 80 | per-market position cap |
-| `flatten.maxPositionAgeSec` | 60 | position age that triggers flattening |
+| `flatten.maxPositionAgeSec` | 60 | position age that triggers an exit |
 | `flatten.passiveSec` | 15 | length of the passive-exit window |
 | `flatten.extendSec` | 10 | the single extension on a favourable move |
 | `flatten.maxHoldSec` | 120 | hard cap on how long a position is held |
 | `flatten.iocSlippageBps` | 5 | IOC limit distance beyond the best price |
 | `flatten.iocRetryMs` | 1000 | spacing between IOC attempts |
-| `flatten.liqDistancePct` | 4 | flatten when liquidation is closer than this |
-| `budget.dailyCostUsd` | 10 | daily all-in cost (fees + funding − trading P&L); after that, reduce-only quoting. Keep it below `risk.dailyLossUsd` so the bot winds down before the hard stop |
+| `flatten.liqDistancePct` | 4 | exit when liquidation is closer than this |
+| `budget.dailyCostUsd` | 10 | daily all-in cost (fees + funding − trading P&L); after that, reduce-only quoting |
 | `risk.dailyLossUsd` | 10 | stop when net P&L for the day is ≤ −this amount |
 | `risk.maxConsecutiveErrors` | 3 | real (Fatal) API errors in a row before stopping |
-| `risk.staleMs` | 5000 | market data older than this counts as stale (that instrument's quotes are cancelled) |
+| `risk.staleMs` | 5000 | market data older than this counts as stale (that market's quotes are cancelled) |
 | `risk.staleGraceSec` | 30 | stop if data stays stale this long |
 | `risk.reconnectGraceSec` | 30 | stop if the WebSocket isn't back within this time |
 | `risk.maxDisconnectsPerDay` | 3 | disconnects allowed per UTC day; the next one stops trading |
-| `leverage.value` / `.cross` | 10 / false | set on each instrument at live start |
+| `leverage.value` / `.cross` | 10 / false | set on each market at live start |
 | `autoCancel.enabled` | true | exchange dead-man's switch (live only) |
 | `autoCancel.aheadSec` / `.rearmSec` | 15 / 5 | armed 15 s ahead, re-armed every 5 s |
 | `autoCancel.pollSec` | 60 | how often the fire count is checked; the bot stops when few fires remain |
@@ -153,79 +319,111 @@ The config is checked at startup. Unknown keys, missing keys, wrong types and ou
 | `report.summaryEveryMin` | 15 | how often the summary is written |
 | `log.level` | `"info"` | debug, info, warn or error |
 
-## Logs and reports (`logs/`)
+</details>
+
+<details>
+<summary><b>Logs and reports (<code>logs/</code>)</b></summary>
+
 | File | Content |
 |---|---|
 | `bot-YYYY-MM-DD.log` | structured JSON-lines log; rotates at 10 MB and daily, keeps 14 files; secrets are redacted |
-| `fills.csv` | every fill: `mode`, side, price, qty, maker/taker, fee, intent, decision mid, slippage ($ and bps), position after, realized P&L |
-| `quotes.csv` | every place, cancel and reject, with `mode` and reason |
-| `summary.csv` | every `summaryEveryMin` and on exit (columns below) |
-| `state-dry.json`, `state-live.json` | what the bot last believed (see below). No secrets: saving refuses keys that look like one |
+| `fills.csv` | every fill: mode, side, price, qty, maker/taker, fee, intent, decision mid, slippage ($ and bps), position after, realized P&L |
+| `quotes.csv` | every place, cancel and reject, with mode and reason |
+| `summary.csv` | written every `summaryEveryMin` and on exit (columns below) |
+| `state-dry.json`, `state-live.json` | what the bot last believed; never contains secrets |
 | `smoke-*.json` | smoke-test results |
 
-## Cost metrics
-Every component is reported **separately** in `summary.csv`:
+The `runs/` folder has saved dry-run experiments that you can open with `node dashboard.mjs --logs runs/<folder>`.
+
+</details>
+
+<details>
+<summary><b>Cost metrics (<code>summary.csv</code>)</b></summary>
 
 | Column | Meaning |
 |---|---|
-| `maker_fees`, `taker_fees` | fees paid (negative would be a rebate) |
-| `funding` | funding paid (+) or received (−) while holding inventory |
-| `slippage` | for each fill, fill price vs the mid when the bot decided to act, signed against us. Maker fills at the touch usually come out negative, because they earn about half the spread |
-| `inventory_drift` | what the position did after the fill: `trading_pnl + slippage`. This is the adverse-selection cost |
+| `maker_fees`, `taker_fees` | fees paid (negative is a rebate) |
+| `funding` | funding paid (+) or received (−) while holding a position |
+| `slippage` | fill price vs the mid when the bot decided to act, signed against the bot; maker fills usually come out negative because they earn about half the spread |
+| `inventory_drift` | what the position did after the fill (`trading_pnl + slippage`); this is the adverse-selection cost |
 | `trading_pnl` | realized + unrealized P&L, marked to the mid |
 | `net_cost` | `fees + funding − trading_pnl`, the all-in cost (= −net P&L) |
-| **`cost_per_$1`** | **`net_cost / gross_volume`, the headline number** (and `cost_per_$1M_volume`) |
-| `budget_used` | all-in cost today: `fees + funding − trading_pnl` (= `net_cost`), compared with `budget.dailyCostUsd` |
+| **`cost_per_$1`** | **`net_cost / gross_volume`, the headline number** (also `cost_per_$1M_volume`) |
+| `budget_used` | today's all-in cost, compared with `budget.dailyCostUsd` |
 | `margin_used`, `max_drawdown`, `min_liq_distance_pct` | risk context |
-| `avg_flatten_slippage_bps` | average slippage of flatten fills |
-| `projected_days_to_$1M_tier`, `projected_cost_to_$1M_tier` | today's pace extrapolated to $1M of volume. The $1M tier only lowers fees from 1.25/4 to 1.00/3.7 bps |
+| `avg_flatten_slippage_bps` | average slippage of exit fills |
+| `projected_days_to_$1M_tier`, `projected_cost_to_$1M_tier` | today's pace extrapolated to $1M volume (the $1M tier lowers fees from 1.25/4 to 1.00/3.7 bps) |
 
-The daily loss stop uses `trading_pnl − fees − funding`, so inventory drift is covered by the loss stop even though it isn't part of the cost budget.
+To judge a change, use per-fill markout (`node tools/markout.mjs`) rather than one day's cost, because short windows are dominated by which way the market moved.
 
-## Crash recovery
-`logs/state-<mode>.json` is rewritten atomically after every material change. It holds:
-- today's cost and P&L components
-- the client-order-id counter
-- open-order snapshot, positions (dry run)
-- disconnect count and stop reason
+</details>
+
+<details>
+<summary><b>Crash recovery</b></summary>
+
+`logs/state-<mode>.json` is rewritten atomically after every material change. It holds today's cost and P&L components, the client-order-id counter, an open-order snapshot, positions (dry run), the disconnect count and the stop reason.
 
 On restart:
-- The order-id counter jumps forward by 1000, so a client order id is never reused.
-- A corrupt state file is moved aside.
-- A new UTC day resets the daily counters.
-- **Live:** open orders, positions and fills are re-read from the exchange, which is the source of truth. State only supplies what the exchange can't, such as slippage vs the decision mid.
-- A second instance is blocked by `control/.lock`.
+- the order-id counter jumps forward by 1000, so a client order id is never reused;
+- a corrupt state file is moved aside;
+- a new UTC day resets the daily counters;
+- **live:** open orders, positions and fills are re-read from the exchange, which is the source of truth;
+- a second instance is blocked by `control/.lock`.
 
-## Error handling
+</details>
+
+<details>
+<summary><b>Error handling</b></summary>
+
 | Class | Examples | Handling | Counts toward the 3-strikes stop? |
 |---|---|---|---|
-| RateLimited | 429, `action_rate_limited`, `ip_rate_limited` | back off (honours `Retry-After` and `Poly-RateLimit-*`), retry | no |
+| RateLimited | 429, `action_rate_limited`, `ip_rate_limited` | back off (honours `Retry-After`), retry | no |
 | Maintenance | cancel-only window, `order_in_flight` | pause new orders for 5 s | no |
-| Indeterminate | 503 `service_unavailable`, 500, timeouts | the **exact same signed body** is resent (same client order id, so no duplicate order), then looked up by client order id | no |
+| Indeterminate | 503, 500, timeouts | the exact same signed order is resent (same client order id, so no duplicate), then looked up | no |
 | PostOnlyReject | a post-only order would cross | re-quote on the next tick | no |
 | Fatal | anything else | logged | **yes** |
 
-## Verification checklist (before going live)
-1. `npm test` and `npm run test:signing` both pass.
-2. Dry run for 24 h or more.
-   - Check `summary.csv`: maker fees, taker fees, funding and slippage are separate numbers.
-   - Set `risk.dailyLossUsd` to `0.5` and confirm the bot stops with `STOPPED ... daily loss stop`.
-   - Kill the process with `taskkill /F` or `kill -9`, restart it, and confirm `state: restored` shows today's numbers carried over.
-3. **Live smoke test** (needs pUSD in the Perps account): `node bot.mjs --live --smoke` with `mode: live`.
-   - Confirm the prompt shows the right account and needs `yes`.
-   - It places a $10 post-only order 3% from the mid, checks it's open, and cancels it.
-   - It places a second one and arms auto-cancel **without re-arming**. The exchange should cancel it within 15 s, and `triggered` should rise by exactly one.
-4. **Simulator calibration:** during the first small live run, run a dry-run copy of this folder side by side on the same machine. Compare fills per hour, maker/taker mix and slippage in the two `summary.csv` files before trusting dry-run numbers.
-5. Small live run on your PC. Then copy `volume-bot/` and its `.env` to the VPS, run `chmod 600` on the `.env`, and run it under a process manager.
+</details>
 
-## Known limits
-- **Simulator fills are an estimate.** The queue position is modelled from public data, and the bot's own orders aren't in the public book. Step 4 is how you check it.
-- **Maker/taker in live mode:** WebSocket fills don't say whether we were maker or taker, so the order type decides (IOC = taker). REST fills, which do say, are used for reconciliation.
-- **Fee rates:** the fee schedule currently lists only an "equity" category, so those rates are used for crypto (this is logged). In live mode, the actual fee on each fill is what's recorded.
-- **Auto-cancel fire limit:** the docs say 1000 fires a day. The bot reads the real `daily_limit` from `GET /v1/account/auto-cancel` and never assumes a value.
+<details>
+<summary><b>Known limits</b></summary>
+
+- **Simulated fills are an estimate.** Queue position is modelled from public data. During your first small live run, run a dry-run copy side by side and compare the two `summary.csv` files.
+- **Maker/taker in live mode:** WebSocket fills don't say which side you were, so the order type decides (IOC = taker). REST fills, which do say, are used to reconcile.
+- **Fee rates:** the fee schedule currently lists only an "equity" category, so those rates are used for crypto (this is logged). In live mode, the real fee on each fill is recorded.
+- **Auto-cancel fire limit:** the bot reads the real daily limit from the exchange and never assumes a value.
+
+</details>
+
+---
+
+## Project structure
+```
+bot.mjs               entry point (dry run / live / smoke test)
+dashboard.mjs         read-only web dashboard (127.0.0.1:5174)
+config.example.json   starting config: copy to config.json
+.env.example          credentials template: copy to credentials/perps.env
+src/
+  strategy.mjs        join-mode quoting
+  fairvalue.mjs       fair value from Binance / Bybit / OKX
+  ladder.mjs          fair-mode resting ladder
+  flatten.mjs         cheap exit logic
+  risk.mjs            loss stop, budgets and guards
+  engine.mjs          main loop
+  exec/live.mjs       real exchange execution
+  exec/sim.mjs        simulated fills for dry run
+  signing.mjs         order signing (matches the official SDK)
+  env.mjs             loads and protects credentials
+  state.mjs           crash-safe state
+tools/                analysis helpers (markout, venue checks, recorders)
+test/                 unit tests (npm test)
+runs/                 saved dry-run experiments
+```
+
+---
 
 ## Disclaimer
-This is experimental software, not financial advice. Trading perpetual futures with leverage can lose more than you expect, and bugs, exchange changes or market moves can cause losses. Run it in dry mode first, start small, and use it at your own risk.
+This is experimental software, **not financial advice**. Trading perpetual futures with leverage can lose more than you expect, and bugs, exchange changes or market moves can cause losses. Run it in dry mode first, start small, never trade money you can't afford to lose, and use it at your own risk. This project is not affiliated with Polymarket.
 
 ## License
 [MIT](LICENSE)
