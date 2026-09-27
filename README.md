@@ -5,7 +5,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-live%20trading-red)
 
-A production-ready, maker-only trading bot for **Polymarket Perps** (BTC-USD and ETH-USD). It generates real trading volume at the **lowest possible cost per $1**, for example to build volume for points or a better fee tier without paying heavy taker fees.
+A production-ready, maker-only trading bot for **Polymarket Perps** (BTC-USD and ETH-USD). It generates real trading volume at the **lowest possible cost per $1**, for example It build volume without paying heavy taker fees.
 
 It places post-only orders at the best bid and ask, so it only trades with other people. It exits positions cheaply and stops itself when a risk limit is hit. A local dashboard shows everything it does.
 
